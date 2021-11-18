@@ -30,5 +30,6 @@
     <Folder Include="IRepository\" />
     <Folder Include="Configurations\" />
     <Folder Include="Configurations\Entities\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 </Project>
