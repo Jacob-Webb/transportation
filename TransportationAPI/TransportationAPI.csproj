@@ -32,5 +32,6 @@
     <Folder Include="Configurations\Entities\" />
     <Folder Include="Data\" />
     <Folder Include="Errors\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>
