@@ -1,5 +1,7 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using TransportationAPI.Data;
+using TransportationAPI.Models;
+
 namespace TransportationAPI.Configurations
 {
     public class MapperInitializer : Profile

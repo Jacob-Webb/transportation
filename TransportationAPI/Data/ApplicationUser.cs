@@ -29,3 +29,4 @@ namespace TransportationAPI.Data
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
         public virtual ICollection<UserNote> UserNotes { get; set; }
     }
+}
