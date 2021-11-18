@@ -6,11 +6,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using TransportationAPI.Configurations;
+using TransportationAPI.Data;
+using TransportationAPI.Extensions;
+using TransportationAPI.IRepository;
+using TransportationAPI.Middleware;
+using TransportationAPI.Services;
 
 namespace TransportationAPI
 {
