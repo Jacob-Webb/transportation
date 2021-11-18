@@ -17,6 +17,7 @@ using TransportationAPI.Data;
 using TransportationAPI.Extensions;
 using TransportationAPI.IRepository;
 using TransportationAPI.Middleware;
+using TransportationAPI.Repository;
 using TransportationAPI.Services;
 
 namespace TransportationAPI
