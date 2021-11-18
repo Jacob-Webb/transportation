@@ -27,27 +27,39 @@ namespace TransportationAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.ConfigureCors();
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
+            services.AddDbContext<transportationContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
+            services.AddAutoMapper(typeof(MapperInitializer));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthManager, AuthManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TransportationAPI", Version = "v1" });
             });
+            services.AddMvc().AddXmlSerializerFormatters();
+            services.AddControllers();
+            services.ConfigureTwilio(Configuration);
+            services.Configure<TwilioVerifySettings>(Configuration.GetSection("Twilio"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TransportationAPI v1"));
-            }
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            app.UseCors("AllowAll");
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TransportationAPI v1"));
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
