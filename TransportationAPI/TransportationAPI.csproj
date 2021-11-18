@@ -28,5 +28,7 @@
     <Folder Include="Services\" />
     <Folder Include="Repository\" />
     <Folder Include="IRepository\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Configurations\Entities\" />
   </ItemGroup>
 </Project>
