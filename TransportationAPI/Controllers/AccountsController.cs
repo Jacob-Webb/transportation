@@ -130,7 +130,12 @@ namespace TransportationAPI.Controllers
         [HttpPost]
         [Route("PhoneVerification/{phone}")]
         public async Task<IActionResult> PhoneVerification(string phone, [FromBody] VerificationCodeDto verification)
-        { 
+        {
+
+            if (phone == "undefined")
+            {
+                return StatusCode(400, $"Bad Request: Value of Phone number is {phone}");
+            }
 
             var validPhone = "+1" + phone;
             try
@@ -148,7 +153,7 @@ namespace TransportationAPI.Controllers
 
                     if (updateResult.Succeeded)
                     {
-                        return Ok("ConfirmPhoneSuccess");
+                        return Ok();
                     }
                     else
                     {
@@ -162,7 +167,7 @@ namespace TransportationAPI.Controllers
             }
             catch (TwilioException ex)
             {
-                return StatusCode(500, new List<string> { ex.Message });
+                return StatusCode(500, new List<string> { ex.Message, validPhone, phone });
             }
         }
 
