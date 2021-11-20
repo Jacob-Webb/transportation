@@ -13,6 +13,8 @@ using Twilio.Exceptions;
 using Twilio.Rest.Lookups.V1;
 using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
+using System;
+
 namespace TransportationAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -39,8 +41,8 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDto userDto)
+        [Route("Registration")]
+        public async Task<IActionResult> Registration([FromBody] RegisterUserDto userDto)
         {
             _logger.LogInformation($"Registration attempt for {userDto.Phone} ");
 
@@ -82,12 +84,13 @@ namespace TransportationAPI.Controllers
             if (existingPhoneUser != null && !existingPhoneUser.PhoneNumberConfirmed)
             {
                 // resend confirmation phone number and code to frontend to activate phone number then return
+                SendPhoneVerification(validatedPhoneNumber);
                 return StatusCode(403, "This number needs to be confirmed. Please see the text sent to you.");
             }
 
             user.UserName = userDto.FirstName.Substring(0, 1) + userDto.LastName + validatedPhoneNumber.Substring(8, 4);
             user.PhoneNumber = validatedPhoneNumber;
-            SendPhoneVerification(user.PhoneNumber);
+
             var result = await _userManager.CreateAsync(user, userDto.Password);
 
             if (!result.Succeeded)
@@ -101,7 +104,8 @@ namespace TransportationAPI.Controllers
 
             await _userManager.AddToRoleAsync(user, userDto.Role);
 
-            return Ok();
+            SendPhoneVerification(user.PhoneNumber);
+            return Ok(userDto.Phone);
         }
 
         [HttpPost]
@@ -124,20 +128,21 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpPost]
-        [Route("PhoneConfirmed")]
-        public async Task<IActionResult> PhoneConfirmed(string userPhone, string verificationCode)
-        {
-            var validPhone = GetFormattedPhone(userPhone);
+        [Route("PhoneVerification/{phone}")]
+        public async Task<IActionResult> PhoneVerification(string phone, [FromBody] VerificationCodeDto verification)
+        { 
+
+            var validPhone = "+1" + phone;
             try
             {
-                var verification = await VerificationCheckResource.CreateAsync(
-                    to: userPhone,
-                    code: verificationCode,
-                    pathServiceSid: _twilioVerifySettings.VerificationServiceSID
+                var verificationCheck = await VerificationCheckResource.CreateAsync(
+                 to: validPhone,
+                 code: verification.Code,
+                 pathServiceSid: _twilioVerifySettings.VerificationServiceSID
                 );
-                if (verification.Status == "approved")
+                if (verificationCheck.Status == "approved")
                 {
-                    var identityUser = await _userManager.FindByPhoneAsync(userPhone);
+                    var identityUser = await _userManager.FindByPhoneAsync(validPhone);
                     identityUser.PhoneNumberConfirmed = true;
                     var updateResult = await _userManager.UpdateAsync(identityUser);
 
@@ -152,13 +157,12 @@ namespace TransportationAPI.Controllers
                 }
                 else
                 {
-                    return StatusCode(403, $"There was an error confirming the verification code: {verification.Status}");
+                    return StatusCode(403, $"There was an error confirming the verification code: {verificationCheck.Status}");
                 }
             }
-            catch (ApiException ex)
+            catch (TwilioException ex)
             {
-                return StatusCode(403,
-                    "There was an error confirming the code, please check the verification code is correct and try again");
+                return StatusCode(500, new List<string> { ex.Message });
             }
         }
 
@@ -174,19 +178,6 @@ namespace TransportationAPI.Controllers
             {
                 ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
             }
-        }
-        private static async Task<string> GetFormattedPhone(string phone)
-        {
-            var type = new List<string> {
-                "carrier"
-            };
-
-            var formattedPhoneNumber = await PhoneNumberResource.FetchAsync(
-                type: type,
-                pathPhoneNumber: new Twilio.Types.PhoneNumber(phone)
-            );
-
-            return formattedPhoneNumber.PhoneNumber.ToString();
         }
     }
 }

@@ -36,4 +36,9 @@ namespace TransportationAPI.Models
         public string ZipCode { get; set; }
         public string Role { get; set; }
     }
+
+    public class VerificationCodeDto
+    {
+        public string Code { get; set; }
+    }
 }
