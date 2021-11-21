@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Quartz;
 using Serilog;
+using TransportationAPI.Extensions;
+using TransportationAPI.Tasks;
 
 namespace TransportationAPI
 {
@@ -16,10 +19,10 @@ namespace TransportationAPI
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File(
-                    path: "c:/apis/transportation/logs/log-.txt",
+                    path: "Logs/log-.txt",
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day,
-                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug
                 ).CreateLogger();
             try
             {
@@ -42,6 +45,19 @@ namespace TransportationAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddQuartz(q =>
+                    {
+                        q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+                        // Register the job, loading the schedule from configuration
+                        q.AddJobAndTrigger<PurgeUnverifiedUsersJob>(hostContext.Configuration);
+                    });
+
+                    services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 });
+            
     }
 }

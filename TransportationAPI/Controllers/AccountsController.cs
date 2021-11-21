@@ -79,13 +79,13 @@ namespace TransportationAPI.Controllers
             var existingPhoneUser = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (existingPhoneUser != null && existingPhoneUser.PhoneNumberConfirmed)
             {
-                return Conflict("Phone number already in use.");
+                return Conflict("Phone number already in use. Please contact The Rock's Transportation Department.");
             }
             if (existingPhoneUser != null && !existingPhoneUser.PhoneNumberConfirmed)
             {
                 // resend confirmation phone number and code to frontend to activate phone number then return
                 SendPhoneVerification(validatedPhoneNumber);
-                return StatusCode(403, "This number needs to be confirmed. Please see the text sent to you.");
+                return StatusCode(403, "This number needs to be confirmed. Please enter your verification code to complete registration.");
             }
 
             user.UserName = userDto.FirstName.Substring(0, 1) + userDto.LastName + validatedPhoneNumber.Substring(8, 4);
@@ -134,7 +134,7 @@ namespace TransportationAPI.Controllers
 
             if (phone == "undefined")
             {
-                return StatusCode(400, $"Bad Request: Value of Phone number is {phone}");
+                return StatusCode(403, $"Value of Phone number is {phone}");
             }
 
             var validPhone = "+1" + phone;
@@ -167,7 +167,7 @@ namespace TransportationAPI.Controllers
             }
             catch (TwilioException ex)
             {
-                return StatusCode(500, new List<string> { ex.Message, validPhone, phone });
+                return StatusCode(500, new List<string> { ex.Message });
             }
         }
 
