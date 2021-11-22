@@ -22,12 +22,15 @@ namespace TransportationAPI.Tasks
 
         public Task Execute(IJobExecutionContext context)
         {
-            _logger.LogInformation("Scheduled removal of unconfirmed users attempted");
-            _context.Users.Where(u => u.PhoneNumberConfirmed == false).DeleteFromQueryAsync();
-            //public static async Task<ApplicationUser> FindByPhoneAsync(this UserManager<ApplicationUser> userManager, string phoneNumber)
-            //{
-            //    return await userManager?.Users?.SingleOrDefaultAsync(user => user.PhoneNumber == phoneNumber);
-            //}
+            try
+            {
+                _logger.LogInformation("Removing unverified accounts");
+                _context.Users.Where(u => u.PhoneNumberConfirmed == false).DeleteFromQuery();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting user");
+            }
             return Task.CompletedTask;
         }
     }
