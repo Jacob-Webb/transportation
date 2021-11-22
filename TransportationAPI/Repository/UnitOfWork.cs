@@ -7,7 +7,7 @@ namespace TransportationAPI.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly transportationContext _context;
+        private readonly TransportationContext _context;
         private IGenericRepository<ApplicationUser> _applicationUser;
         private IGenericRepository<CancelledRide> _cancelledRide;
         private IGenericRepository<Coordinate> _coordinate;
@@ -24,7 +24,7 @@ namespace TransportationAPI.Repository
         private IGenericRepository<UserCoordinate> _userCoordinate;
         private IGenericRepository<UserNote> _userNote;
 
-        public UnitOfWork(transportationContext context)
+        public UnitOfWork(TransportationContext context)
         {
             _context = context;
         }

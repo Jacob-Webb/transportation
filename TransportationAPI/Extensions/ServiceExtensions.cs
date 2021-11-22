@@ -29,7 +29,7 @@ namespace TransportationAPI.Extensions
         {
             var builder = services.AddIdentityCore<ApplicationUser>(query => query.User.RequireUniqueEmail = false);
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
-            builder.AddEntityFrameworkStores<transportationContext>().AddDefaultTokenProviders();
+            builder.AddEntityFrameworkStores<TransportationContext>().AddDefaultTokenProviders();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)

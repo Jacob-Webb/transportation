@@ -9,7 +9,7 @@ using TransportationAPI.Data;
 
 namespace TransportationAPI.Migrations
 {
-    [DbContext(typeof(transportationContext))]
+    [DbContext(typeof(TransportationContext))]
     [Migration("20211118172532_initial")]
     partial class initial
     {

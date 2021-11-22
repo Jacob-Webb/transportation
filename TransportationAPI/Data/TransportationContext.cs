@@ -5,13 +5,13 @@ using TransportationAPI.Configurations.Entities;
 
 namespace TransportationAPI.Data
 {
-    public partial class transportationContext : IdentityDbContext<ApplicationUser>
+    public partial class TransportationContext : IdentityDbContext<ApplicationUser>
     {
-        public transportationContext()
+        public TransportationContext()
         {
         }
 
-        public transportationContext(DbContextOptions<transportationContext> options)
+        public TransportationContext(DbContextOptions<TransportationContext> options)
             : base(options)
         {
         }

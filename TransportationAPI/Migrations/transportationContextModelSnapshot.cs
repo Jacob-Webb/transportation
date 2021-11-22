@@ -8,7 +8,7 @@ using TransportationAPI.Data;
 
 namespace TransportationAPI.Migrations
 {
-    [DbContext(typeof(transportationContext))]
+    [DbContext(typeof(TransportationContext))]
     partial class transportationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
