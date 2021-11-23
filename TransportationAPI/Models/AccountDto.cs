@@ -37,4 +37,15 @@ namespace TransportationAPI.Models
         public string Role { get; set; }
     }
 
+    public class PhoneVerificationDto
+    {
+        public string Code { get; set; }
+    }
+
+    public class AuthResponseDto
+    {
+        public bool IsAuthSuccessful { get; set; }
+        public string Token { get; set; }
+    }
+
 }

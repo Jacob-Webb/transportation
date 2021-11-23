@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TransportationAPI.Data;
+using TransportationAPI.Extensions;
+using TransportationAPI.Middleware;
 using TransportationAPI.Models;
 
 namespace TransportationAPI.Services
@@ -76,7 +78,8 @@ namespace TransportationAPI.Services
 
         public async Task<bool> ValidateUser(UserLoginDto userDto)
         {
-            _user = await _userManager.FindByNameAsync(userDto.Phone);
+            var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
+            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
         }
     }

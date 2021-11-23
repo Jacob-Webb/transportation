@@ -21,13 +21,13 @@ namespace TransportationAPI.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly TwilioVerifySettings _twilioVerifySettings;
+        private readonly TwilioSettings _twilioVerifySettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
 
-        public AccountsController(IOptions<TwilioVerifySettings> twilioVerifySettings,
+        public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
             ILogger<AccountsController> logger,
             IMapper mapper,
@@ -120,10 +120,10 @@ namespace TransportationAPI.Controllers
 
             if (!await _authManager.ValidateUser(userDto))
             {
-                return Unauthorized();
+                return Unauthorized("The phone number - password combination is invalid. Please try again.");
             }
 
-            return Accepted(new { Token = await _authManager.CreateToken() });
+            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, Token = await _authManager.CreateToken() });
 
         }
 
@@ -137,7 +137,7 @@ namespace TransportationAPI.Controllers
                 return StatusCode(403, $"Value of Phone number is {phone}");
             }
 
-            var validPhone = "+1" + phone;
+            var validPhone = TwilioSettings.FormatPhoneNumber(phone);
             try
             {
                 var verificationCheck = await VerificationCheckResource.CreateAsync(

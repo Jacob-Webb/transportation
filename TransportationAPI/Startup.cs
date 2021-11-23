@@ -50,7 +50,7 @@ namespace TransportationAPI
             services.AddMvc().AddXmlSerializerFormatters();
             services.AddControllers();
             services.ConfigureTwilio(Configuration);
-            services.Configure<TwilioVerifySettings>(Configuration.GetSection("Twilio"));
+            services.Configure<TwilioSettings>(Configuration.GetSection("Twilio"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
