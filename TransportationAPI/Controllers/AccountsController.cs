@@ -129,7 +129,7 @@ namespace TransportationAPI.Controllers
 
         [HttpPost]
         [Route("PhoneVerification/{phone}")]
-        public async Task<IActionResult> PhoneVerification(string phone, [FromBody] VerificationCodeDto verification)
+        public async Task<IActionResult> PhoneVerification(string phone, [FromBody] PhoneVerificationDto verification)
         {
 
             if (phone == "undefined")

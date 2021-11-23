@@ -37,8 +37,4 @@ namespace TransportationAPI.Models
         public string Role { get; set; }
     }
 
-    public class VerificationCodeDto
-    {
-        public string Code { get; set; }
-    }
 }
