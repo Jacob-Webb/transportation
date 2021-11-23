@@ -149,13 +149,14 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
+**/*.log
 *.vspscc
 *.vssscc
 .builds
 *.pidb
 *.svclog
 *.scc
+Logs/
 
 # Chutzpah Test files
 _Chutzpah*
@@ -203,6 +204,9 @@ _TeamCity*
 # AxoCover is a Code Coverage Tool
 .axoCover/*
 !.axoCover/settings.json
+
+#Visual Studio Code files
+**/*.vscode
 
 # Visual Studio code coverage results
 *.coverage
@@ -403,3 +407,6 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
+#Twilio Verify testing
+verify-testing-dashboard/
