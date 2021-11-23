@@ -79,7 +79,7 @@ namespace TransportationAPI.Services
         public async Task<bool> ValidateUser(UserLoginDto userDto)
         {
             var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
-            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
+            _user = await _userManager.FindByPhoneAsync(validatedNumber);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
         }
     }
