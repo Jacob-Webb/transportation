@@ -11,10 +11,12 @@ namespace TransportationAPI.Models
         [Range(0, 6)]
         public int DayOfWeek { get; set; }
         [Required]
-        public TimeSpan TimeOfDay { get; set; }
+        public int HourOfDay { get; set; }
+        [Required]
+        public int MinutesOfHour { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }
-        public HashSet<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
+        //public HashSet<List<float>> BoundaryCoordinates { get; set; }
     }
     public class EventTemplateDto : CreateEventTemplateDto
     {

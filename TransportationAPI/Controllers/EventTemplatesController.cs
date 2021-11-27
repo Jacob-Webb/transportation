@@ -15,14 +15,14 @@ namespace TransportationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventTemplateController : ControllerBase
+    public class EventTemplatesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<EventTemplateController> _logger;
+        private readonly ILogger<EventTemplatesController> _logger;
         private readonly IMapper _mapper;
 
-        public EventTemplateController(IUnitOfWork unitOfWork,
-            ILogger<EventTemplateController> logger,
+        public EventTemplatesController(IUnitOfWork unitOfWork,
+            ILogger<EventTemplatesController> logger,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -58,7 +58,12 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var template = _mapper.Map<EventTemplate>(templateDto);
+
+            var template = new EventTemplate() { Active = templateDto.Active,
+                                                 DayOfWeek = templateDto.DayOfWeek,
+                                                 DriversNeeded = templateDto.DriversNeeded,
+                                                 TimeOfDay = new TimeSpan(templateDto.HourOfDay, templateDto.MinutesOfHour, 0)};
+            var templateMapper = _mapper.Map<EventTemplate>(template);
             await _unitOfWork.EventTemplates.Insert(template);
             await _unitOfWork.Save();
 
