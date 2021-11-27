@@ -32,6 +32,15 @@ namespace TransportationAPI.Extensions
             builder.AddEntityFrameworkStores<TransportationContext>().AddDefaultTokenProviders();
         }
 
+        public static void ConfigurePolicies(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                    policy => policy.RequireRole("SuperAdmin", "Administrator"));
+            });
+        }
+
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
         {
             var jwtSettings = Configuration.GetSection("Jwt");

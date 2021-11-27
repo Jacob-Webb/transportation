@@ -38,6 +38,7 @@ namespace TransportationAPI
             services.ConfigureCors();
             services.AddAuthentication();
             services.ConfigureIdentity();
+            services.ConfigurePolicies();
             services.ConfigureJWT(Configuration);
             services.AddDbContext<TransportationContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
             services.AddAutoMapper(typeof(MapperInitializer));

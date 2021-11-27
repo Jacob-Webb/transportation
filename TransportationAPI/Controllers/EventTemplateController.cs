@@ -31,6 +31,7 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> GetAll()
         {
             var templates = await _unitOfWork.EventTemplates.GetAll();
@@ -39,6 +40,7 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetEventTemplate")]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> GetEventTemplate(int id)
         {
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
@@ -46,7 +48,7 @@ namespace TransportationAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPost]
         public async Task<IActionResult> CreateTemplate([FromBody] CreateEventTemplateDto templateDto)
         {
@@ -63,8 +65,8 @@ namespace TransportationAPI.Controllers
             return CreatedAtRoute("GetEventTemplate", new { id = template.Id }, template);
         }
 
-        [Authorize]
         [HttpPut("{id:int}")]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> UpdateEventTemplate(int id, [FromBody] UpdateEventTemplateDto templateDto)
         {
             if (!ModelState.IsValid || id < 1)
@@ -88,8 +90,8 @@ namespace TransportationAPI.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpDelete("{id:int}")]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> DeleteEventTemplate(int id)
         {
             if (id < 1)
