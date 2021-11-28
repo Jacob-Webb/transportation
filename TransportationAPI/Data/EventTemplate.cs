@@ -7,7 +7,6 @@ namespace TransportationAPI.Data
     {
         public EventTemplate()
         {
-            this.Events = new HashSet<Event>();
             this.EventTemplateBoundaries = new HashSet<EventTemplateBoundary>();
         }
         public int Id { get; set; }
@@ -17,6 +16,5 @@ namespace TransportationAPI.Data
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }
         public virtual ICollection<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
-        public virtual ICollection<Event> Events { get; set; }
     }
 }

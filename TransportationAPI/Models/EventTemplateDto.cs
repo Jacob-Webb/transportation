@@ -16,6 +16,7 @@ namespace TransportationAPI.Models
         public int MinutesOfHour { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }
+        public string Language { get; set; }
         //public HashSet<List<float>> BoundaryCoordinates { get; set; }
     }
     public class EventTemplateDto : CreateEventTemplateDto

@@ -44,8 +44,8 @@ namespace TransportationAPI.Controllers
         public async Task<IActionResult> GetEventTemplate(int id)
         {
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
-            var result = _mapper.Map<EventTemplateDto>(template);
-            return Ok(result);
+            //var result = _mapper.Map<EventTemplateDto>(template);
+            return Ok(template);
         }
 
         [Authorize(Policy = "RequireAdministratorRole")]
@@ -62,6 +62,7 @@ namespace TransportationAPI.Controllers
             var template = new EventTemplate() { Active = templateDto.Active,
                                                  DayOfWeek = templateDto.DayOfWeek,
                                                  DriversNeeded = templateDto.DriversNeeded,
+                                                 Language = templateDto.Language,
                                                  TimeOfDay = new TimeSpan(templateDto.HourOfDay, templateDto.MinutesOfHour, 0)};
             var templateMapper = _mapper.Map<EventTemplate>(template);
             await _unitOfWork.EventTemplates.Insert(template);
