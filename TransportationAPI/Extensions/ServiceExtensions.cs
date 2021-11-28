@@ -56,9 +56,12 @@ namespace TransportationAPI.Extensions
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                    ValidAudience = jwtSettings.GetSection("Audience").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                 };
             });
