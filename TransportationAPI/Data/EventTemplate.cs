@@ -10,8 +10,10 @@ namespace TransportationAPI.Data
             this.EventTemplateBoundaries = new HashSet<EventTemplateBoundary>();
         }
         public int Id { get; set; }
-        public int DayOfWeek { get; set; }
-        public TimeSpan TimeOfDay { get; set; }
+        /// <summary>Indicates the day of the week.</summary>
+        public DayOfWeek DayOfWeek { get; set; }
+        public int Hour { get; set; }
+        public int  Minutes { get; set; }
         public string Language { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportationAPI.Data;
 
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(TransportationContext))]
-    partial class transportationContextModelSnapshot : ModelSnapshot
+    [Migration("20211128100543_remove-events")]
+    partial class removeevents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a839116a-490b-436b-9a64-5666b4968c6f",
-                            ConcurrencyStamp = "c08ba5e6-cf28-4b5c-a00f-3d3df2ee37ee",
+                            Id = "2f59b075-f1e0-46f3-af67-371efc484fa8",
+                            ConcurrencyStamp = "3594af51-675a-4f59-8805-5717e5677cab",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "7996dc5b-25a7-4ac8-90f3-5f6985776020",
-                            ConcurrencyStamp = "75da6f21-caa5-47e7-938c-0df428e2dcc1",
+                            Id = "9e3e40ef-daf9-449d-be11-95c126a64467",
+                            ConcurrencyStamp = "3d188618-fa96-4063-acfe-b47d033f3482",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "8bed19e0-e3e9-4094-8ddb-9e0296b83c81",
-                            ConcurrencyStamp = "b3afa4b0-151e-4e04-bfb9-77b1f3b2fa9d",
+                            Id = "5d4f0469-fea5-45e0-bd2c-f59b79ac44c5",
+                            ConcurrencyStamp = "e8de43f9-9e66-481d-bc2e-d14d0e4a2c42",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "232e5e1e-fc2d-461a-8ff5-45c76778c16a",
-                            ConcurrencyStamp = "baceeb2d-0529-40a5-91f8-0ce21933dde7",
+                            Id = "9bc3d221-6716-44d0-8c02-0c94b4871c4d",
+                            ConcurrencyStamp = "76b831ba-77b9-4b82-872d-72ee51c3d992",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -328,18 +330,18 @@ namespace TransportationAPI.Migrations
 
             modelBuilder.Entity("TransportationAPI.Data.Event", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EventDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("TemplateId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("eventDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
 
                     b.HasIndex("TemplateId");
 
@@ -362,14 +364,11 @@ namespace TransportationAPI.Migrations
                     b.Property<int>("DriversNeeded")
                         .HasColumnType("int");
 
-                    b.Property<int>("Hour")
-                        .HasColumnType("int");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
+                    b.Property<TimeSpan>("TimeOfDay")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

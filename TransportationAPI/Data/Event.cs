@@ -11,8 +11,8 @@ namespace TransportationAPI.Data
             this.CancelledRides = new HashSet<CancelledRide>();
             this.Routes = new HashSet<Route>();
         }
-        public int id { get; set; }
-        public DateTime eventDateTime { get; set; }
+        public int Id { get; set; }
+        public DateTime EventDateTime { get; set; }
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
         public virtual ICollection<CancelledRide> CancelledRides { get; set; }
         public virtual ICollection<Route> Routes { get; set; }
