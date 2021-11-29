@@ -39,9 +39,9 @@ namespace TransportationAPI.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id:int}", Name = "GetEventTemplate")]
+        [HttpGet("{id:int}", Name = "GetById")]
         [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> GetEventTemplate(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
             var result = _mapper.Map<EventTemplateDto>(template);

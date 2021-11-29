@@ -48,29 +48,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a839116a-490b-436b-9a64-5666b4968c6f",
-                            ConcurrencyStamp = "c08ba5e6-cf28-4b5c-a00f-3d3df2ee37ee",
+                            Id = "f25ed596-b4f1-4304-87cb-27dc0a4fb542",
+                            ConcurrencyStamp = "07b105bd-6522-4e7c-a686-798f2aa642da",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "7996dc5b-25a7-4ac8-90f3-5f6985776020",
-                            ConcurrencyStamp = "75da6f21-caa5-47e7-938c-0df428e2dcc1",
+                            Id = "0edd9824-78d8-464e-a390-444401f6d79d",
+                            ConcurrencyStamp = "ea5da38c-978e-45db-a95c-f586cde8ec80",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "8bed19e0-e3e9-4094-8ddb-9e0296b83c81",
-                            ConcurrencyStamp = "b3afa4b0-151e-4e04-bfb9-77b1f3b2fa9d",
+                            Id = "ade43c8a-3532-4d40-af19-c3444642716e",
+                            ConcurrencyStamp = "80827fb5-2a43-4e52-b2fb-8c6972b27295",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "232e5e1e-fc2d-461a-8ff5-45c76778c16a",
-                            ConcurrencyStamp = "baceeb2d-0529-40a5-91f8-0ce21933dde7",
+                            Id = "82d39f2e-4246-4380-9931-969670867c2d",
+                            ConcurrencyStamp = "abbee8c8-e24b-43f0-a957-ae4f971bb313",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -362,7 +362,7 @@ namespace TransportationAPI.Migrations
                     b.Property<int>("DriversNeeded")
                         .HasColumnType("int");
 
-                    b.Property<int>("Hour")
+                    b.Property<int>("Hours")
                         .HasColumnType("int");
 
                     b.Property<string>("Language")

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TransportationAPI.Types;
 
 namespace TransportationAPI.Data
 {
@@ -12,8 +13,7 @@ namespace TransportationAPI.Data
         public int Id { get; set; }
         /// <summary>Indicates the day of the week.</summary>
         public DayOfWeek DayOfWeek { get; set; }
-        public int Hour { get; set; }
-        public int  Minutes { get; set; }
+        public TimeOfDay TimeOfDay { get; set; }
         public string Language { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }

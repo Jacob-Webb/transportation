@@ -10,8 +10,8 @@ using TransportationAPI.Data;
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(TransportationContext))]
-    [Migration("20211128100543_remove-events")]
-    partial class removeevents
+    [Migration("20211129143649_timeofday")]
+    partial class timeofday
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2f59b075-f1e0-46f3-af67-371efc484fa8",
-                            ConcurrencyStamp = "3594af51-675a-4f59-8805-5717e5677cab",
+                            Id = "f25ed596-b4f1-4304-87cb-27dc0a4fb542",
+                            ConcurrencyStamp = "07b105bd-6522-4e7c-a686-798f2aa642da",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "9e3e40ef-daf9-449d-be11-95c126a64467",
-                            ConcurrencyStamp = "3d188618-fa96-4063-acfe-b47d033f3482",
+                            Id = "0edd9824-78d8-464e-a390-444401f6d79d",
+                            ConcurrencyStamp = "ea5da38c-978e-45db-a95c-f586cde8ec80",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "5d4f0469-fea5-45e0-bd2c-f59b79ac44c5",
-                            ConcurrencyStamp = "e8de43f9-9e66-481d-bc2e-d14d0e4a2c42",
+                            Id = "ade43c8a-3532-4d40-af19-c3444642716e",
+                            ConcurrencyStamp = "80827fb5-2a43-4e52-b2fb-8c6972b27295",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "9bc3d221-6716-44d0-8c02-0c94b4871c4d",
-                            ConcurrencyStamp = "76b831ba-77b9-4b82-872d-72ee51c3d992",
+                            Id = "82d39f2e-4246-4380-9931-969670867c2d",
+                            ConcurrencyStamp = "abbee8c8-e24b-43f0-a957-ae4f971bb313",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -330,18 +330,18 @@ namespace TransportationAPI.Migrations
 
             modelBuilder.Entity("TransportationAPI.Data.Event", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("EventDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("eventDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("TemplateId");
 
@@ -364,11 +364,14 @@ namespace TransportationAPI.Migrations
                     b.Property<int>("DriversNeeded")
                         .HasColumnType("int");
 
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("TimeOfDay")
-                        .HasColumnType("time");
+                    b.Property<int>("Minutes")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
