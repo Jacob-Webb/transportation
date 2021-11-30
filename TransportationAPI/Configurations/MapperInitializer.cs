@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using TransportationAPI.Data;
 using TransportationAPI.Models;
+using TransportationAPI.DTOs;
 using TransportationAPI.Types;
 
 namespace TransportationAPI.Configurations

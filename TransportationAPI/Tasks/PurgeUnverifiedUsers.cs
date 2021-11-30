@@ -3,7 +3,7 @@ using Quartz;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using System.Linq;
 
 namespace TransportationAPI.Tasks

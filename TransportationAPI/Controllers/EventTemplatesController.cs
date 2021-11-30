@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransportationAPI.Data;
-using TransportationAPI.IRepository;
 using TransportationAPI.Models;
+using TransportationAPI.IRepository;
+using TransportationAPI.DTOs;
 
 namespace TransportationAPI.Controllers
 {

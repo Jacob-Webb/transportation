@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.Types;
 
-namespace TransportationAPI.Models
+namespace TransportationAPI.DTOs
 {
     public class CreateEventTemplateDto
     {

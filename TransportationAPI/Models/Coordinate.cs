@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     public class Coordinate
     {

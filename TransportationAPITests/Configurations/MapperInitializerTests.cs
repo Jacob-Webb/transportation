@@ -5,7 +5,7 @@ using TransportationAPI.Types;
 namespace TransportationAPITests
 {
     [TestFixture]
-    public class TimeOfDayTests
+    public class MapperInitializerTests
     {
         public TimeOfDay _timeOfDay;
         [SetUp]

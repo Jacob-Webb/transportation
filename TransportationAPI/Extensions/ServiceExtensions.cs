@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using Twilio;
 
 namespace TransportationAPI.Extensions

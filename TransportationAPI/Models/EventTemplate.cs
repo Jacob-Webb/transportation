@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TransportationAPI.Types;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     public class EventTemplate
     {

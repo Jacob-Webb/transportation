@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Repository

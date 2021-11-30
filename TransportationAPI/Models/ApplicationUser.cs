@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     /*
     * ApplicationUser initially taken from database first design from legacy code 

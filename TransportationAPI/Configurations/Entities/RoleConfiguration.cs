@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 namespace TransportationAPI.Configurations.Entities
 {
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>

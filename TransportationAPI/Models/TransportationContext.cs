@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TransportationAPI.Configurations.Entities;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     public partial class TransportationContext : IdentityDbContext<ApplicationUser>
     {

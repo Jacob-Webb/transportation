@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TransportationAPI.Models;
+using TransportationAPI.DTOs;
 
 namespace TransportationAPI.Services
 {

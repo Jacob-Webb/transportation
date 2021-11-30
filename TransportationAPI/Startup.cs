@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using TransportationAPI.Configurations;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.Extensions;
 using TransportationAPI.IRepository;
 using TransportationAPI.Middleware;

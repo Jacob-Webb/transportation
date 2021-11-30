@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TransportationAPI.Models
+namespace TransportationAPI.DTOs
 {
     
     public class UserLoginDto

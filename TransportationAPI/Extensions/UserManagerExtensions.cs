@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 
 namespace TransportationAPI.Extensions
 {
