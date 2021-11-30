@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace TransportationAPI.Types
 {
     /// <summary>
@@ -6,19 +8,28 @@ namespace TransportationAPI.Types
     /// </summary>
     public struct TimeOfDay
     {
-        private int _hour;
-        private int _minutes;
+        private int? _hour;
+        private int? _minutes;
+
         /// <summary>
         /// Represents the hour value of the time of day. Values should range from 0 - 23.
         /// </summary>
-        public int Hour { get => _hour; set => CheckArgumentRange(nameof(value), value, 0,23); }
+        public int? Hour
+        {
+            get { return _hour; }
+            set { _hour = CheckArgumentRange(nameof(value), value, 0, 23); }
+        }
         /// <summary>
         /// Represents the minutes value of the time of day. Values should range from 0 - 59.
         /// </summary>
-        public int Minutes { get => _minutes; set => CheckArgumentRange(nameof(value), value, 0, 59); }
+        public int? Minutes
+        {
+            get { return _minutes; }
+            set { _minutes = CheckArgumentRange(nameof(value), value, 0, 59); }
+        }
 
-        internal static int CheckArgumentRange(
-        string paramName, int value, int minInclusive, int maxInclusive)
+        internal static int? CheckArgumentRange(
+        string paramName, int? value, int minInclusive, int maxInclusive)
         {
             if (value < minInclusive || value > maxInclusive)
             {

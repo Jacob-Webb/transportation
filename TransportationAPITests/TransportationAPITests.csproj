@@ -14,9 +14,11 @@
 
   <ItemGroup>
     <None Remove="Types\" />
+    <None Remove="Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Types\" />
+    <Folder Include="Configurations\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransportationAPI\TransportationAPI.csproj" />

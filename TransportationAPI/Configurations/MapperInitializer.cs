@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using TransportationAPI.Data;
 using TransportationAPI.Models;
+using TransportationAPI.Types;
 
 namespace TransportationAPI.Configurations
 {
@@ -12,8 +14,17 @@ namespace TransportationAPI.Configurations
 
             CreateMap<ApplicationUser, UserLoginDto>().ReverseMap();
             CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
-            CreateMap<EventTemplate, EventTemplateDto>().ReverseMap();
+            //CreateMap<EventTemplate, EventTemplateDto>().ReverseMap();
+            //CreateMap<EventTemplateDto, EventTemplate>();
             CreateMap<EventTemplate, CreateEventTemplateDto>().ReverseMap();
         }
     }
+
+    //public class CustomTimeResolver : IValueResolver<TimeOfDay, TimeSpan, TimeSpan>
+    //{
+    //    public TimeSpan Resolve(TimeOfDay source, TimeSpan destination, TimeSpan member, ResolutionContext context)
+    //    {
+    //        return new TimeSpan(source.Hour, source.Minutes, 0);
+    //    }
+    //}
 }

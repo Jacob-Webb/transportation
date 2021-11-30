@@ -10,7 +10,7 @@ using TransportationAPI.Data;
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(TransportationContext))]
-    [Migration("20211129143649_timeofday")]
+    [Migration("20211129174116_timeofday")]
     partial class timeofday
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f25ed596-b4f1-4304-87cb-27dc0a4fb542",
-                            ConcurrencyStamp = "07b105bd-6522-4e7c-a686-798f2aa642da",
+                            Id = "02d0418f-ca74-4828-a3ba-a3a032876a7b",
+                            ConcurrencyStamp = "059507ba-a50c-4955-a780-04cf9d712152",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "0edd9824-78d8-464e-a390-444401f6d79d",
-                            ConcurrencyStamp = "ea5da38c-978e-45db-a95c-f586cde8ec80",
+                            Id = "7dbcb848-98c4-4f83-bba0-ada531ed35cd",
+                            ConcurrencyStamp = "c4562379-6f57-42b2-aa03-fd44a4fa781c",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "ade43c8a-3532-4d40-af19-c3444642716e",
-                            ConcurrencyStamp = "80827fb5-2a43-4e52-b2fb-8c6972b27295",
+                            Id = "e26a24d9-2737-49af-9b66-2d03a5af4507",
+                            ConcurrencyStamp = "8086c926-9ee2-4aed-9343-f5d24e707f40",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "82d39f2e-4246-4380-9931-969670867c2d",
-                            ConcurrencyStamp = "abbee8c8-e24b-43f0-a957-ae4f971bb313",
+                            Id = "a8b6dd94-9e18-47e0-ba38-818d101523a0",
+                            ConcurrencyStamp = "c387a2aa-a31a-4f58-8b63-17de7b47d296",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -364,14 +364,8 @@ namespace TransportationAPI.Migrations
                     b.Property<int>("DriversNeeded")
                         .HasColumnType("int");
 
-                    b.Property<int>("Hours")
-                        .HasColumnType("int");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
