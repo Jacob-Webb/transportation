@@ -58,6 +58,18 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Get:
+            //public DayOfWeek DayOfWeek { get; set; }
+            //public TimeOfDay TimeOfDay { get; set; }
+            //public string Language { get; set; }
+            //public int DriversNeeded { get; set; }
+            //public bool Active { get; set; }
+            //public HashSet<Coordinate> BoundaryCoordinates { get; set; }
+            // For DayOfWeek, Language, DriversNeeded, and Active these transfer across.
+            // For TimeOfDay, we can create a new TimeSpan object to map to the EventTemplate
+            // For each Coordinate, if the pair is unique, we can create a new one. Get the EventTemplate id, then create a new EventTemplateBoundary
+
+
 
             var template = _mapper.Map<EventTemplate>(templateDto);
             await _unitOfWork.EventTemplates.Insert(template);

@@ -12,16 +12,14 @@ namespace TransportationAPI.DTOs
         
         [Required]
         public DayOfWeek DayOfWeek { get; set; }
+        [Required]
         public TimeOfDay TimeOfDay { get; set; }
-        //[Required]
-        //public int Hour { get; set; }
-        //[Required]
-        //public int Minutes { get; set; }
         public string Language { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }
-        public HashSet<List<float>> BoundaryCoordinates { get; set; }
+        public HashSet<Coordinate> BoundaryCoordinates { get; set; }
     }
+
     public class EventTemplateDto : CreateEventTemplateDto
     {
         public int Id { get; set; }

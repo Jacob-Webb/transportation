@@ -11,6 +11,7 @@ namespace TransportationAPITests
         [SetUp]
         public void Setup()
         {
+            _timeOfDay = new TimeOfDay();
         }
 
         [Test]

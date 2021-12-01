@@ -1,5 +1,8 @@
 ﻿using System;
+using AutoMapper;
 using NUnit.Framework;
+using TransportationAPI.DTOs;
+using TransportationAPI.Models;
 using TransportationAPI.Types;
 
 namespace TransportationAPITests
@@ -7,49 +10,32 @@ namespace TransportationAPITests
     [TestFixture]
     public class MapperInitializerTests
     {
-        public TimeOfDay _timeOfDay;
+        MapperConfiguration _config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<TimeOfDay, TimeSpan>();
+            cfg.CreateMap<EventTemplateDto, EventTemplate>()
+                .ForMember(dest => dest.EventTemplateBoundaries, opt => opt.MapFrom(src => src.BoundaryCoordinates));
+        });
+
         [SetUp]
         public void Setup()
         {
         }
 
         [Test]
-        public void Hour_AssignedNegativeValue_ThrowsArgumentOutOfRangeException()
+        public void Configuration_IsValid()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeOfDay.Hour = -1);
+            _config.AssertConfigurationIsValid();
         }
 
-        [Test]
-        public void Hour_AssignedValueGreaterThan23_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeOfDay.Hour = 24);
-        }
 
-        [Test]
-        public void Hour_AssignedValueIsValid_ReturnsHourValue()
-        {
-            _timeOfDay.Hour = 1;
-            Assert.AreEqual(1, _timeOfDay.Hour);
-        }
 
-        [Test]
-        public void Minutes_AssignedNegativeValue_ThrowsArgumentOutOfRangeException()
+    }
+    public class TimeSpanTypeConverter : ITypeConverter<TimeOfDay, TimeSpan>
+    {
+        public TimeSpan Convert(TimeOfDay source, TimeSpan destination, ResolutionContext context)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeOfDay.Minutes = -1);
+            return new TimeSpan(source.Hour, source.Minutes, 0);
         }
-
-        [Test]
-        public void Minutes_AssignedValueGreaterThan59_ThrowsArgumentOutOfRangeException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeOfDay.Minutes = 60);
-        }
-
-        [Test]
-        public void Minutes_AssignedValueIsValid_ReturnsMinutesValue()
-        {
-            _timeOfDay.Minutes = 1;
-            Assert.AreEqual(1, _timeOfDay.Minutes);
-        }
-
     }
 }
