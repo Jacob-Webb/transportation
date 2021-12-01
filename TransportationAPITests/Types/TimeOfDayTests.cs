@@ -7,7 +7,7 @@ namespace TransportationAPITests
     [TestFixture]
     public class TimeOfDayTests
     {
-        public TimeOfDay _timeOfDay;
+        private TimeOfDay _timeOfDay;
         [SetUp]
         public void Setup()
         {

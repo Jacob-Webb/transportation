@@ -14,7 +14,7 @@ namespace TransportationAPITests
         {
             cfg.CreateMap<TimeOfDay, TimeSpan>();
             cfg.CreateMap<EventTemplateDto, EventTemplate>()
-                .ForMember(dest => dest.EventTemplateBoundaries, opt => opt.MapFrom(src => src.BoundaryCoordinates));
+                .ForMember(dest => dest.EventTemplateBoundaries, opt => opt.Ignore());
         });
 
         [SetUp]

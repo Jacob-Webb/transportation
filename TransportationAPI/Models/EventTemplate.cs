@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TransportationAPI.Types;
 
 namespace TransportationAPI.Models
 {
@@ -11,7 +10,6 @@ namespace TransportationAPI.Models
             this.EventTemplateBoundaries = new HashSet<EventTemplateBoundary>();
         }
         public int Id { get; set; }
-        /// <summary>Indicates the day of the week.</summary>
         public DayOfWeek DayOfWeek { get; set; }
         public TimeSpan TimeOfDay { get; set; }
         public string Language { get; set; }

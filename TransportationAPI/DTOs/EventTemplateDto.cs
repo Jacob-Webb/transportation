@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using AutoMapper;
 using TransportationAPI.Models;
 using TransportationAPI.Types;
 
@@ -17,7 +18,7 @@ namespace TransportationAPI.DTOs
         public string Language { get; set; }
         public int DriversNeeded { get; set; }
         public bool Active { get; set; }
-        public HashSet<Coordinate> BoundaryCoordinates { get; set; }
+        public HashSet<CoordinateDto> BoundaryCoordinates { get; set; }
     }
 
     public class EventTemplateDto : CreateEventTemplateDto
