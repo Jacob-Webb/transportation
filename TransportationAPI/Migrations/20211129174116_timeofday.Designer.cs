@@ -9,7 +9,7 @@ using TransportationAPI.Models;
 
 namespace TransportationAPI.Migrations
 {
-    [DbContext(typeof(TransportationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20211129174116_timeofday")]
     partial class timeofday
     {

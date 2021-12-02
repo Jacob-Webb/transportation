@@ -9,7 +9,7 @@ using TransportationAPI.Models;
 
 namespace TransportationAPI.Migrations
 {
-    [DbContext(typeof(TransportationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20211130055409_timespan-type-for-eventtemplate")]
     partial class timespantypeforeventtemplate
     {

@@ -23,7 +23,7 @@ namespace TransportationAPI.Configurations
     {
         public TimeSpan Convert(TimeSpanDto source, TimeSpan destination, ResolutionContext context)
         {
-            return new TimeSpan(source.Hour, source.Minutes, 0);
+            return new TimeSpan(source.Hours, source.Minutes, 0);
         }
     }
 

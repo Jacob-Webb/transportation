@@ -12,10 +12,10 @@ namespace TransportationAPI.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly TransportationContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(TransportationContext context)
+        public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

@@ -5,13 +5,13 @@ using TransportationAPI.Configurations.Entities;
 
 namespace TransportationAPI.Models
 {
-    public partial class TransportationContext : IdentityDbContext<ApplicationUser>
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public TransportationContext()
+        public ApplicationDbContext()
         {
         }
 
-        public TransportationContext(DbContextOptions<TransportationContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
@@ -36,6 +36,9 @@ namespace TransportationAPI.Models
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
+
+            modelBuilder.Entity<Coordinate>()
+            .HasKey(c => new { c.Latitude, c.Longitude });
 
             modelBuilder.Entity<CancelledRide>()
             .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });

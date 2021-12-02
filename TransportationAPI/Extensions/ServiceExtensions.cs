@@ -29,7 +29,7 @@ namespace TransportationAPI.Extensions
         {
             var builder = services.AddIdentityCore<ApplicationUser>(query => query.User.RequireUniqueEmail = false);
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
-            builder.AddEntityFrameworkStores<TransportationContext>().AddDefaultTokenProviders();
+            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
         }
 
         public static void ConfigurePolicies(this IServiceCollection services)

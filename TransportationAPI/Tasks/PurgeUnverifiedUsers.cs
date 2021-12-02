@@ -11,10 +11,10 @@ namespace TransportationAPI.Tasks
     [DisallowConcurrentExecution]
     public class PurgeUnverifiedUsersJob : IJob
     {
-        private readonly TransportationContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<PurgeUnverifiedUsersJob> _logger;
 
-        public PurgeUnverifiedUsersJob(TransportationContext context, ILogger<PurgeUnverifiedUsersJob> logger)
+        public PurgeUnverifiedUsersJob(ApplicationDbContext context, ILogger<PurgeUnverifiedUsersJob> logger)
         {
             _context = context;
             _logger = logger;

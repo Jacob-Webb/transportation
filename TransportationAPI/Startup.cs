@@ -40,7 +40,7 @@ namespace TransportationAPI
             services.ConfigureIdentity();
             services.ConfigurePolicies();
             services.ConfigureJWT(Configuration);
-            services.AddDbContext<TransportationContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
+            services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
             services.AddAutoMapper(typeof(MapperInitializer));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthManager, AuthManager>();
