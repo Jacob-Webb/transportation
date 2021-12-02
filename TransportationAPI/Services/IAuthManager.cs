@@ -6,7 +6,7 @@ namespace TransportationAPI.Services
 {
     public interface IAuthManager
     {
-        Task<bool> ValidateUser(UserLoginDto userDto);
+        Task<bool> ValidateUser(LoginUserDto userDto);
         Task<string> CreateToken();
     }
 }

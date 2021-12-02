@@ -10,7 +10,7 @@ namespace TransportationAPI.Configurations
         public MapperInitializer()
         {
             // User data class has direct correlation to UserDTO fields and it goes in both direction.
-            CreateMap<ApplicationUser, UserLoginDto>().ReverseMap();
+            CreateMap<ApplicationUser, LoginUserDto>().ReverseMap();
             CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
             CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new TimeSpanDtoTypeConverter());
             CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new TimeSpanTypeConverter());

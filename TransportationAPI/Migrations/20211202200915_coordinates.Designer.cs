@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportationAPI.Models;
 
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class transportationContextModelSnapshot : ModelSnapshot
+    [Migration("20211202200915_coordinates")]
+    partial class coordinates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bc7dcd25-9c08-4be7-a08e-087e3cf4ec8b",
-                            ConcurrencyStamp = "8d9c655a-35af-46cb-b4e1-10351759fd0d",
+                            Id = "9b092cea-c60a-4844-9a9e-462425591ca1",
+                            ConcurrencyStamp = "c7c0f916-c67f-4478-a681-e5b3e94345b5",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "b9cfc8bc-887f-4ccf-8460-633eb2c4592e",
-                            ConcurrencyStamp = "20cc4a0c-2328-4c35-aad8-c04aadc7fa1b",
+                            Id = "59b8fb08-a70b-4919-b8c2-4f6e4016afea",
+                            ConcurrencyStamp = "2b651955-da0e-408a-9540-a0567f7c97b5",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "00cdcc3e-95d6-43d6-b85d-60d4bb9a5f26",
-                            ConcurrencyStamp = "b351aed5-1e5a-4f54-bd29-1d2b560c6d42",
+                            Id = "7e4ff701-62e4-4f6c-8f6f-62f44e1f582a",
+                            ConcurrencyStamp = "877cd9cc-ee62-430c-af48-82d64a9f0a9c",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "e808c521-96c9-4e1e-a21b-2afb166b13b1",
-                            ConcurrencyStamp = "957164d8-795d-44d4-8e65-841010f97738",
+                            Id = "bfae3d6f-f75e-4d9b-a0ee-1380a2324a87",
+                            ConcurrencyStamp = "19198d1c-876a-40f6-8d57-dac186fc440a",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -373,15 +375,21 @@ namespace TransportationAPI.Migrations
                     b.Property<int>("EventTemplateId")
                         .HasColumnType("int");
 
-                    b.Property<double>("CoordinateLatitude")
+                    b.Property<double>("Latitude")
                         .HasColumnType("float");
 
-                    b.Property<double>("CoordinateLongitude")
+                    b.Property<double>("Longitude")
                         .HasColumnType("float");
 
-                    b.HasKey("EventTemplateId", "CoordinateLatitude", "CoordinateLongitude");
+                    b.Property<double?>("CoordinatesLatitude")
+                        .HasColumnType("float");
 
-                    b.HasIndex("CoordinateLatitude", "CoordinateLongitude");
+                    b.Property<double?>("CoordinatesLongitude")
+                        .HasColumnType("float");
+
+                    b.HasKey("EventTemplateId", "Latitude", "Longitude");
+
+                    b.HasIndex("CoordinatesLatitude", "CoordinatesLongitude");
 
                     b.ToTable("EventTemplateBoundaries");
                 });
@@ -512,13 +520,19 @@ namespace TransportationAPI.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("CoordinateLatitude")
+                    b.Property<double>("Latitude")
                         .HasColumnType("float");
 
-                    b.Property<double>("CoordinateLongitude")
+                    b.Property<double>("Longitude")
                         .HasColumnType("float");
 
-                    b.HasKey("ApplicationUserId", "CoordinateLatitude", "CoordinateLongitude");
+                    b.Property<double?>("CoordinateLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("CoordinateLongitude")
+                        .HasColumnType("float");
+
+                    b.HasKey("ApplicationUserId", "Latitude", "Longitude");
 
                     b.HasIndex("CoordinateLatitude", "CoordinateLongitude");
 
@@ -650,9 +664,7 @@ namespace TransportationAPI.Migrations
 
                     b.HasOne("TransportationAPI.Models.Coordinate", "Coordinates")
                         .WithMany("EventTemplateBoundaries")
-                        .HasForeignKey("CoordinateLatitude", "CoordinateLongitude")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CoordinatesLatitude", "CoordinatesLongitude");
 
                     b.Navigation("Coordinates");
 
@@ -728,9 +740,7 @@ namespace TransportationAPI.Migrations
 
                     b.HasOne("TransportationAPI.Models.Coordinate", "Coordinate")
                         .WithMany("UserCoordinates")
-                        .HasForeignKey("CoordinateLatitude", "CoordinateLongitude")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CoordinateLatitude", "CoordinateLongitude");
 
                     b.Navigation("ApplicationUser");
 
