@@ -12,6 +12,7 @@ namespace TransportationAPI.IRepository
         IGenericRepository<Driver> Drivers { get; }
         IGenericRepository<Event> Events { get; }
         IGenericRepository<EventTemplate> EventTemplates { get; }
+        IGenericRepository<EventTemplateBoundary> EventTemplateBoundaries { get; }
         IGenericRepository<Note> Notes { get; }
         IGenericRepository<Route> Routes { get; }
         IGenericRepository<RouteDriver> RouteDrivers { get; }

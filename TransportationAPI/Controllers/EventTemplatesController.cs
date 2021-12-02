@@ -39,9 +39,9 @@ namespace TransportationAPI.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id:int}", Name = "GetById")]
+        [HttpGet("{id:int}", Name = "GetTemplate")]
         [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetTemplate(int id)
         {
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
             var result = _mapper.Map<EventTemplateDto>(template);
@@ -58,24 +58,11 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            
-
-            // Get:
-            //public DayOfWeek DayOfWeek { get; set; }
-            //public TimeOfDay TimeOfDay { get; set; }
-            //public string Language { get; set; }
-            //public int DriversNeeded { get; set; }
-            //public bool Active { get; set; }
-            //public HashSet<Coordinate> BoundaryCoordinates { get; set; }
-            // For DayOfWeek, Language, DriversNeeded, and Active these transfer across.
-            // For TimeOfDay, we can create a new TimeSpan object to map to the EventTemplate
-            // For each Coordinate, if the pair is unique, we can create a new one. Get the EventTemplate id, then create a new EventTemplateBoundary
-
-           var template = _mapper.Map<EventTemplate>(templateDto);
+            var template = _mapper.Map<EventTemplate>(templateDto);
             await _unitOfWork.EventTemplates.Insert(template);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetEventTemplate", new { id = template.Id }, template);
+            return CreatedAtRoute("GetTemplate", new { id = template.Id }, template);
         }
 
         [HttpPut("{id:int}")]

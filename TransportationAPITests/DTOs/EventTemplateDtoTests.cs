@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using TransportationAPI.DTOs;
-using TransportationAPI.Types;
 
 namespace TransportationAPITests
 {

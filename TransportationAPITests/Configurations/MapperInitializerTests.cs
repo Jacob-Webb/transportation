@@ -3,7 +3,6 @@ using AutoMapper;
 using NUnit.Framework;
 using TransportationAPI.DTOs;
 using TransportationAPI.Models;
-using TransportationAPI.Types;
 
 namespace TransportationAPITests
 {
@@ -12,7 +11,7 @@ namespace TransportationAPITests
     {
         MapperConfiguration _config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<TimeOfDay, TimeSpan>();
+            cfg.CreateMap<TimeSpanDto, TimeSpan>();
             cfg.CreateMap<EventTemplateDto, EventTemplate>()
                 .ForMember(dest => dest.EventTemplateBoundaries, opt => opt.Ignore());
         });
@@ -31,9 +30,9 @@ namespace TransportationAPITests
 
 
     }
-    public class TimeSpanTypeConverter : ITypeConverter<TimeOfDay, TimeSpan>
+    public class TimeSpanTypeConverter : ITypeConverter<TimeSpanDto, TimeSpan>
     {
-        public TimeSpan Convert(TimeOfDay source, TimeSpan destination, ResolutionContext context)
+        public TimeSpan Convert(TimeSpanDto source, TimeSpan destination, ResolutionContext context)
         {
             return new TimeSpan(source.Hour, source.Minutes, 0);
         }

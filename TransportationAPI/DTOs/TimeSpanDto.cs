@@ -1,17 +1,15 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TransportationAPI.Types
+namespace TransportationAPI.DTOs
 {
     /// <summary>
     /// Represents the time of day using a 24-hour period.
     /// </summary>
-    public class TimeOfDay
+    public class TimeSpanDto
     {
         private int _hour;
         private int _minutes;
 
-        public TimeOfDay(int hour = 0, int minutes = 0)
+        public TimeSpanDto(int hour = 0, int minutes = 0)
         {
             _hour = hour;
             _minutes = minutes;

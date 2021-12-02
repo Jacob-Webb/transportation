@@ -38,12 +38,10 @@
     <Folder Include="DTOs\" />
     <Folder Include="Tasks\" />
     <Folder Include="Logs\" />
-    <Folder Include="Types\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Quartz.Extensions.Hosting" />
     <None Remove="Tasks\" />
     <None Remove="Logs\" />
-    <None Remove="Types\" />
   </ItemGroup>
 </Project>

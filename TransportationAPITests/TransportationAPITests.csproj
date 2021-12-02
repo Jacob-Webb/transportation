@@ -13,12 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Types\" />
     <None Remove="Configurations\" />
     <None Remove="DTOs\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Types\" />
     <Folder Include="Configurations\" />
     <Folder Include="DTOs\" />
   </ItemGroup>
