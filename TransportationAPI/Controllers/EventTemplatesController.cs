@@ -7,22 +7,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransportationAPI.Data;
-using TransportationAPI.IRepository;
 using TransportationAPI.Models;
+using TransportationAPI.IRepository;
+using TransportationAPI.DTOs;
 
 namespace TransportationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventTemplateController : ControllerBase
+    public class EventTemplatesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<EventTemplateController> _logger;
+        private readonly ILogger<EventTemplatesController> _logger;
         private readonly IMapper _mapper;
 
-        public EventTemplateController(IUnitOfWork unitOfWork,
-            ILogger<EventTemplateController> logger,
+        public EventTemplatesController(IUnitOfWork unitOfWork,
+            ILogger<EventTemplatesController> logger,
             IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -39,9 +39,9 @@ namespace TransportationAPI.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id:int}", Name = "GetEventTemplate")]
+        [HttpGet("{id:int}", Name = "GetTemplate")]
         [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> GetEventTemplate(int id)
+        public async Task<IActionResult> GetTemplate(int id)
         {
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
             var result = _mapper.Map<EventTemplateDto>(template);
@@ -62,7 +62,7 @@ namespace TransportationAPI.Controllers
             await _unitOfWork.EventTemplates.Insert(template);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetEventTemplate", new { id = template.Id }, template);
+            return CreatedAtRoute("GetTemplate", new { id = template.Id }, template);
         }
 
         [HttpPut("{id:int}")]

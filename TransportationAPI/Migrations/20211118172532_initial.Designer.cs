@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 
 namespace TransportationAPI.Migrations
 {
-    [DbContext(typeof(TransportationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20211118172532_initial")]
     partial class initial
     {

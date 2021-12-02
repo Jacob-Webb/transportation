@@ -1,16 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
-    public class UserCoordinate
+    public class UserNote
     {
+        [ForeignKey("Note")]
+        public int NoteId { get; set; }
+        public Note Note { get; set; }
+
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-
-        [ForeignKey("Coordinate")]
-        public int CoordinateId { get; set; }
-        public Coordinate Coordinate { get; set; }
     }
 }

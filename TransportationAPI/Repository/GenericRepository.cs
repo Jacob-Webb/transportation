@@ -5,17 +5,17 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly TransportationContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(TransportationContext context)
+        public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

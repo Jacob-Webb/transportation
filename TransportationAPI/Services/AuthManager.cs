@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.Extensions;
 using TransportationAPI.Middleware;
-using TransportationAPI.Models;
+using TransportationAPI.DTOs;
 
 namespace TransportationAPI.Services
 {
@@ -19,12 +20,15 @@ namespace TransportationAPI.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private ApplicationUser _user;
+        private ILogger<AuthManager> _logger;
 
         public AuthManager(UserManager<ApplicationUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<AuthManager> logger)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _logger = logger;
         }
         public async Task<string> CreateToken()
         {
@@ -43,11 +47,11 @@ namespace TransportationAPI.Services
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings.GetSection("Issuer").Value,
+                audience: jwtSettings.GetSection("Audience").Value,
                 claims: claims,
                 expires: expiration,
                 signingCredentials: signingCredentials
                 );
-
             return token;
         }
 

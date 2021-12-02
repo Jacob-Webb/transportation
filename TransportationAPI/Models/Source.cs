@@ -1,5 +1,5 @@
 ﻿using System;
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     public class Source
     {

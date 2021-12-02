@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
     public class EventTemplateBoundary
     {

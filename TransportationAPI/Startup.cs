@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using TransportationAPI.Configurations;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using TransportationAPI.Extensions;
 using TransportationAPI.IRepository;
 using TransportationAPI.Middleware;
@@ -40,7 +40,7 @@ namespace TransportationAPI
             services.ConfigureIdentity();
             services.ConfigurePolicies();
             services.ConfigureJWT(Configuration);
-            services.AddDbContext<TransportationContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
+            services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("MSSQLDev")));
             services.AddAutoMapper(typeof(MapperInitializer));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthManager, AuthManager>();

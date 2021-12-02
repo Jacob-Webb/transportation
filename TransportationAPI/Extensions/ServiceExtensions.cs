@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using TransportationAPI.Data;
+using TransportationAPI.Models;
 using Twilio;
 
 namespace TransportationAPI.Extensions
@@ -29,7 +29,7 @@ namespace TransportationAPI.Extensions
         {
             var builder = services.AddIdentityCore<ApplicationUser>(query => query.User.RequireUniqueEmail = false);
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
-            builder.AddEntityFrameworkStores<TransportationContext>().AddDefaultTokenProviders();
+            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
         }
 
         public static void ConfigurePolicies(this IServiceCollection services)
@@ -56,9 +56,12 @@ namespace TransportationAPI.Extensions
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                    ValidAudience = jwtSettings.GetSection("Audience").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                 };
             });

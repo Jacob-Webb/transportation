@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportationAPI.Models;
 
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class transportationContextModelSnapshot : ModelSnapshot
+    [Migration("20211129174116_timeofday")]
+    partial class timeofday
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1c0a56dc-4118-4097-ac1f-bfe63a4d4588",
-                            ConcurrencyStamp = "0ef34ce1-15b7-49a2-9d44-f65b62742893",
+                            Id = "02d0418f-ca74-4828-a3ba-a3a032876a7b",
+                            ConcurrencyStamp = "059507ba-a50c-4955-a780-04cf9d712152",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "b9e4cd0e-38a4-44c0-ba9a-069bf561d4d3",
-                            ConcurrencyStamp = "f619d6e6-b68e-4730-9004-69af38db7bd7",
+                            Id = "7dbcb848-98c4-4f83-bba0-ada531ed35cd",
+                            ConcurrencyStamp = "c4562379-6f57-42b2-aa03-fd44a4fa781c",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "61323dd8-db81-4b5e-9c62-245a844e493c",
-                            ConcurrencyStamp = "915f4b1a-14f1-4ca5-8a7a-f92af661b928",
+                            Id = "e26a24d9-2737-49af-9b66-2d03a5af4507",
+                            ConcurrencyStamp = "8086c926-9ee2-4aed-9343-f5d24e707f40",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "7f752681-8d2a-4aa5-8ed1-66005c1db9d0",
-                            ConcurrencyStamp = "1160fd7d-277a-4f10-b80d-b8e40b69cb19",
+                            Id = "a8b6dd94-9e18-47e0-ba38-818d101523a0",
+                            ConcurrencyStamp = "c387a2aa-a31a-4f58-8b63-17de7b47d296",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -364,9 +366,6 @@ namespace TransportationAPI.Migrations
 
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("TimeOfDay")
-                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

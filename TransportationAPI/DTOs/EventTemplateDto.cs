@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TransportationAPI.Data;
+using System.Text.Json.Serialization;
+using AutoMapper;
 
-namespace TransportationAPI.Models
+namespace TransportationAPI.DTOs
 {
     public class CreateEventTemplateDto
     {
+        
         [Required]
-        [Range(0, 6)]
-        public int DayOfWeek { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
         [Required]
-        public DateTime TimeOfDay { get; set; }
+        public TimeSpanDto TimeOfDay { get; set; }
+        public string Language { get; set; }
         public int DriversNeeded { get; set; }
-        public HashSet<Coordinate> Boundaries { get; set; }
+        public bool Active { get; set; }
+        public HashSet<CoordinateDto> BoundaryCoordinates { get; set; }
     }
+
     public class EventTemplateDto : CreateEventTemplateDto
     {
         public int Id { get; set; }

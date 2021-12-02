@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TransportationAPI.Configurations.Entities;
 
-namespace TransportationAPI.Data
+namespace TransportationAPI.Models
 {
-    public partial class TransportationContext : IdentityDbContext<ApplicationUser>
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public TransportationContext()
+        public ApplicationDbContext()
         {
         }
 
-        public TransportationContext(DbContextOptions<TransportationContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
@@ -20,9 +20,10 @@ namespace TransportationAPI.Data
         public virtual DbSet<Driver> Drivers { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventTemplate> EventTemplates { get; set; }
+        public virtual DbSet<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Route> Routes { get; set; }
-        public virtual DbSet<RouteDriver> RouteDriver { get; set; }
+        public virtual DbSet<RouteDriver> RouteDrivers { get; set; }
         public virtual DbSet<ScheduledRide> ScheduledRides { get; set; }
         public virtual DbSet<Source> Sources { get; set; }
         public virtual DbSet<TextHistory> TextHistory { get; set; }
@@ -35,6 +36,9 @@ namespace TransportationAPI.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
+
+            modelBuilder.Entity<Coordinate>()
+            .HasKey(c => new { c.Latitude, c.Longitude });
 
             modelBuilder.Entity<CancelledRide>()
             .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });
