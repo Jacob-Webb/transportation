@@ -6,22 +6,22 @@ namespace TransportationAPI.DTOs
     /// </summary>
     public class TimeSpanDto
     {
-        private int _hour;
+        private int _hours;
         private int _minutes;
 
-        public TimeSpanDto(int hour = 0, int minutes = 0)
+        public TimeSpanDto(int hours = 0, int minutes = 0)
         {
-            _hour = hour;
+            _hours = hours;
             _minutes = minutes;
         }
 
         /// <summary>
         /// Represents the hour value of the time of day. Values should range from 0 - 23.
         /// </summary>
-        public int Hour
+        public int Hours
         {
-            get { return _hour; }
-            set { _hour = CheckArgumentRange(nameof(value), value, 0, 23); }
+            get { return _hours; }
+            set { _hours = CheckArgumentRange(nameof(value), value, 0, 23); }
         }
         /// <summary>
         /// Represents the minutes value of the time of day. Values should range from 0 - 59.

@@ -17,20 +17,20 @@ namespace TransportationAPITests
         [Test]
         public void Hour_AssignedNegativeValue_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeSpanDto.Hour = -1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _timeSpanDto.Hours = -1);
         }
 
         [Test]
         public void Hour_AssignedValueGreaterThan23_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _timeSpanDto.Hour = 24);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _timeSpanDto.Hours = 24);
         }
 
         [Test]
         public void Hour_AssignedValueIsValid_ReturnsHourValue()
         {
-            _timeSpanDto.Hour = 1;
-            Assert.AreEqual(1, _timeSpanDto.Hour);
+            _timeSpanDto.Hours = 1;
+            Assert.AreEqual(1, _timeSpanDto.Hours);
         }
 
         [Test]
