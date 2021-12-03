@@ -80,7 +80,7 @@ namespace TransportationAPI.Services
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<bool> ValidateUser(UserLoginDto userDto)
+        public async Task<bool> ValidateUser(LoginUserDto userDto)
         {
             var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
             _user = await _userManager.FindByPhoneAsync(validatedNumber);

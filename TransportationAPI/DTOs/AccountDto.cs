@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace TransportationAPI.DTOs
 {
     
-    public class UserLoginDto
+    public class LoginUserDto
     {
         [Required(ErrorMessage = "A phone number is required")]
         [Phone]
@@ -15,7 +15,7 @@ namespace TransportationAPI.DTOs
         public string Password { get; set; }
     }
 
-    public class RegisterUserDto : UserLoginDto
+    public class RegisterUserDto : LoginUserDto
     {
         [Required(ErrorMessage = "A first name is required")]
         [StringLength(50)]

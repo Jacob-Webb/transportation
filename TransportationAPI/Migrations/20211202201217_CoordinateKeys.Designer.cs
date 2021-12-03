@@ -10,8 +10,8 @@ using TransportationAPI.Models;
 namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211130055409_timespan-type-for-eventtemplate")]
-    partial class timespantypeforeventtemplate
+    [Migration("20211202201217_CoordinateKeys")]
+    partial class CoordinateKeys
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,29 +50,29 @@ namespace TransportationAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1c0a56dc-4118-4097-ac1f-bfe63a4d4588",
-                            ConcurrencyStamp = "0ef34ce1-15b7-49a2-9d44-f65b62742893",
+                            Id = "bc7dcd25-9c08-4be7-a08e-087e3cf4ec8b",
+                            ConcurrencyStamp = "8d9c655a-35af-46cb-b4e1-10351759fd0d",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "b9e4cd0e-38a4-44c0-ba9a-069bf561d4d3",
-                            ConcurrencyStamp = "f619d6e6-b68e-4730-9004-69af38db7bd7",
+                            Id = "b9cfc8bc-887f-4ccf-8460-633eb2c4592e",
+                            ConcurrencyStamp = "20cc4a0c-2328-4c35-aad8-c04aadc7fa1b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "61323dd8-db81-4b5e-9c62-245a844e493c",
-                            ConcurrencyStamp = "915f4b1a-14f1-4ca5-8a7a-f92af661b928",
+                            Id = "00cdcc3e-95d6-43d6-b85d-60d4bb9a5f26",
+                            ConcurrencyStamp = "b351aed5-1e5a-4f54-bd29-1d2b560c6d42",
                             Name = "Driver",
                             NormalizedName = "DRIVER"
                         },
                         new
                         {
-                            Id = "7f752681-8d2a-4aa5-8ed1-66005c1db9d0",
-                            ConcurrencyStamp = "1160fd7d-277a-4f10-b80d-b8e40b69cb19",
+                            Id = "e808c521-96c9-4e1e-a21b-2afb166b13b1",
+                            ConcurrencyStamp = "957164d8-795d-44d4-8e65-841010f97738",
                             Name = "Rider",
                             NormalizedName = "RIDER"
                         });
@@ -182,7 +182,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.ApplicationUser", b =>
+            modelBuilder.Entity("TransportationAPI.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -268,7 +268,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.CancelledRide", b =>
+            modelBuilder.Entity("TransportationAPI.Models.CancelledRide", b =>
                 {
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -293,25 +293,20 @@ namespace TransportationAPI.Migrations
                     b.ToTable("CancelledRides");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Coordinate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Coordinate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("Latitude", "Longitude");
 
                     b.ToTable("Coordinates");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Driver", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Driver", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -328,7 +323,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("Drivers");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Event", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,7 +343,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.EventTemplate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.EventTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -375,22 +370,25 @@ namespace TransportationAPI.Migrations
                     b.ToTable("EventTemplates");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.EventTemplateBoundary", b =>
+            modelBuilder.Entity("TransportationAPI.Models.EventTemplateBoundary", b =>
                 {
                     b.Property<int>("EventTemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CoordinateId")
-                        .HasColumnType("int");
+                    b.Property<double>("CoordinateLatitude")
+                        .HasColumnType("float");
 
-                    b.HasKey("EventTemplateId", "CoordinateId");
+                    b.Property<double>("CoordinateLongitude")
+                        .HasColumnType("float");
 
-                    b.HasIndex("CoordinateId");
+                    b.HasKey("EventTemplateId", "CoordinateLatitude", "CoordinateLongitude");
 
-                    b.ToTable("EventTemplateBoundary");
+                    b.HasIndex("CoordinateLatitude", "CoordinateLongitude");
+
+                    b.ToTable("EventTemplateBoundaries");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Note", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -405,7 +403,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Route", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Route", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -422,7 +420,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.RouteDriver", b =>
+            modelBuilder.Entity("TransportationAPI.Models.RouteDriver", b =>
                 {
                     b.Property<int>("RouteId")
                         .HasColumnType("int");
@@ -434,10 +432,10 @@ namespace TransportationAPI.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.ToTable("RouteDriver");
+                    b.ToTable("RouteDrivers");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.ScheduledRide", b =>
+            modelBuilder.Entity("TransportationAPI.Models.ScheduledRide", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -475,7 +473,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("ScheduledRides");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Source", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Source", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,7 +488,7 @@ namespace TransportationAPI.Migrations
                     b.ToTable("Sources");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.TextHistory", b =>
+            modelBuilder.Entity("TransportationAPI.Models.TextHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -511,22 +509,25 @@ namespace TransportationAPI.Migrations
                     b.ToTable("TextHistory");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.UserCoordinate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.UserCoordinate", b =>
                 {
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CoordinateId")
-                        .HasColumnType("int");
+                    b.Property<double>("CoordinateLatitude")
+                        .HasColumnType("float");
 
-                    b.HasKey("ApplicationUserId", "CoordinateId");
+                    b.Property<double>("CoordinateLongitude")
+                        .HasColumnType("float");
 
-                    b.HasIndex("CoordinateId");
+                    b.HasKey("ApplicationUserId", "CoordinateLatitude", "CoordinateLongitude");
+
+                    b.HasIndex("CoordinateLatitude", "CoordinateLongitude");
 
                     b.ToTable("UserCoordinates");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.UserNote", b =>
+            modelBuilder.Entity("TransportationAPI.Models.UserNote", b =>
                 {
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -552,7 +553,7 @@ namespace TransportationAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", null)
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -561,7 +562,7 @@ namespace TransportationAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", null)
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -576,7 +577,7 @@ namespace TransportationAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", null)
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,32 +586,32 @@ namespace TransportationAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", null)
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.CancelledRide", b =>
+            modelBuilder.Entity("TransportationAPI.Models.CancelledRide", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", "ApplicationUser")
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("CancelledRides")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Event", "Event")
+                    b.HasOne("TransportationAPI.Models.Event", "Event")
                         .WithMany("CancelledRides")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Note", "Note")
+                    b.HasOne("TransportationAPI.Models.Note", "Note")
                         .WithMany("CancelledRides")
                         .HasForeignKey("NoteId");
 
-                    b.HasOne("TransportationAPI.Data.Source", "Source")
+                    b.HasOne("TransportationAPI.Models.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId");
 
@@ -623,35 +624,35 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Driver", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Driver", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", "User")
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Event", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Event", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.EventTemplate", "Template")
+                    b.HasOne("TransportationAPI.Models.EventTemplate", "Template")
                         .WithMany()
                         .HasForeignKey("TemplateId");
 
                     b.Navigation("Template");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.EventTemplateBoundary", b =>
+            modelBuilder.Entity("TransportationAPI.Models.EventTemplateBoundary", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.Coordinate", "Coordinates")
+                    b.HasOne("TransportationAPI.Models.EventTemplate", "EventTemplates")
                         .WithMany("EventTemplateBoundaries")
-                        .HasForeignKey("CoordinateId")
+                        .HasForeignKey("EventTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.EventTemplate", "EventTemplates")
+                    b.HasOne("TransportationAPI.Models.Coordinate", "Coordinates")
                         .WithMany("EventTemplateBoundaries")
-                        .HasForeignKey("EventTemplateId")
+                        .HasForeignKey("CoordinateLatitude", "CoordinateLongitude")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -660,9 +661,9 @@ namespace TransportationAPI.Migrations
                     b.Navigation("EventTemplates");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Route", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Route", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.Event", "Event")
+                    b.HasOne("TransportationAPI.Models.Event", "Event")
                         .WithMany("Routes")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,15 +672,15 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.RouteDriver", b =>
+            modelBuilder.Entity("TransportationAPI.Models.RouteDriver", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.Driver", "Driver")
+                    b.HasOne("TransportationAPI.Models.Driver", "Driver")
                         .WithMany("RouteDrivers")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Route", "Route")
+                    b.HasOne("TransportationAPI.Models.Route", "Route")
                         .WithMany("RouteDrivers")
                         .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -690,23 +691,23 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Route");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.ScheduledRide", b =>
+            modelBuilder.Entity("TransportationAPI.Models.ScheduledRide", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", "ApplicationUser")
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("ScheduledRides")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("TransportationAPI.Data.Event", "Event")
+                    b.HasOne("TransportationAPI.Models.Event", "Event")
                         .WithMany("ScheduledRides")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Route", "Route")
+                    b.HasOne("TransportationAPI.Models.Route", "Route")
                         .WithMany("ScheduledRides")
                         .HasForeignKey("RouteId");
 
-                    b.HasOne("TransportationAPI.Data.Source", "Source")
+                    b.HasOne("TransportationAPI.Models.Source", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId");
 
@@ -719,17 +720,17 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.UserCoordinate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.UserCoordinate", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", "ApplicationUser")
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("UserCoordinates")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Coordinate", "Coordinate")
+                    b.HasOne("TransportationAPI.Models.Coordinate", "Coordinate")
                         .WithMany("UserCoordinates")
-                        .HasForeignKey("CoordinateId")
+                        .HasForeignKey("CoordinateLatitude", "CoordinateLongitude")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -738,15 +739,15 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Coordinate");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.UserNote", b =>
+            modelBuilder.Entity("TransportationAPI.Models.UserNote", b =>
                 {
-                    b.HasOne("TransportationAPI.Data.ApplicationUser", "ApplicationUser")
+                    b.HasOne("TransportationAPI.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("UserNotes")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportationAPI.Data.Note", "Note")
+                    b.HasOne("TransportationAPI.Models.Note", "Note")
                         .WithMany("UserNotes")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -757,7 +758,7 @@ namespace TransportationAPI.Migrations
                     b.Navigation("Note");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.ApplicationUser", b =>
+            modelBuilder.Entity("TransportationAPI.Models.ApplicationUser", b =>
                 {
                     b.Navigation("CancelledRides");
 
@@ -768,19 +769,19 @@ namespace TransportationAPI.Migrations
                     b.Navigation("UserNotes");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Coordinate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Coordinate", b =>
                 {
                     b.Navigation("EventTemplateBoundaries");
 
                     b.Navigation("UserCoordinates");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Driver", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Driver", b =>
                 {
                     b.Navigation("RouteDrivers");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Event", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Event", b =>
                 {
                     b.Navigation("CancelledRides");
 
@@ -789,19 +790,19 @@ namespace TransportationAPI.Migrations
                     b.Navigation("ScheduledRides");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.EventTemplate", b =>
+            modelBuilder.Entity("TransportationAPI.Models.EventTemplate", b =>
                 {
                     b.Navigation("EventTemplateBoundaries");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Note", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Note", b =>
                 {
                     b.Navigation("CancelledRides");
 
                     b.Navigation("UserNotes");
                 });
 
-            modelBuilder.Entity("TransportationAPI.Data.Route", b =>
+            modelBuilder.Entity("TransportationAPI.Models.Route", b =>
                 {
                     b.Navigation("RouteDrivers");
 

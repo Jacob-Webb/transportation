@@ -110,7 +110,7 @@ namespace TransportationAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDto userDto)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto userDto)
         {
             _logger.LogInformation($"Login attempt for {userDto.Phone} ");
             if (!ModelState.IsValid)

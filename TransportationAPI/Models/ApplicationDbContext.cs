@@ -44,13 +44,13 @@ namespace TransportationAPI.Models
             .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });
 
             modelBuilder.Entity<EventTemplateBoundary>()
-            .HasKey(etb => new { etb.EventTemplateId, etb.CoordinateId });
+            .HasKey(etb => new { etb.EventTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
 
             modelBuilder.Entity<RouteDriver>()
             .HasKey(rd => new { rd.RouteId, rd.DriverId });
 
             modelBuilder.Entity<UserCoordinate>()
-            .HasKey(uc => new { uc.ApplicationUserId, uc.CoordinateId });
+            .HasKey(uc => new { uc.ApplicationUserId, uc.CoordinateLatitude, uc.CoordinateLongitude });
 
             modelBuilder.Entity<UserNote>()
             .HasKey(un => new { un.ApplicationUserId, un.NoteId });
