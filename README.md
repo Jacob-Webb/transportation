@@ -1,4 +1,14 @@
 ﻿# Transportation API v1.0
+## Purpose
+
+This software was designed as a replacement for the pre-existing app that allowed people to text in for rides to The Rock Church services.
+This app seeks to allow (potential) riders access to clean UI to
+    1. Enhance the user experience with the church's app
+    2. Eliminate mistakes made by users through an intuitive system, relieving the transportion administration.
+
+This software is utilizes Angular for the web app interface, C# and .NET Core on the server side, and MSSQL Server as the RBDMS.
+
+To see the client side code, please visit https://github.com/Jacob-Webb/transportation-client
 
 ## Steps for Local set up
 

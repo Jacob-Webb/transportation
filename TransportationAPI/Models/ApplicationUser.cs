@@ -4,10 +4,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace TransportationAPI.Models
 {
-    /*
-    * ApplicationUser initially taken from database first design from legacy code 
-    *
-    */
     public class ApplicationUser : IdentityUser
     {
         public ApplicationUser()
