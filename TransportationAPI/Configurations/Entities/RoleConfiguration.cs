@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace TransportationAPI.Configurations.Entities
 {
+    /// <summary>
+    /// Role Configuration class that creates the following roles in the database when the database is created
+    /// </summary>
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
