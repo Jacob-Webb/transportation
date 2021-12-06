@@ -82,8 +82,9 @@ namespace TransportationAPI.Services
 
         public async Task<bool> ValidateUser(LoginUserDto userDto)
         {
-            var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
-            _user = await _userManager.FindByPhoneAsync(validatedNumber);
+            // userDto Phone number must be in E.164 format.
+            // userDto.Phone should be formatted by the calling method before being passed to ValidateUser
+            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
         }
     }

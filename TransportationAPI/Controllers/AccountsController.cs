@@ -118,12 +118,22 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
+
+            userDto.Phone = validatedNumber;
+
             if (!await _authManager.ValidateUser(userDto))
             {
                 return Unauthorized("The phone number - password combination is invalid. Please try again.");
             }
 
-            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, Token = await _authManager.CreateToken() });
+            // Create AccessToken
+            // Create RefreshToken
+            // Set Refresh Token to user
+            var user = _userManager.FindByPhoneAsync(userDto.Phone);
+            // Save User
+
+            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, AccessToken = await _authManager.CreateToken() });
 
         }
 
