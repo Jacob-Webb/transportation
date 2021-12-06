@@ -30,8 +30,8 @@ namespace TransportationAPI.Configurations.Entities
                 },
                 new IdentityRole
                 {
-                    Name = "Rider",
-                    NormalizedName = "RIDER"
+                    Name = "User",
+                    NormalizedName = "USER"
                 }
             );
         }
