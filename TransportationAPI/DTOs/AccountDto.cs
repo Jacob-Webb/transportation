@@ -13,6 +13,8 @@ namespace TransportationAPI.DTOs
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
         public string Password { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 
     public class RegisterUserDto : LoginUserDto
