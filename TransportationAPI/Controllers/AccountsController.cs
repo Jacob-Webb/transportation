@@ -129,18 +129,20 @@ namespace TransportationAPI.Controllers
 
             // Create AccessToken
             var accessToken = await _authManager.GenerateAccessToken();
-            var refreshToken = await _authManager.GenerateRefreshToken();
+            var refreshToken = _authManager.GenerateRefreshToken();
             // Create RefreshToken
             // Set Refresh Token to user
-            var user = _userManager.FindByPhoneAsync(userDto.Phone);
+            var user = await _userManager.FindByPhoneAsync(userDto.Phone);
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
             // Save User
 
-            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, AccessToken = await _authManager.CreateToken() });
+            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, AccessToken = await _authManager.GenerateAccessToken() });
 
         }
+
+        
 
         [HttpPost]
         [Route("PhoneVerification/{phone}")]
