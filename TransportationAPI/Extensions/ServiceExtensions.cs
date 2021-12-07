@@ -44,7 +44,7 @@ namespace TransportationAPI.Extensions
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
         {
             var jwtSettings = Configuration.GetSection("Jwt");
-            var key = Configuration["Jwt:Key"];
+            var key = Configuration["Jwt:AccessKey"];
 
             services.AddAuthentication(option =>
             {
