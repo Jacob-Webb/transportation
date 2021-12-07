@@ -139,13 +139,17 @@ namespace TransportationAPI.Controllers
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
             // Save User
 
-            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, AccessToken = await _authManager.GenerateAccessToken() });
+            return Accepted(new AuthResponseDto {
+                IsAuthSuccessful = true,
+                AccessToken = await _authManager.GenerateAccessToken(),
+                RefreshToken = _authManager.GenerateRefreshToken()
+            });
 
         }
 
         [HttpPost]
         [Route("Refresh")]
-        public async Task<IActionResult> Refresh(TokenDto tokenDto)
+        public async Task<IActionResult> RefreshToken(TokenDto tokenDto)
         {
             if (!ModelState.IsValid)
             {
@@ -183,7 +187,7 @@ namespace TransportationAPI.Controllers
         [HttpPost]
         [Authorize]
         [Route("Revoke")]
-        public async Task<IActionResult> Revoke()
+        public async Task<IActionResult> RevokeToken()
         {
             var username = User.Identity.Name;
 
