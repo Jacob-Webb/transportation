@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace TransportationAPI.Controllers
 {
@@ -24,18 +25,21 @@ namespace TransportationAPI.Controllers
     {
         private readonly TwilioSettings _twilioVerifySettings;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
 
         public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
             IAuthManager authManager)
         {
             _twilioVerifySettings = twilioVerifySettings.Value;
             _userManager = userManager;
+            _configuration = configuration;
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
@@ -136,7 +140,8 @@ namespace TransportationAPI.Controllers
             var user = await _userManager.FindByPhoneAsync(userDto.Phone);
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            var refreshLifetime = Convert.ToDouble(_configuration.GetSection("Jwt").GetSection("RefreshLifetime").Value);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshLifetime);
             // Save User
 
             return Accepted(new AuthResponseDto {
