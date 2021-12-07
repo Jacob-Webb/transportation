@@ -14,6 +14,7 @@ using Twilio.Rest.Lookups.V1;
 using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TransportationAPI.Controllers
 {
@@ -142,7 +143,59 @@ namespace TransportationAPI.Controllers
 
         }
 
-        
+        [HttpPost]
+        [Route("Refresh")]
+        public async Task<IActionResult> Refresh(TokenDto tokenDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (tokenDto == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            string accessToken = tokenDto.AccessToken;
+            string refreshToken = tokenDto.RefreshToken;
+
+            var principal = _authManager.GetPrincipalFromExpiredToken(accessToken);
+            var username = principal.Identity.Name; //this is mapped to the Name claim by default
+
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            var newAccessToken = await _authManager.GenerateAccessToken();
+            var newRefreshToken = _authManager.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+
+            var updatedUser = await _userManager.UpdateAsync(user);
+
+            return Accepted(new TokenDto { AccessToken = newAccessToken, RefreshToken = newRefreshToken });
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("Revoke")]
+        public async Task<IActionResult> Revoke()
+        {
+            var username = User.Identity.Name;
+
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null) return BadRequest();
+
+            user.RefreshToken = null;
+
+            var updatedUser = await _userManager.UpdateAsync(user);
+            return NoContent();
+        }
 
         [HttpPost]
         [Route("PhoneVerification/{phone}")]
