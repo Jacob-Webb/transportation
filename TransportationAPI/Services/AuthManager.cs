@@ -13,6 +13,7 @@ using TransportationAPI.Extensions;
 using TransportationAPI.Middleware;
 using TransportationAPI.DTOs;
 using System.Security.Cryptography;
+using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Services
 {
@@ -22,14 +23,17 @@ namespace TransportationAPI.Services
         private readonly IConfiguration _configuration;
         private ApplicationUser _user;
         private ILogger<AuthManager> _logger;
+        private IUnitOfWork _unitOfWork;
 
         public AuthManager(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-            ILogger<AuthManager> logger)
+            ILogger<AuthManager> logger,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
         //public async Task<string> CreateToken()
         //{
@@ -62,14 +66,14 @@ namespace TransportationAPI.Services
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
-            var refreshKey = _configuration["Jwt:RefreshKey"];
+            var key = _configuration["Jwt:Key"];
 
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = true,
-                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(refreshKey)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                 ValidateLifetime = false
             };
 

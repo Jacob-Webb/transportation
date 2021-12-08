@@ -16,6 +16,7 @@ using Twilio.Rest.Verify.V2.Service;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Controllers
 {
@@ -29,13 +30,15 @@ namespace TransportationAPI.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
+        private readonly IUnitOfWork _unitOfWork; 
 
         public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
-            IAuthManager authManager)
+            IAuthManager authManager,
+            IUnitOfWork unitOfWork)
         {
             _twilioVerifySettings = twilioVerifySettings.Value;
             _userManager = userManager;
@@ -43,6 +46,7 @@ namespace TransportationAPI.Controllers
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost]
@@ -123,9 +127,9 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
 
-            userDto.Phone = validatedNumber;
+            userDto.Phone = validatedPhoneNumber;
 
             if (!await _authManager.ValidateUser(userDto))
             {
@@ -137,17 +141,19 @@ namespace TransportationAPI.Controllers
             var refreshToken = _authManager.GenerateRefreshToken();
             // Create RefreshToken
             // Set Refresh Token to user
-            var user = await _userManager.FindByPhoneAsync(userDto.Phone);
+            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
 
             user.RefreshToken = refreshToken;
             var refreshLifetime = Convert.ToDouble(_configuration.GetSection("Jwt").GetSection("RefreshLifetime").Value);
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshLifetime);
             // Save User
+            await _userManager.UpdateAsync(user);
+
 
             return Accepted(new AuthResponseDto {
                 IsAuthSuccessful = true,
                 AccessToken = await _authManager.GenerateAccessToken(),
-                RefreshToken = _authManager.GenerateRefreshToken()
+                RefreshToken =user.RefreshToken
             });
 
         }
