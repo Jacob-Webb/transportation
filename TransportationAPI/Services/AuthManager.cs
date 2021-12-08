@@ -23,31 +23,20 @@ namespace TransportationAPI.Services
         private readonly IConfiguration _configuration;
         private ApplicationUser _user;
         private ILogger<AuthManager> _logger;
-        private IUnitOfWork _unitOfWork;
 
         public AuthManager(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-            ILogger<AuthManager> logger,
-            IUnitOfWork unitOfWork)
+            ILogger<AuthManager> logger)
         {
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
-            _unitOfWork = unitOfWork;
         }
-        //public async Task<string> CreateToken()
-        //{
-        //    var signingCredentials = GetSigningCredentials();
-        //    var claims = await GetClaims();
-        //    var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
-        //    return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        //}
-
-        public async Task<string> GenerateAccessToken()
+        public async Task<string> GenerateAccessToken(ApplicationUser user = null)
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
+            var claims = await GetClaims(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
@@ -87,6 +76,14 @@ namespace TransportationAPI.Services
             return principal;
         }
 
+        public async Task<bool> ValidateUser(LoginUserDto userDto)
+        {
+            // userDto Phone number must be in E.164 format.
+            // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
+            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
+            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
+        }
+
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
@@ -103,8 +100,9 @@ namespace TransportationAPI.Services
             return token;
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private async Task<List<Claim>> GetClaims(ApplicationUser user = null)
         {
+            if (user != null) _user = user;
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
@@ -128,12 +126,6 @@ namespace TransportationAPI.Services
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<bool> ValidateUser(LoginUserDto userDto)
-        {
-            // userDto Phone number must be in E.164 format.
-            // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
-            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
-        }
+
     }
 }

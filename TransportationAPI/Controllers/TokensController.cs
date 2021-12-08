@@ -66,7 +66,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest("Invalid client request");
             }
 
-            var newAccessToken = await _authManager.GenerateAccessToken();
+            var newAccessToken = await _authManager.GenerateAccessToken(user);
             var newRefreshToken = _authManager.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
