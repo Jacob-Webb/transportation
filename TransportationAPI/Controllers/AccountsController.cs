@@ -111,7 +111,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userManager.AddToRoleAsync(user, userDto.Role);
+            await _userManager.AddToRoleAsync(user, "User");
 
             SendPhoneVerification(user.PhoneNumber);
             return Ok(userDto.Phone);
