@@ -37,6 +37,14 @@ namespace TransportationAPI.DTOs
         public string Role { get; set; }
     }
 
+    public class ForgotPasswordDto
+    {
+        [Required(ErrorMessage = "A phone number is required")]
+        [Phone]
+        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
+        public string Phone { get; set; }
+    }
+
     public class PhoneVerificationDto
     {
         public string Code { get; set; }

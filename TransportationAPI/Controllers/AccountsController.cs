@@ -159,7 +159,30 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpPost]
-        [Route("PhoneVerification/{phone}")]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(forgotPasswordDto.Phone);
+
+            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
+            if (user == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            // send out phone verification
+            SendPhoneVerification(validatedPhoneNumber);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("PhoneConfirmation/{phone}")]
         public async Task<IActionResult> PhoneVerification(string phone, [FromBody] PhoneVerificationDto verification)
         {
 
