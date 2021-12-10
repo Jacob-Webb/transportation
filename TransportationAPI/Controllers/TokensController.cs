@@ -47,7 +47,7 @@ namespace TransportationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            Console.WriteLine($"TokenDto: {tokenDto}");
             if (tokenDto == null)
             {
                 return BadRequest("Invalid client request");
