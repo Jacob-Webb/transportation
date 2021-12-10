@@ -12,6 +12,8 @@ using TransportationAPI.Models;
 using TransportationAPI.Extensions;
 using TransportationAPI.Middleware;
 using TransportationAPI.DTOs;
+using System.Security.Cryptography;
+using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Services
 {
@@ -30,20 +32,63 @@ namespace TransportationAPI.Services
             _configuration = configuration;
             _logger = logger;
         }
-        public async Task<string> CreateToken()
+
+        public async Task<string> GenerateAccessToken(ApplicationUser user = null)
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
+            var claims = await GetClaims(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var key = _configuration["Jwt:Key"];
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+        }
+
+        public async Task<bool> ValidateUser(LoginUserDto userDto)
+        {
+            // userDto Phone number must be in E.164 format.
+            // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
+            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
+            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
         }
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
             var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(
-                jwtSettings.GetSection("Lifetime").Value));
+            jwtSettings.GetSection("AccessLifetime").Value));
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings.GetSection("Issuer").Value,
@@ -55,8 +100,9 @@ namespace TransportationAPI.Services
             return token;
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private async Task<List<Claim>> GetClaims(ApplicationUser user = null)
         {
+            if (user != null) _user = user;
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
@@ -80,11 +126,6 @@ namespace TransportationAPI.Services
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<bool> ValidateUser(LoginUserDto userDto)
-        {
-            var validatedNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
-            _user = await _userManager.FindByPhoneAsync(validatedNumber);
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
-        }
+
     }
 }

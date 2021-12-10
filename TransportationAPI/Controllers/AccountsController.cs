@@ -14,6 +14,9 @@ using Twilio.Rest.Lookups.V1;
 using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using TransportationAPI.IRepository;
 
 namespace TransportationAPI.Controllers
 {
@@ -23,21 +26,27 @@ namespace TransportationAPI.Controllers
     {
         private readonly TwilioSettings _twilioVerifySettings;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
+        private readonly IUnitOfWork _unitOfWork; 
 
         public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
+            IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
-            IAuthManager authManager)
+            IAuthManager authManager,
+            IUnitOfWork unitOfWork)
         {
             _twilioVerifySettings = twilioVerifySettings.Value;
             _userManager = userManager;
+            _configuration = configuration;
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost]
@@ -102,7 +111,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userManager.AddToRoleAsync(user, userDto.Role);
+            await _userManager.AddToRoleAsync(user, "User");
 
             SendPhoneVerification(user.PhoneNumber);
             return Ok(userDto.Phone);
@@ -118,12 +127,34 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
+
+            userDto.Phone = validatedPhoneNumber;
+
             if (!await _authManager.ValidateUser(userDto))
             {
                 return Unauthorized("The phone number - password combination is invalid. Please try again.");
             }
 
-            return Accepted(new AuthResponseDto { IsAuthSuccessful = true, Token = await _authManager.CreateToken() });
+            // Create AccessToken
+            var accessToken = await _authManager.GenerateAccessToken();
+            var refreshToken = _authManager.GenerateRefreshToken();
+            // Create RefreshToken
+            // Set Refresh Token to user
+            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
+
+            user.RefreshToken = refreshToken;
+            var refreshLifetime = Convert.ToDouble(_configuration.GetSection("Jwt").GetSection("RefreshLifetime").Value);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshLifetime);
+            // Save User
+            await _userManager.UpdateAsync(user);
+
+
+            return Accepted(new AuthResponseDto {
+                IsAuthSuccessful = true,
+                AccessToken = accessToken,
+                RefreshToken = user.RefreshToken
+            });
 
         }
 

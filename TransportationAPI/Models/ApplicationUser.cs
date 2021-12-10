@@ -20,6 +20,8 @@ namespace TransportationAPI.Models
         public string City { get; set; }
         public string ZipCode { get; set; }
         public bool RequiresWheelchair { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
         public virtual ICollection<UserCoordinate> UserCoordinates { get; set; }
         public virtual ICollection<CancelledRide> CancelledRides { get; set; }
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
