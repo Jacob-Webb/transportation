@@ -24,7 +24,7 @@ namespace TransportationAPI.Controllers
         private readonly IAuthManager _authManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public TokensController( UserManager<ApplicationUser> userManager,
+        public TokensController(UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
@@ -47,7 +47,7 @@ namespace TransportationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Console.WriteLine($"TokenDto: {tokenDto}");
+
             if (tokenDto == null)
             {
                 return BadRequest("Invalid client request");
@@ -61,9 +61,14 @@ namespace TransportationAPI.Controllers
 
             var user = await _userManager.FindByNameAsync(username);
 
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+
+            if (user == null || user.RefreshToken != refreshToken)
             {
                 return BadRequest("Invalid client request");
+            }
+            if (user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return StatusCode(403, "Session timed out. Please login again");
             }
 
             var newAccessToken = await _authManager.GenerateAccessToken(user);
