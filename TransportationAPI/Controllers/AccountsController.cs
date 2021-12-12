@@ -183,7 +183,7 @@ namespace TransportationAPI.Controllers
 
         [HttpPost]
         [Route("PhoneConfirmation/{phone}")]
-        public async Task<IActionResult> PhoneVerification(string phone, [FromBody] PhoneVerificationDto verification)
+        public async Task<IActionResult> PhoneConfirmation(string phone, [FromBody] PhoneVerificationDto verificationDto)
         {
 
             if (phone == "undefined")
@@ -196,12 +196,59 @@ namespace TransportationAPI.Controllers
             {
                 var verificationCheck = await VerificationCheckResource.CreateAsync(
                  to: validPhone,
-                 code: verification.Code,
+                 code: verificationDto.Code,
                  pathServiceSid: _twilioVerifySettings.VerificationServiceSID
                 );
                 if (verificationCheck.Status == "approved")
                 {
+                    // Perform different actions based on the purpose sent signified by "purpose"
                     var identityUser = await _userManager.FindByPhoneAsync(validPhone);
+                    identityUser.PhoneNumberConfirmed = true;
+                    var updateResult = await _userManager.UpdateAsync(identityUser);
+
+                    if (updateResult.Succeeded)
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(403, "There was an error confirming the verification code, please try again");
+                    }
+                }
+                else
+                {
+                    return StatusCode(403, $"There was an error confirming the verification code: {verificationCheck.Status}");
+                }
+            }
+            catch (TwilioException ex)
+            {
+                return StatusCode(500, new List<string> { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("ForgotPassword/{phone}")]
+        public async Task<IActionResult> ForgotPassword([FromBody] PhoneVerificationDto phoneVerificationDto)
+        {
+
+            if (phoneVerificationDto.PhoneNumber == "undefined")
+            {
+                return StatusCode(403, $"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
+            }
+
+            var validPhone = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            try
+            {
+                var verificationCheck = await VerificationCheckResource.CreateAsync(
+                 to: validPhone,
+                 code: phoneVerificationDto.Code,
+                 pathServiceSid: _twilioVerifySettings.VerificationServiceSID
+                );
+                if (verificationCheck.Status == "approved")
+                {
+                    // Perform different actions based on the purpose sent signified by "purpose"
+                    var identityUser = await _userManager.FindByPhoneAsync(validPhone);
+
                     identityUser.PhoneNumberConfirmed = true;
                     var updateResult = await _userManager.UpdateAsync(identityUser);
 

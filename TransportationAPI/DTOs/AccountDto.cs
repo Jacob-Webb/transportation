@@ -47,8 +47,8 @@ namespace TransportationAPI.DTOs
 
     public class PhoneVerificationDto
     {
+        public string PhoneNumber { get; set; }
         public string Code { get; set; }
-    }
 
     public class AuthResponseDto
     {
