@@ -49,6 +49,7 @@ namespace TransportationAPI.DTOs
     {
         public string PhoneNumber { get; set; }
         public string Code { get; set; }
+    }
 
     public class AuthResponseDto
     {
