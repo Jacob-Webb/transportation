@@ -182,16 +182,24 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpPost]
-        [Route("PhoneConfirmation")]
-        public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
+        [Route("PhoneVerification")]
+        public async Task<IActionResult> PhoneVerification([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
 
             if (phoneVerificationDto.PhoneNumber == "undefined")
             {
-                return StatusCode(403, $"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
+                return BadRequest($"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
             }
 
             var validPhone = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+
+            var identityUser = await _userManager.FindByPhoneAsync(validPhone);
+
+            if (identityUser == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
             try
             {
                 var verificationCheck = await VerificationCheckResource.CreateAsync(
@@ -201,72 +209,22 @@ namespace TransportationAPI.Controllers
                 );
                 if (verificationCheck.Status == "approved")
                 {
-                    
-                    var identityUser = await _userManager.FindByPhoneAsync(validPhone);
-
-
-
-                    identityUser.PhoneNumberConfirmed = true;
-                    var updateResult = await _userManager.UpdateAsync(identityUser);
-
-                    if (updateResult.Succeeded)
+                    if (identityUser.PhoneNumberConfirmed == false)
                     {
-                        return Ok();
+                        identityUser.PhoneNumberConfirmed = true;
+                        var updateResult = await _userManager.UpdateAsync(identityUser);
+
+                        if (!updateResult.Succeeded)
+                        {
+                            return BadRequest("There was an error confirming the verification code, please try again");
+                        }
                     }
-                    else
-                    {
-                        return StatusCode(403, "There was an error confirming the verification code, please try again");
-                    }
+                    return Ok();
+
                 }
                 else
                 {
-                    return StatusCode(403, $"There was an error confirming the verification code: {verificationCheck.Status}");
-                }
-            }
-            catch (TwilioException ex)
-            {
-                return StatusCode(500, new List<string> { ex.Message });
-            }
-        }
-
-        [HttpPost]
-        [Route("ForgotPassword/{phone}")]
-        public async Task<IActionResult> ForgotPassword([FromBody] PhoneVerificationDto phoneVerificationDto)
-        {
-
-            if (phoneVerificationDto.PhoneNumber == "undefined")
-            {
-                return StatusCode(403, $"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
-            }
-
-            var validPhone = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
-            try
-            {
-                var verificationCheck = await VerificationCheckResource.CreateAsync(
-                 to: validPhone,
-                 code: phoneVerificationDto.Code,
-                 pathServiceSid: _twilioVerifySettings.VerificationServiceSID
-                );
-                if (verificationCheck.Status == "approved")
-                {
-                    // Perform different actions based on the purpose sent signified by "purpose"
-                    var identityUser = await _userManager.FindByPhoneAsync(validPhone);
-
-                    identityUser.PhoneNumberConfirmed = true;
-                    var updateResult = await _userManager.UpdateAsync(identityUser);
-
-                    if (updateResult.Succeeded)
-                    {
-                        return Ok();
-                    }
-                    else
-                    {
-                        return StatusCode(403, "There was an error confirming the verification code, please try again");
-                    }
-                }
-                else
-                {
-                    return StatusCode(403, $"There was an error confirming the verification code: {verificationCheck.Status}");
+                    return BadRequest($"There was an error confirming the verification code: {verificationCheck.Status}");
                 }
             }
             catch (TwilioException ex)
