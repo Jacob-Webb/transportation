@@ -185,47 +185,62 @@ namespace TransportationAPI.Controllers
         [Route("PhoneVerification")]
         public async Task<IActionResult> PhoneVerification([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
+            return await VerifyPhone(phoneVerificationDto);
+        }
 
-            if (phoneVerificationDto.PhoneNumber == "undefined")
+        [HttpPost]
+        [Route("PhoneConfirmation")]
+        public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
+        {
+            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var verifyResult = await VerifyPhone(phoneVerificationDto);
+
+            if (!verifyResult.Equals(Ok()))
             {
-                return BadRequest($"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
+                return verifyResult;
             }
 
-            var validPhone = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            return await ConfirmPhone(phoneVerificationDto.PhoneNumber);
+        }
 
-            var identityUser = await _userManager.FindByPhoneAsync(validPhone);
+        private async Task<IActionResult> ConfirmPhone(string phoneNumber)
+        {
+            var identityUser = await _userManager.FindByPhoneAsync(phoneNumber);
 
             if (identityUser == null)
             {
                 return BadRequest("Invalid client request");
             }
 
+            identityUser.PhoneNumberConfirmed = true;
+            var updateResult = await _userManager.UpdateAsync(identityUser);
+
+            if (!updateResult.Succeeded)
+            {
+                return BadRequest("There was an error confirming the verification code, please try again.");
+            }
+            return Ok();
+        }
+
+        private async Task<IActionResult> VerifyPhone(PhoneVerificationDto phoneVerificationDto)
+        {
+            if (phoneVerificationDto.PhoneNumber == "undefined")
+            {
+                return BadRequest($"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
+            }
+
             try
             {
                 var verificationCheck = await VerificationCheckResource.CreateAsync(
-                 to: validPhone,
+                 to: phoneVerificationDto.PhoneNumber,
                  code: phoneVerificationDto.Code,
                  pathServiceSid: _twilioVerifySettings.VerificationServiceSID
                 );
-                if (verificationCheck.Status == "approved")
-                {
-                    if (identityUser.PhoneNumberConfirmed == false)
-                    {
-                        identityUser.PhoneNumberConfirmed = true;
-                        var updateResult = await _userManager.UpdateAsync(identityUser);
-
-                        if (!updateResult.Succeeded)
-                        {
-                            return BadRequest("There was an error confirming the verification code, please try again");
-                        }
-                    }
-                    return Ok();
-
-                }
-                else
+                if (!(verificationCheck.Status == "approved"))
                 {
                     return BadRequest($"There was an error confirming the verification code: {verificationCheck.Status}");
                 }
+                return Ok();
             }
             catch (TwilioException ex)
             {
