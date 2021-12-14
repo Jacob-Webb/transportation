@@ -38,10 +38,12 @@
     <Folder Include="DTOs\" />
     <Folder Include="Tasks\" />
     <Folder Include="Configurations\Mapper\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Quartz.Extensions.Hosting" />
     <None Remove="Tasks\" />
     <None Remove="Configurations\Mapper\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
 </Project>

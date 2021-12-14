@@ -17,6 +17,8 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using TransportationAPI.IRepository;
+using TransportationAPI.Helpers;
+using System.Net;
 
 namespace TransportationAPI.Controllers
 {
@@ -185,7 +187,11 @@ namespace TransportationAPI.Controllers
         [Route("PhoneVerification")]
         public async Task<IActionResult> PhoneVerification([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
-            return await VerifyPhone(phoneVerificationDto);
+            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+
+            HttpStatus verificationStatus = await VerifyPhone(phoneVerificationDto);
+
+            return StatusCode((int)verificationStatus.Code, verificationStatus.Response);
         }
 
         [HttpPost]
@@ -193,23 +199,30 @@ namespace TransportationAPI.Controllers
         public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
             phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
-            var verifyResult = await VerifyPhone(phoneVerificationDto);
 
-            if (!verifyResult.Equals(Ok()))
+            var verificationStatus = await VerifyPhone(phoneVerificationDto);
+
+            if (!verificationStatus.Code.Equals(HttpStatusCode.OK))
             {
-                return verifyResult;
+                return StatusCode((int)verificationStatus.Code, verificationStatus.Response);
             }
 
-            return await ConfirmPhone(phoneVerificationDto.PhoneNumber);
+            var confirmationStatus = await ConfirmPhone(phoneVerificationDto.PhoneNumber);
+
+            return StatusCode((int)confirmationStatus.Code, confirmationStatus.Response);
         }
 
-        private async Task<IActionResult> ConfirmPhone(string phoneNumber)
+        private async Task<HttpStatus> ConfirmPhone(string phoneNumber)
         {
             var identityUser = await _userManager.FindByPhoneAsync(phoneNumber);
 
             if (identityUser == null)
             {
-                return BadRequest("Invalid client request");
+                return new HttpStatus
+                {
+                    Code = HttpStatusCode.BadRequest,
+                    Response = "Bad client request"
+                };
             }
 
             identityUser.PhoneNumberConfirmed = true;
@@ -217,16 +230,29 @@ namespace TransportationAPI.Controllers
 
             if (!updateResult.Succeeded)
             {
-                return BadRequest("There was an error confirming the verification code, please try again.");
+                return new HttpStatus
+                {
+                    Code = HttpStatusCode.BadRequest,
+                    Response = "There was an error confirming the verification code, please try again."
+                };
             }
-            return Ok();
+
+            return new HttpStatus
+            {
+                Code = HttpStatusCode.OK,
+                Response = ""
+            };
         }
 
-        private async Task<IActionResult> VerifyPhone(PhoneVerificationDto phoneVerificationDto)
+        private async Task<HttpStatus> VerifyPhone(PhoneVerificationDto phoneVerificationDto)
         {
             if (phoneVerificationDto.PhoneNumber == "undefined")
             {
-                return BadRequest($"Value of Phone number is {phoneVerificationDto.PhoneNumber}");
+                return new HttpStatus
+                {
+                    Code = HttpStatusCode.BadRequest,
+                    Response = $"Value of Phone number is {phoneVerificationDto.PhoneNumber}"
+                };
             }
 
             try
@@ -238,13 +264,25 @@ namespace TransportationAPI.Controllers
                 );
                 if (!(verificationCheck.Status == "approved"))
                 {
-                    return BadRequest($"There was an error confirming the verification code: {verificationCheck.Status}");
+                    return new HttpStatus
+                    {
+                        Code = HttpStatusCode.BadRequest,
+                        Response = $"There was an error confirming the verification code: {verificationCheck.Status}"
+                    };
                 }
-                return Ok();
+                return new HttpStatus
+                {
+                    Code = HttpStatusCode.OK,
+                    Response = "" 
+                };
             }
             catch (TwilioException ex)
             {
-                return StatusCode(500, new List<string> { ex.Message });
+                return new HttpStatus
+                {
+                    Code = HttpStatusCode.InternalServerError,
+                    Response = ex.Message
+                };
             }
         }
 
