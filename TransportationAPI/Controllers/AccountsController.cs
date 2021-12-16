@@ -22,6 +22,9 @@ using System.Net;
 
 namespace TransportationAPI.Controllers
 {
+    /// <summary>
+    /// Class <c>AccountsController</c> allows API calls relating to an ApplicationUsers account information
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -161,29 +164,6 @@ namespace TransportationAPI.Controllers
         }
 
         [HttpPost]
-        [Route("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(forgotPasswordDto.Phone);
-
-            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
-            if (user == null)
-            {
-                return BadRequest("Invalid client request");
-            }
-
-            // send out phone verification
-            SendPhoneVerification(validatedPhoneNumber);
-
-            return Ok();
-        }
-
-        [HttpPost]
         [Route("PhoneVerification")]
         public async Task<IActionResult> PhoneVerification([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
@@ -212,6 +192,75 @@ namespace TransportationAPI.Controllers
             return StatusCode((int)confirmationStatus.Code, confirmationStatus.Response);
         }
 
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(forgotPasswordDto.Phone);
+
+            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
+            if (user == null || user.PhoneNumberConfirmed == false)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            // send out phone verification
+            SendPhoneVerification(validatedPhoneNumber);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var response = new ResetPasswordDto
+            {
+                NewPassword = null,
+                PhoneNumber = forgotPasswordDto.Phone,
+                Token = token
+            };
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(resetPasswordDto.PhoneNumber);
+            var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
+            if (user == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            var updateResult = await _userManager.ResetPasswordAsync(
+                user,
+                await _userManager.GeneratePasswordResetTokenAsync(user),
+                resetPasswordDto.NewPassword
+                );
+
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+
+        /*
+         * Utility Methods
+         */
         private async Task<HttpStatus> ConfirmPhone(string phoneNumber)
         {
             var identityUser = await _userManager.FindByPhoneAsync(phoneNumber);
@@ -240,7 +289,7 @@ namespace TransportationAPI.Controllers
             return new HttpStatus
             {
                 Code = HttpStatusCode.OK,
-                Response = ""
+                Response = null
             };
         }
 

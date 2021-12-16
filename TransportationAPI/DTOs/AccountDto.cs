@@ -37,12 +37,11 @@ namespace TransportationAPI.DTOs
         public string Role { get; set; }
     }
 
-    public class ForgotPasswordDto
+    public class AuthResponseDto
     {
-        [Required(ErrorMessage = "A phone number is required")]
-        [Phone]
-        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string Phone { get; set; }
+        public bool IsAuthSuccessful { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 
     public class PhoneVerificationDto
@@ -51,11 +50,19 @@ namespace TransportationAPI.DTOs
         public string Code { get; set; }
     }
 
-    public class AuthResponseDto
+    public class ForgotPasswordDto
     {
-        public bool IsAuthSuccessful { get; set; }
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        [Required(ErrorMessage = "A phone number is required")]
+        [Phone]
+        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
+        public string Phone { get; set; }
+    }
+
+    public class ResetPasswordDto
+    {
+        public string PhoneNumber { get; set; }
+        public string NewPassword { get; set; }
+        public string Token { get; set; }
     }
 
 }
