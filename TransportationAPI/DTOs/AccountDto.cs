@@ -11,12 +11,18 @@ namespace TransportationAPI.DTOs
         public string PhoneNumber { get; set; }
     }
 
-    public class LoginUserDto : PhoneNumberDto
+    //public class LoginUserDto : PhoneNumberDto
+    public class LoginUserDto
     {
 
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
         public string Password { get; set; }
+        [Required(ErrorMessage = "A phone number is required")]
+        [Phone]
+        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
+        public string PhoneNumber { get; set; }
+
     }
 
     public class RegisterUserDto : LoginUserDto
@@ -38,7 +44,7 @@ namespace TransportationAPI.DTOs
         public string City { get; set; }
         [StringLength(11)]
         public string ZipCode { get; set; }
-        public string Role { get; set; }
+        //public string Role { get; set; }
     }
 
     public class AuthResponseDto

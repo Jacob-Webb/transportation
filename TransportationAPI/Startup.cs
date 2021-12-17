@@ -11,6 +11,7 @@ using TransportationAPI.IRepository;
 using TransportationAPI.Middleware;
 using TransportationAPI.Repository;
 using TransportationAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TransportationAPI
 {
@@ -26,7 +27,6 @@ namespace TransportationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.ConfigureCors();
             services.AddAuthentication();
             services.ConfigureIdentity();

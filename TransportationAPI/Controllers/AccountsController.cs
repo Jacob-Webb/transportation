@@ -208,10 +208,11 @@ namespace TransportationAPI.Controllers
             phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
 
             var verificationStatus = await VerifyPhone(phoneVerificationDto);
+            var statusCode = (int)verificationStatus.Code;
 
-            if (!verificationStatus.Code.Equals(HttpStatusCode.OK))
+            if (statusCode < 200 || statusCode >=300)
             {
-                return StatusCode((int)verificationStatus.Code, verificationStatus.Response);
+                return StatusCode(statusCode, verificationStatus.Response);
             }
 
             var confirmationStatus = await ConfirmPhone(phoneVerificationDto.PhoneNumber);
