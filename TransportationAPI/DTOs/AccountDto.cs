@@ -3,13 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TransportationAPI.DTOs
 {
-    
-    public class LoginUserDto
+    public class PhoneNumberDto
     {
         [Required(ErrorMessage = "A phone number is required")]
         [Phone]
         [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
+    public class LoginUserDto : PhoneNumberDto
+    {
+
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
         public string Password { get; set; }
@@ -44,24 +48,14 @@ namespace TransportationAPI.DTOs
         public string RefreshToken { get; set; }
     }
 
-    public class PhoneVerificationDto
+    public class PhoneVerificationDto : PhoneNumberDto
     {
-        public string PhoneNumber { get; set; }
         public string Code { get; set; }
     }
 
-    public class ForgotPasswordDto
+    public class ResetPasswordDto : PhoneNumberDto
     {
-        [Required(ErrorMessage = "A phone number is required")]
-        [Phone]
-        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string Phone { get; set; }
-    }
-
-    public class ResetPasswordDto
-    {
-        public string PhoneNumber { get; set; }
-        public string NewPassword { get; set; }
+        public string Password { get; set; }
         public string Token { get; set; }
     }
 

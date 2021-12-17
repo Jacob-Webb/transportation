@@ -54,11 +54,24 @@ namespace TransportationAPI.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Validates user input, including phone number, ensures that the user does not already exist, then creates the user in the database.
+        /// </summary>
+        /// <param name="userDto">
+        /// The <see cref="RegisterUserDto"/> instance that represents the information passed to and from the frontend
+        /// for user registration
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Ok code and return the user's phone number, which is their identifier,
+        /// as a <see cref="PhoneNumberDto"/>.
+        /// Errors return appropriate status codes and informative error messagses.
+        /// </returns>
         [HttpPost]
         [Route("Registration")]
         public async Task<IActionResult> Registration([FromBody] RegisterUserDto userDto)
         {
-            _logger.LogInformation($"Registration attempt for {userDto.Phone} ");
+            _logger.LogInformation($"Registration attempt for {userDto.PhoneNumber} ");
 
             if (userDto == null || !ModelState.IsValid) return BadRequest(ModelState);
 
@@ -69,7 +82,7 @@ namespace TransportationAPI.Controllers
             try
             {
                 var numberDetails = await PhoneNumberResource.FetchAsync(
-                    pathPhoneNumber: new Twilio.Types.PhoneNumber(userDto.Phone),
+                    pathPhoneNumber: new Twilio.Types.PhoneNumber(userDto.PhoneNumber),
                     countryCode: "US",
                     type: new List<string> { "carrier" }
                     );
@@ -119,22 +132,35 @@ namespace TransportationAPI.Controllers
             await _userManager.AddToRoleAsync(user, "User");
 
             SendPhoneVerification(user.PhoneNumber);
-            return Ok(userDto.Phone);
+            return Ok(new PhoneNumberDto { PhoneNumber = userDto.PhoneNumber });
         }
 
+        /// <summary>
+        /// Retrieves user based on validated phone number, creates an access token and refresh token,
+        /// assigns tokens, and updates the user
+        /// </summary>
+        /// <param name="userDto">
+        /// The <see cref="LoginUserDto"/> instance that represents the information passed to and from the frontend
+        /// for user authentication.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Accepted code and an instance of <see cref="AuthResponseDto"/>.
+        ///  Errors return appropriate status codes and informative error messagses.
+        /// </returns>
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto userDto)
         {
-            _logger.LogInformation($"Login attempt for {userDto.Phone} ");
+            _logger.LogInformation($"Login attempt for {userDto.PhoneNumber} ");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(userDto.Phone);
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
 
-            userDto.Phone = validatedPhoneNumber;
+            userDto.PhoneNumber = validatedPhoneNumber;
 
             if (!await _authManager.ValidateUser(userDto))
             {
@@ -163,17 +189,18 @@ namespace TransportationAPI.Controllers
 
         }
 
-        [HttpPost]
-        [Route("PhoneVerification")]
-        public async Task<IActionResult> PhoneVerification([FromBody] PhoneVerificationDto phoneVerificationDto)
-        {
-            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
-
-            HttpStatus verificationStatus = await VerifyPhone(phoneVerificationDto);
-
-            return StatusCode((int)verificationStatus.Code, verificationStatus.Response);
-        }
-
+        /// <summary>
+        /// Updates a user's PhoneNumberConfirmed field to `true` upon successful phone verification.
+        /// </summary>
+        /// <param name="phoneVerificationDto">
+        /// The <see cref="PhoneVerificationDto"/> instance that represents the information passed to and from the frontend
+        /// for phone verification.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Ok status code.
+        /// Errors return appropriate status codes and informative error messages.
+        /// </returns>
         [HttpPost]
         [Route("PhoneConfirmation")]
         public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
@@ -189,19 +216,31 @@ namespace TransportationAPI.Controllers
 
             var confirmationStatus = await ConfirmPhone(phoneVerificationDto.PhoneNumber);
 
-            return StatusCode((int)confirmationStatus.Code, confirmationStatus.Response);
+            return StatusCode((int)confirmationStatus.Code);
         }
 
+        /// <summary>
+        /// Generates a password reset token for the user, if any, found by the valid phone number
+        /// </summary>
+        /// <param name="phoneNumberDto">
+        /// The <see cref="PhoneNumberDto"/> instance that represents the information passed to and from the frontend
+        /// to reset a password prior to user authentication.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Ok status code.
+        /// Errors return appropriate status codes and informative error messages.
+        /// </returns>
         [HttpPost]
         [Route("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        public async Task<IActionResult> ForgotPassword(PhoneNumberDto phoneNumberDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(forgotPasswordDto.Phone);
+            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(phoneNumberDto.PhoneNumber);
 
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (user == null || user.PhoneNumberConfirmed == false)
@@ -212,18 +251,21 @@ namespace TransportationAPI.Controllers
             // send out phone verification
             SendPhoneVerification(validatedPhoneNumber);
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var response = new ResetPasswordDto
-            {
-                NewPassword = null,
-                PhoneNumber = forgotPasswordDto.Phone,
-                Token = token
-            };
-
-            return Ok(response);
+            return Ok();
         }
 
+        /// <summary>
+        /// Finds user by  valid phone number and resets password.
+        /// </summary>
+        /// <param name="resetPasswordDto">
+        /// The <see cref="ResetPasswordDto"/> instance that represents the information passed to and from the frontend
+        /// to reset a password
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Ok status.
+        /// Errors return appropriate status codes and informative error messages.
+        /// </returns>
         [HttpPost]
         [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
@@ -243,7 +285,7 @@ namespace TransportationAPI.Controllers
             var updateResult = await _userManager.ResetPasswordAsync(
                 user,
                 await _userManager.GeneratePasswordResetTokenAsync(user),
-                resetPasswordDto.NewPassword
+                resetPasswordDto.Password
                 );
 
             if (!updateResult.Succeeded)
@@ -256,6 +298,50 @@ namespace TransportationAPI.Controllers
             }
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Verify a code-phone number pair then generate a password reset token for the user identified by the phone number
+        /// </summary>
+        /// <param name="phoneVerificationDto">
+        /// The <see cref="PhoneVerificationDto"/> instance that represents the information passed to and from the frontend
+        /// for phone verification.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="IActionResult"/> class representing the status code and content.
+        /// A successful operation should return an Accepted code and an instance of <see cref="ResetPasswordDto"/> .
+        /// Errors return appropriate status codes and informative error messagses.
+        /// </returns>
+        [HttpPost]
+        [Route("ResetPasswordToken")]
+        public async Task<IActionResult> ResetPasswordToken([FromBody] PhoneVerificationDto phoneVerificationDto)
+        {
+            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+
+            HttpStatus verificationStatus = await VerifyPhone(phoneVerificationDto);
+            var statusCode = (int)verificationStatus.Code;
+
+            if (statusCode < 200 && statusCode >= 300)
+            {
+                return StatusCode(statusCode, verificationStatus.Response);
+            }
+
+            var user = await _userManager.FindByPhoneAsync(phoneVerificationDto.PhoneNumber);
+
+            if (user == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var response = new ResetPasswordDto
+            {
+                Password = null,
+                PhoneNumber = phoneVerificationDto.PhoneNumber,
+                Token = token
+            };
+
+            return Accepted(response);
         }
 
         /*
@@ -321,7 +407,7 @@ namespace TransportationAPI.Controllers
                 }
                 return new HttpStatus
                 {
-                    Code = HttpStatusCode.OK,
+                    Code = HttpStatusCode.Accepted,
                     Response = "" 
                 };
             }

@@ -80,7 +80,7 @@ namespace TransportationAPI.Services
         {
             // userDto Phone number must be in E.164 format.
             // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
-            _user = await _userManager.FindByPhoneAsync(userDto.Phone);
+            _user = await _userManager.FindByPhoneAsync(userDto.PhoneNumber);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
         }
 
