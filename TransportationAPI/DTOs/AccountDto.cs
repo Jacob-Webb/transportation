@@ -3,16 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TransportationAPI.DTOs
 {
-    
-    public class LoginUserDto
+    public class PhoneNumberDto
     {
         [Required(ErrorMessage = "A phone number is required")]
         [Phone]
         [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+
+    //public class LoginUserDto : PhoneNumberDto
+    public class LoginUserDto
+    {
+
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
         public string Password { get; set; }
+        [Required(ErrorMessage = "A phone number is required")]
+        [Phone]
+        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
+        public string PhoneNumber { get; set; }
+
     }
 
     public class RegisterUserDto : LoginUserDto
@@ -34,12 +44,7 @@ namespace TransportationAPI.DTOs
         public string City { get; set; }
         [StringLength(11)]
         public string ZipCode { get; set; }
-        public string Role { get; set; }
-    }
-
-    public class PhoneVerificationDto
-    {
-        public string Code { get; set; }
+        //public string Role { get; set; }
     }
 
     public class AuthResponseDto
@@ -47,6 +52,17 @@ namespace TransportationAPI.DTOs
         public bool IsAuthSuccessful { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+    }
+
+    public class PhoneVerificationDto : PhoneNumberDto
+    {
+        public string Code { get; set; }
+    }
+
+    public class ResetPasswordDto : PhoneNumberDto
+    {
+        public string Password { get; set; }
+        public string Token { get; set; }
     }
 
 }

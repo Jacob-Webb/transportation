@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <UserSecretsId>91a36312-1949-48be-8053-46cac234d891</UserSecretsId>
   </PropertyGroup>
 
@@ -38,10 +39,14 @@
     <Folder Include="DTOs\" />
     <Folder Include="Tasks\" />
     <Folder Include="Configurations\Mapper\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Quartz.Extensions.Hosting" />
     <None Remove="Tasks\" />
     <None Remove="Configurations\Mapper\" />
+    <None Remove="Helpers\" />
+    <None Remove="Logs\" />
   </ItemGroup>
 </Project>
