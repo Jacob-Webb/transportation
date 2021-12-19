@@ -13,7 +13,7 @@ namespace TransportationAPI.Configurations
         /// </summary>
         public MapperInitializer()
         {
-            CreateMap<ApplicationUser, LoginUserDto>().ReverseMap();
+            CreateMap<ApplicationUser, AuthenticationDto>().ReverseMap();
             CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
             CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new TimeSpanDtoTypeConverter());
             CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new TimeSpanTypeConverter());

@@ -12,7 +12,7 @@ namespace TransportationAPITests
     {
         MapperConfiguration _config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<ApplicationUser, LoginUserDto>().ReverseMap();
+            cfg.CreateMap<ApplicationUser, AuthenticationDto>().ReverseMap();
             cfg.CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
             cfg.CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new TimeSpanDtoTypeConverter());
             cfg.CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new TimeSpanTypeConverter());

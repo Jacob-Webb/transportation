@@ -10,6 +10,6 @@ namespace TransportationAPI.Services
         Task<string> GenerateAccessToken(ApplicationUser user = null);
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
-        Task<bool> ValidateUser(LoginUserDto userDto);
+        Task<bool> ValidateUser(AuthenticationDto userDto);
     }
 }

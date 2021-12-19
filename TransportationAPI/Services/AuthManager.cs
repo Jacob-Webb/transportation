@@ -76,7 +76,7 @@ namespace TransportationAPI.Services
             return principal;
         }
 
-        public async Task<bool> ValidateUser(LoginUserDto userDto)
+        public async Task<bool> ValidateUser(AuthenticationDto userDto)
         {
             // userDto Phone number must be in E.164 format.
             // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.

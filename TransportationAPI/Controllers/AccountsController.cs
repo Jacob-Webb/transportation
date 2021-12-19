@@ -77,36 +77,21 @@ namespace TransportationAPI.Controllers
 
             var user = _mapper.Map<ApplicationUser>(userDto);
 
-            string validatedPhoneNumber = null;
+            var formatStatus = await TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
 
-            try
+            var statusCode = (int)formatStatus.Code;
+            if (statusCode < 200 || statusCode >= 300)
             {
-                var numberDetails = await PhoneNumberResource.FetchAsync(
-                    pathPhoneNumber: new Twilio.Types.PhoneNumber(userDto.PhoneNumber),
-                    countryCode: "US",
-                    type: new List<string> { "carrier" }
-                    );
-                if (numberDetails?.Carrier != null
-                    && numberDetails.Carrier.TryGetValue("type", out var phoneNumberType)
-                    && phoneNumberType == "landline")
-                {
-                    return StatusCode(406,
-                        $"The number you entered does not appear to be capable of receiving SMS ({phoneNumberType}). Please enter a different number and try again");
-                }
-
-                validatedPhoneNumber = numberDetails.PhoneNumber.ToString();
-            }
-            catch (ApiException ex)
-            {
-                return StatusCode(406, $"The number you entered was not valid (Twilio code {ex.Code}), please check it and try again");
+                return StatusCode(statusCode, formatStatus.Response);
             }
 
+            string validatedPhoneNumber = formatStatus.Response;
 
             // Check if phone number is already used and confirmed
             var existingPhoneUser = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (existingPhoneUser != null && existingPhoneUser.PhoneNumberConfirmed)
             {
-                return Conflict("Phone number already in use. Please contact The Rock's Transportation Department.");
+                return Conflict("This phone number is already in use. Please contact The Rock's Transportation Department.");
             }
             if (existingPhoneUser != null && !existingPhoneUser.PhoneNumberConfirmed)
             {
@@ -140,7 +125,7 @@ namespace TransportationAPI.Controllers
         /// assigns tokens, and updates the user
         /// </summary>
         /// <param name="userDto">
-        /// The <see cref="LoginUserDto"/> instance that represents the information passed to and from the frontend
+        /// The <see cref="AuthenticationDto"/> instance that represents the information passed to and from the frontend
         /// for user authentication.
         /// </param>
         /// <returns>
@@ -150,7 +135,7 @@ namespace TransportationAPI.Controllers
         /// </returns>
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserDto userDto)
+        public async Task<IActionResult> Login([FromBody] AuthenticationDto userDto)
         {
             _logger.LogInformation($"Login attempt for {userDto.PhoneNumber} ");
             if (!ModelState.IsValid)
@@ -158,7 +143,15 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
+            var statusCode = (int)formatResult.Code;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                return StatusCode(statusCode, formatResult.Response);
+            }
+
+            var validatedPhoneNumber = formatResult.Response;
 
             userDto.PhoneNumber = validatedPhoneNumber;
 
@@ -205,10 +198,19 @@ namespace TransportationAPI.Controllers
         [Route("PhoneConfirmation")]
         public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
-            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var statusCode = (int)formatResult.Code;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                return StatusCode(statusCode, formatResult.Response);
+            }
+
+            phoneVerificationDto.PhoneNumber = formatResult.Response;
+
 
             var verificationStatus = await VerifyPhone(phoneVerificationDto);
-            var statusCode = (int)verificationStatus.Code;
+            statusCode = (int)verificationStatus.Code;
 
             if (statusCode < 200 || statusCode >=300)
             {
@@ -241,7 +243,15 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(phoneNumberDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneNumberDto.PhoneNumber);
+            var statusCode = (int)formatResult.Code;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                return StatusCode(statusCode, formatResult.Response);
+            }
+
+            var validatedPhoneNumber = formatResult.Response;
 
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (user == null || user.PhoneNumberConfirmed == false)
@@ -276,7 +286,17 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var validatedPhoneNumber = TwilioSettings.FormatPhoneNumber(resetPasswordDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumber(resetPasswordDto.PhoneNumber);
+            var statusCode = (int)formatResult.Code;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                return StatusCode(statusCode, formatResult.Response);
+            }
+
+            var validatedPhoneNumber = formatResult.Response;
+
+
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (user == null)
             {
@@ -317,10 +337,18 @@ namespace TransportationAPI.Controllers
         [Route("ResetPasswordToken")]
         public async Task<IActionResult> ResetPasswordToken([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
-            phoneVerificationDto.PhoneNumber = TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var statusCode = (int)formatResult.Code;
+
+            if (statusCode < 200 || statusCode >= 300)
+            {
+                return StatusCode(statusCode, formatResult.Response);
+            }
+
+            phoneVerificationDto.PhoneNumber = formatResult.Response;
 
             HttpStatus verificationStatus = await VerifyPhone(phoneVerificationDto);
-            var statusCode = (int)verificationStatus.Code;
+            statusCode = (int)verificationStatus.Code;
 
             if (statusCode < 200 && statusCode >= 300)
             {

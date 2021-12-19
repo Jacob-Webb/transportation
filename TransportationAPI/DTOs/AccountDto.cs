@@ -3,29 +3,35 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TransportationAPI.DTOs
 {
-    public class PhoneNumberDto
-    {
-        [Required(ErrorMessage = "A phone number is required")]
-        [Phone]
-        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string PhoneNumber { get; set; }
-    }
-
-    //public class LoginUserDto : PhoneNumberDto
-    public class LoginUserDto
+    public class AuthenticationDto : PhoneNumberDto
     {
 
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
         public string Password { get; set; }
-        [Required(ErrorMessage = "A phone number is required")]
-        [Phone]
-        [StringLength(maximumLength: 12, ErrorMessage = "Phone number is too long")]
-        public string PhoneNumber { get; set; }
-
     }
 
-    public class RegisterUserDto : LoginUserDto
+    public class AuthResponseDto
+    {
+        public bool IsAuthSuccessful { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+    }
+
+    public class PhoneNumberDto
+    {
+        [Required(ErrorMessage = "A phone number is required")]
+        [Phone]
+        [StringLength(maximumLength: 10, ErrorMessage = "Phone number is too long")]
+        public string PhoneNumber { get; set; }
+    }
+
+    public class PhoneVerificationDto : PhoneNumberDto
+    {
+        public string Code { get; set; }
+    }
+
+    public class RegisterUserDto : AuthenticationDto
     {
         [Required(ErrorMessage = "A first name is required")]
         [StringLength(50)]
@@ -36,32 +42,21 @@ namespace TransportationAPI.DTOs
         [EmailAddress]
         [StringLength(50)]
         public string Email { get; set; }
+        [Required(ErrorMessage = "An address is required")]
         [StringLength(60)]
         public string Address1 { get; set; }
         [StringLength(60)]
         public string Address2 { get; set; }
+        [Required(ErrorMessage = "A city is required")]
         [StringLength(50)]
         public string City { get; set; }
+        [Required(ErrorMessage = "A zip code is required")]
         [StringLength(11)]
         public string ZipCode { get; set; }
-        //public string Role { get; set; }
     }
 
-    public class AuthResponseDto
+    public class ResetPasswordDto : AuthenticationDto
     {
-        public bool IsAuthSuccessful { get; set; }
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
-
-    public class PhoneVerificationDto : PhoneNumberDto
-    {
-        public string Code { get; set; }
-    }
-
-    public class ResetPasswordDto : PhoneNumberDto
-    {
-        public string Password { get; set; }
         public string Token { get; set; }
     }
 

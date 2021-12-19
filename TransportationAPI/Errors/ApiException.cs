@@ -13,5 +13,6 @@ namespace TransportationAPI.Errors
         public int StatusCode { get; set; }
         public string Message { get; set; }
         public string Details { get; set; }
+        public object Code { get; internal set; }
     }
 }
