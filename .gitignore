@@ -410,3 +410,7 @@ ASALocalRun/
 
 #Twilio Verify testing
 verify-testing-dashboard/
+
+#Documentation
+html/
+latex/
