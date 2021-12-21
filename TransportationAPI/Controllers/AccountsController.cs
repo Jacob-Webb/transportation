@@ -350,7 +350,7 @@ namespace TransportationAPI.Controllers
             HttpStatus verificationStatus = await VerifyPhone(phoneVerificationDto);
             statusCode = (int)verificationStatus.Code;
 
-            if (statusCode < 200 && statusCode >= 300)
+            if (statusCode < 200 || statusCode >= 300)
             {
                 return StatusCode(statusCode, verificationStatus.Response);
             }
@@ -431,7 +431,7 @@ namespace TransportationAPI.Controllers
                     return new HttpStatus
                     {
                         Code = HttpStatusCode.BadRequest,
-                        Response = $"There was an error confirming the verification code: {verificationCheck.Status}"
+                        Response = $"There was an error confirming the verification code. Please check your code and try again."
                     };
                 }
                 return new HttpStatus

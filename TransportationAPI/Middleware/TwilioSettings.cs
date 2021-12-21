@@ -13,11 +13,6 @@ namespace TransportationAPI.Middleware
 
         public static async Task<HttpStatus> FormatPhoneNumber(string numberToFormat)
         {
-            //var phoneNumber = PhoneNumberResource.Fetch(
-            //        countryCode: "US",
-            //        pathPhoneNumber: new Twilio.Types.PhoneNumber(numberToFormat)
-            //    );
-
             try
             {
                 var numberDetails = await PhoneNumberResource.FetchAsync(
