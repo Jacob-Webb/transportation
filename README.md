@@ -31,19 +31,6 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 
 * [Set up testing for Twilio Verify locally](https://www.twilio.com/blog/test-verify-no-rate-limits)
 
-* Managing Nuget Packages
-  * AutoMapper.Extensions.Microsoft.DependencyInjection - 8.1.1   
-  * Microsoft.AspNetCore.Authentication.JwtBearer - 5.0.10  
-  * Microsoft.AspNetCore.Identity.EntityFrameworkCore - 5.0.10  
-  * Microsoft.EntityFrameworkCore - 5.0.10  
-  * Microsoft.EntityFrameworkCore.SqlServer - 5.0.10  
-  * Microsoft.EntityFrameworkCore.Tools - 5.0.10  
-  * Microsoft.Extensions.Configuration.Json - 5.0.0   
-  * Microsoft.VisualStudio.Web.CodeGeneration.Design - 5.0.2
-  * Quartz.Extensions.Hosting - 3.3.3
-  * Serilog.AspNetCore - 4.1.0   
-  * Swashbuckle.AspNetCore - 6.2.3   
-  * Twilio - 5.50.0 
-    * Twilio package needs to be at 5.50.0 to avoid errors with TryGetValue at TransportationAPI/Controllers/AccountControllers.cs::63 
-  * Twilio.AspNet.Core - 5.37.2  
-  * Z.EntityFramework.Extensions.EFCore - 5.2.17
+## Versioning and CHANGELOG.md generation
+
+* See [Versionize](https://www.nuget.org/packages/Versionize/) docs for automatic changelog generation and versioning.
