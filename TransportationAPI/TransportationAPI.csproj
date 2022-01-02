@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CodeAnalysisRuleSet>../StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
     <UserSecretsId>91a36312-1949-48be-8053-46cac234d891</UserSecretsId>
   </PropertyGroup>
 
@@ -31,6 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="../stylecop.json">
+        <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Repository\" />
     <Folder Include="IRepository\" />
@@ -53,5 +60,6 @@
     <None Remove="Helpers\" />
     <None Remove="Logs\" />
     <None Remove="StyleCop.Analyzers" />
+    <None Remove="StyleCop.MSBuild" />
   </ItemGroup>
 </Project>

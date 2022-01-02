@@ -1,24 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Net;
 using System.Threading.Tasks;
-using TransportationAPI.Models;
-using TransportationAPI.Extensions;
-using TransportationAPI.Middleware;
 using TransportationAPI.DTOs;
+using TransportationAPI.Extensions;
+using TransportationAPI.Helpers;
+using TransportationAPI.Middleware;
+using TransportationAPI.Models;
 using TransportationAPI.Services;
 using Twilio.Exceptions;
-using Twilio.Rest.Lookups.V1;
-using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using TransportationAPI.IRepository;
-using TransportationAPI.Helpers;
-using System.Net;
 
 namespace TransportationAPI.Controllers
 {
@@ -35,15 +31,13 @@ namespace TransportationAPI.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
-        private readonly IUnitOfWork _unitOfWork; 
 
         public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
-            IAuthManager authManager,
-            IUnitOfWork unitOfWork)
+            IAuthManager authManager)
         {
             _twilioVerifySettings = twilioVerifySettings.Value;
             _userManager = userManager;
@@ -51,7 +45,6 @@ namespace TransportationAPI.Controllers
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
-            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
