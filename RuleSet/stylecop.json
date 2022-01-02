@@ -3,7 +3,7 @@
   "settings": {
     "documentationRules": {
       "copyrightText": "Licensed under the MIT license. See LICENSE file in the samples root for full license information.",
-      "companyName": "Microsoft",
+      "companyName": "The Rock Church and World Outreach Center",
       "xmlHeader": false,
       "documentExposedElements": false
     },
@@ -14,7 +14,8 @@
       "indentationSize": 4,
       "useTabs": false
     },
-    "namingRules": {},
+    "namingRules": {
+    },
     "orderingRules": {
       "systemUsingDirectivesFirst": false,
       "usingDirectivesPlacement": "outsideNamespace",

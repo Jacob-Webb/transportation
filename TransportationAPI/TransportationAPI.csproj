@@ -63,4 +63,7 @@
     <None Remove="StyleCop.Analyzers" />
     <None Remove="StyleCop.MSBuild" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>
