@@ -14,8 +14,8 @@ namespace TransportationAPITests
         {
             cfg.CreateMap<ApplicationUser, AuthenticationDto>().ReverseMap();
             cfg.CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
-            cfg.CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new TimeSpanDtoTypeConverter());
-            cfg.CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new TimeSpanTypeConverter());
+            cfg.CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new MapTimeSpanToTimeSpanDto());
+            cfg.CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new MapTimeSpanDtoToTimeSpan());
             cfg.CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 
         // For this, I need to map from Coordinate to EventTemplateBoundary or ignore them and assign in code

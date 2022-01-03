@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +9,7 @@ namespace TransportationAPI.Configurations.Entities
     /// </summary>
     public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1413:Use trailing comma in multi-line initializers", Justification = "Reviewed")]
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
             builder.HasData(

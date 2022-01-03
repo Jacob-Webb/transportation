@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using TransportationAPI.Models;
-using TransportationAPI.DTOs;
-using TransportationAPI.Services;
-using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using TransportationAPI.DTOs;
 using TransportationAPI.IRepository;
+using TransportationAPI.Models;
+using TransportationAPI.Services;
 
 namespace TransportationAPI.Controllers
 {
@@ -24,7 +24,8 @@ namespace TransportationAPI.Controllers
         private readonly IAuthManager _authManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public TokensController(UserManager<ApplicationUser> userManager,
+        public TokensController(
+            UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
@@ -57,15 +58,15 @@ namespace TransportationAPI.Controllers
             string refreshToken = tokenDto.RefreshToken;
 
             var principal = _authManager.GetPrincipalFromExpiredToken(accessToken);
-            var username = principal.Identity.Name; //this is mapped to the Name claim by default
+            var username = principal.Identity.Name; // this is mapped to the Name claim by default
 
             var user = await _userManager.FindByNameAsync(username);
-
 
             if (user == null || user.RefreshToken != refreshToken)
             {
                 return BadRequest("Invalid client request");
             }
+
             if (user.RefreshTokenExpiryTime <= DateTime.Now)
             {
                 return StatusCode(403, "Session timed out. Please login again");
@@ -90,14 +91,15 @@ namespace TransportationAPI.Controllers
 
             var user = await _userManager.FindByNameAsync(username);
 
-            if (user == null) return BadRequest();
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
             user.RefreshToken = null;
 
             var updatedUser = await _userManager.UpdateAsync(user);
             return NoContent();
         }
-
-       
     }
 }
