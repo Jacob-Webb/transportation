@@ -76,8 +76,7 @@ namespace TransportationAPI.Configurations.Entities
                 {
                     Name = "User",
                     NormalizedName = "USER"
-                }
-            );
+                });
         }
     }
 }

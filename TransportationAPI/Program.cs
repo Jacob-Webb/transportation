@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
+using System;
 using TransportationAPI.Extensions;
 using TransportationAPI.Tasks;
 
@@ -22,8 +17,8 @@ namespace TransportationAPI
                     path: "Logs/log-.txt",
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day,
-                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug
-                ).CreateLogger();
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug)
+                .CreateLogger();
             try
             {
                 Log.Information("Application is starting");
@@ -58,6 +53,5 @@ namespace TransportationAPI
 
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 });
-            
     }
 }

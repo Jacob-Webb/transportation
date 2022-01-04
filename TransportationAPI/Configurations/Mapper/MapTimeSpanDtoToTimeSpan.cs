@@ -4,7 +4,6 @@ using TransportationAPI.DTOs;
 
 namespace TransportationAPI.Configurations.Mapper
 {
-
     public class MapTimeSpanDtoToTimeSpan : ITypeConverter<TimeSpanDto, TimeSpan>
     {
         public TimeSpan Convert(TimeSpanDto source, TimeSpan destination, ResolutionContext context)
