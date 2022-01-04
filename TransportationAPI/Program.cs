@@ -53,7 +53,7 @@ namespace TransportationAPI
                         q.UseMicrosoftDependencyInjectionJobFactory();
 
                         // Register the job, loading the schedule from configuration
-                        q.AddJobAndTrigger<PurgeUnverifiedUsersJob>(hostContext.Configuration);
+                        q.AddJobAndTrigger<PurgeUnverifiedUsers>(hostContext.Configuration);
                     });
 
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

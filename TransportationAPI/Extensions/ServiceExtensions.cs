@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TransportationAPI.Models;
 using Twilio;
 
@@ -19,12 +18,10 @@ namespace TransportationAPI.Extensions
                 option.AddPolicy("AllowAll", builder =>
                     builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                );
-            }
-
-            );
+                    .AllowAnyHeader());
+            });
         }
+
         public static void ConfigureIdentity(this IServiceCollection services)
         {
             var builder = services.AddIdentityCore<ApplicationUser>(query => query.User.RequireUniqueEmail = false);
@@ -36,15 +33,16 @@ namespace TransportationAPI.Extensions
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireAdministratorRole",
+                options.AddPolicy(
+                    "RequireAdministratorRole",
                     policy => policy.RequireRole("SuperAdmin", "Administrator"));
             });
         }
 
-        public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
+        public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = Configuration.GetSection("Jwt");
-            var key = Configuration["Jwt:Key"];
+            var jwtSettings = configuration.GetSection("Jwt");
+            var key = configuration["Jwt:Key"];
 
             services.AddAuthentication(option =>
             {
@@ -62,7 +60,7 @@ namespace TransportationAPI.Extensions
 
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
                     ValidAudience = jwtSettings.GetSection("Audience").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                 };
             });
         }

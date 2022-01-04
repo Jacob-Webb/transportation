@@ -1,9 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace TransportationAPI.Migrations
 {
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable SA1300 // Element should begin with upper-case letter
     public partial class initial : Migration
+#pragma warning restore SA1300 // Element should begin with upper-case letter
+#pragma warning restore IDE1006 // Naming Styles
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +18,7 @@ namespace TransportationAPI.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -46,7 +50,7 @@ namespace TransportationAPI.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -60,7 +64,7 @@ namespace TransportationAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false)
+                    Longitude = table.Column<double>(type: "float", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -77,7 +81,7 @@ namespace TransportationAPI.Migrations
                     TimeOfDay = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DriversNeeded = table.Column<int>(type: "int", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false)
+                    Active = table.Column<bool>(type: "bit", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -90,7 +94,7 @@ namespace TransportationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -103,7 +107,7 @@ namespace TransportationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MediaType = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    MediaType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -118,7 +122,7 @@ namespace TransportationAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TextTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -133,7 +137,7 @@ namespace TransportationAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -154,7 +158,7 @@ namespace TransportationAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -174,7 +178,7 @@ namespace TransportationAPI.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -192,7 +196,7 @@ namespace TransportationAPI.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -218,7 +222,7 @@ namespace TransportationAPI.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -237,7 +241,7 @@ namespace TransportationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -255,7 +259,7 @@ namespace TransportationAPI.Migrations
                 columns: table => new
                 {
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CoordinateId = table.Column<int>(type: "int", nullable: false)
+                    CoordinateId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -281,7 +285,7 @@ namespace TransportationAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     eventDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TemplateId = table.Column<int>(type: "int", nullable: true)
+                    TemplateId = table.Column<int>(type: "int", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -299,7 +303,7 @@ namespace TransportationAPI.Migrations
                 columns: table => new
                 {
                     EventTemplateId = table.Column<int>(type: "int", nullable: false),
-                    CoordinateId = table.Column<int>(type: "int", nullable: false)
+                    CoordinateId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -323,7 +327,7 @@ namespace TransportationAPI.Migrations
                 columns: table => new
                 {
                     NoteId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -349,7 +353,7 @@ namespace TransportationAPI.Migrations
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     NoteId = table.Column<int>(type: "int", nullable: true),
-                    SourceId = table.Column<int>(type: "int", nullable: true)
+                    SourceId = table.Column<int>(type: "int", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -386,7 +390,7 @@ namespace TransportationAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventId = table.Column<int>(type: "int", nullable: false)
+                    EventId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -404,7 +408,7 @@ namespace TransportationAPI.Migrations
                 columns: table => new
                 {
                     DriverId = table.Column<int>(type: "int", nullable: false),
-                    RouteId = table.Column<int>(type: "int", nullable: false)
+                    RouteId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -434,7 +438,7 @@ namespace TransportationAPI.Migrations
                     RouteId = table.Column<int>(type: "int", nullable: true),
                     SourceId = table.Column<int>(type: "int", nullable: true),
                     EventId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -468,13 +472,15 @@ namespace TransportationAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+#pragma warning disable SA1118 // Parameter should not span multiple lines
                 values: new object[,]
                 {
                     { "1b9ab474-6255-4268-8f7c-871bf48b5c0c", "4c791b5e-c21e-4219-8093-73690e8ee31d", "SuperAdmin", "SUPERADMIN" },
                     { "d87f4ceb-1532-4020-a80a-096271569ea9", "afb6afb9-0fba-4a21-bc3c-942005fbe733", "Administrator", "ADMINISTRATOR" },
                     { "3b52932c-ff02-4c3d-a214-b98c4199e7b0", "9449c44e-e10c-4cee-b580-f206f3973f58", "Driver", "DRIVER" },
-                    { "54cb8096-0878-4c17-bb36-af28eb645f8a", "feb4aa5d-b972-4731-a384-46833455ca53", "Rider", "RIDER" }
+                    { "54cb8096-0878-4c17-bb36-af28eb645f8a", "feb4aa5d-b972-4731-a384-46833455ca53", "Rider", "RIDER" },
                 });
+#pragma warning restore SA1118 // Parameter should not span multiple lines
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

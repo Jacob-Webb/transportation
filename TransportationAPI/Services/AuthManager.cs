@@ -6,14 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TransportationAPI.Models;
-using TransportationAPI.Extensions;
-using TransportationAPI.Middleware;
 using TransportationAPI.DTOs;
-using System.Security.Cryptography;
-using TransportationAPI.IRepository;
+using TransportationAPI.Extensions;
+using TransportationAPI.Models;
 
 namespace TransportationAPI.Services
 {
@@ -24,7 +22,8 @@ namespace TransportationAPI.Services
         private ApplicationUser _user;
         private ILogger<AuthManager> _logger;
 
-        public AuthManager(UserManager<ApplicationUser> userManager,
+        public AuthManager(
+            UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AuthManager> logger)
         {
@@ -46,11 +45,9 @@ namespace TransportationAPI.Services
         {
             var randomNumber = new byte[32];
 
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -63,7 +60,7 @@ namespace TransportationAPI.Services
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                ValidateLifetime = false
+                ValidateLifetime = false,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -71,7 +68,9 @@ namespace TransportationAPI.Services
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw new SecurityTokenException("Invalid token");
+            }
 
             return principal;
         }
@@ -81,7 +80,7 @@ namespace TransportationAPI.Services
             // userDto Phone number must be in E.164 format.
             // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
             _user = await _userManager.FindByPhoneAsync(userDto.PhoneNumber);
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
+            return _user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password);
         }
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
@@ -95,18 +94,18 @@ namespace TransportationAPI.Services
                 audience: jwtSettings.GetSection("Audience").Value,
                 claims: claims,
                 expires: expiration,
-                signingCredentials: signingCredentials
-                );
+                signingCredentials: signingCredentials);
             return token;
         }
 
         private async Task<List<Claim>> GetClaims(ApplicationUser user = null)
         {
-            if (user != null) _user = user;
-            var claims = new List<Claim>
+            if (user != null)
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
-            };
+                _user = user;
+            }
+
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, _user.UserName) };
 
             var roles = await _userManager.GetRolesAsync(_user);
 
@@ -125,7 +124,5 @@ namespace TransportationAPI.Services
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-
-
     }
 }

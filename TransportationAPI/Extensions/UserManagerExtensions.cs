@@ -1,9 +1,6 @@
-﻿
-
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using TransportationAPI.Models;
 
 namespace TransportationAPI.Extensions
