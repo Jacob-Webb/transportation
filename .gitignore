@@ -412,5 +412,4 @@ ASALocalRun/
 verify-testing-dashboard/
 
 #Documentation
-html/
-latex/
+Documentation/
