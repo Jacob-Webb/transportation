@@ -77,7 +77,7 @@ namespace TransportationAPI.Controllers
 
             user.RefreshToken = newRefreshToken;
 
-            var updatedUser = await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
 
             return Accepted(new TokenDto { AccessToken = newAccessToken, RefreshToken = newRefreshToken });
         }
@@ -98,7 +98,7 @@ namespace TransportationAPI.Controllers
 
             user.RefreshToken = null;
 
-            var updatedUser = await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
             return NoContent();
         }
     }

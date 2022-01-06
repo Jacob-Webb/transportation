@@ -19,8 +19,8 @@ namespace TransportationAPI.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthManager> _logger;
         private ApplicationUser _user;
-        private ILogger<AuthManager> _logger;
 
         public AuthManager(
             UserManager<ApplicationUser> userManager,
@@ -34,6 +34,8 @@ namespace TransportationAPI.Services
 
         public async Task<string> GenerateAccessToken(ApplicationUser user = null)
         {
+            _logger.LogInformation($"Generating access token attempted for {user}");
+
             var signingCredentials = GetSigningCredentials();
             var claims = await GetClaims(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
@@ -43,6 +45,8 @@ namespace TransportationAPI.Services
 
         public string GenerateRefreshToken()
         {
+            _logger.LogInformation("Generating refresh token attempted");
+
             var randomNumber = new byte[32];
 
             using var rng = RandomNumberGenerator.Create();

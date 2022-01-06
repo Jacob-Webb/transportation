@@ -43,33 +43,35 @@ namespace TransportationAPI.Models
 
         public virtual DbSet<UserNote> UserNotes { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
 
-            modelBuilder.Entity<Coordinate>()
+            builder.Entity<Coordinate>()
             .HasKey(c => new { c.Latitude, c.Longitude });
 
-            modelBuilder.Entity<CancelledRide>()
+            builder.Entity<CancelledRide>()
             .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });
 
-            modelBuilder.Entity<EventTemplateBoundary>()
+            builder.Entity<EventTemplateBoundary>()
             .HasKey(etb => new { etb.EventTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
 
-            modelBuilder.Entity<RouteDriver>()
+            builder.Entity<RouteDriver>()
             .HasKey(rd => new { rd.RouteId, rd.DriverId });
 
-            modelBuilder.Entity<UserCoordinate>()
+            builder.Entity<UserCoordinate>()
             .HasKey(uc => new { uc.ApplicationUserId, uc.CoordinateLatitude, uc.CoordinateLongitude });
 
-            modelBuilder.Entity<UserNote>()
+            builder.Entity<UserNote>()
             .HasKey(un => new { un.ApplicationUserId, un.NoteId });
 
-            OnModelCreatingPartial(modelBuilder);
+#pragma warning disable S3251 // Implementations should be provided for "partial" methods
+            OnModelCreatingPartial(builder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+#pragma warning restore S3251 // Implementations should be provided for "partial" methods
     }
 }

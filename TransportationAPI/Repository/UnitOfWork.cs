@@ -59,15 +59,23 @@ namespace TransportationAPI.Repository
 
         public IGenericRepository<UserNote> UserNotes => _userNote ??= new GenericRepository<UserNote>(_context);
 
-        public void Dispose()
-        {
-            _context.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
         public async Task Save()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _context.Dispose();
         }
     }
 }

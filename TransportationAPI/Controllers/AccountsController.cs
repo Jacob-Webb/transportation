@@ -67,7 +67,7 @@ namespace TransportationAPI.Controllers
         {
             _logger.LogInformation($"Registration attempt for {userDto.PhoneNumber} ");
 
-            if (userDto == null || !ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -94,7 +94,7 @@ namespace TransportationAPI.Controllers
             if (existingPhoneUser != null && !existingPhoneUser.PhoneNumberConfirmed)
             {
                 // Resend confirmation phone number and code to frontend to activate phone number then return.
-                SendPhoneVerification(validatedPhoneNumber);
+                await SendPhoneVerification(validatedPhoneNumber);
                 return StatusCode(403, "This number needs to be confirmed. Please enter your verification code to complete registration.");
             }
 
@@ -115,7 +115,7 @@ namespace TransportationAPI.Controllers
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            SendPhoneVerification(user.PhoneNumber);
+            await SendPhoneVerification(user.PhoneNumber);
             return Ok(new PhoneNumberDto { PhoneNumber = userDto.PhoneNumber });
         }
 
@@ -253,13 +253,13 @@ namespace TransportationAPI.Controllers
             var validatedPhoneNumber = formatResult.Response;
 
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
-            if (user == null || user.PhoneNumberConfirmed == false)
+            if (user == null || !user.PhoneNumberConfirmed)
             {
                 return BadRequest("Invalid client request");
             }
 
             // send out phone verification
-            SendPhoneVerification(validatedPhoneNumber);
+            await SendPhoneVerification(validatedPhoneNumber);
 
             return Ok();
         }
@@ -423,7 +423,7 @@ namespace TransportationAPI.Controllers
                  to: phoneVerificationDto.PhoneNumber,
                  code: phoneVerificationDto.Code,
                  pathServiceSid: _twilioVerifySettings.VerificationServiceSID);
-                if (!(verificationCheck.Status == "approved"))
+                if (verificationCheck.Status != "approved")
                 {
                     return new HttpStatus
                     {
@@ -448,7 +448,7 @@ namespace TransportationAPI.Controllers
             }
         }
 
-        private async void SendPhoneVerification(string phone)
+        private async Task SendPhoneVerification(string phone)
         {
             var verification = await VerificationResource.CreateAsync(
                 to: phone,

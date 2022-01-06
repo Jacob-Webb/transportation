@@ -33,7 +33,7 @@ namespace TransportationAPI.Middleware
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.Accepted,
-                    Response = numberDetails.PhoneNumber.ToString(),
+                    Response = numberDetails?.PhoneNumber.ToString(),
                 };
             }
             catch (ApiException ex)

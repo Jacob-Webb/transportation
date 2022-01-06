@@ -24,7 +24,7 @@ namespace TransportationAPI.Tasks
             try
             {
                 _logger.LogInformation("Removing unverified accounts");
-                _context.Users.Where(u => u.PhoneNumberConfirmed == false).DeleteFromQuery();
+                _context.Users.Where(u => !u.PhoneNumberConfirmed).DeleteFromQuery();
             }
             catch (Exception ex)
             {

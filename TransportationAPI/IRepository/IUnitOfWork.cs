@@ -89,5 +89,11 @@ namespace TransportationAPI.IRepository
         /// </summary>
         /// <returns>An instance of type <see cref="Task"/>.</returns>
         Task Save();
+
+        /// <summary>
+        /// Implements the Dispose method, primarily for releasing unmanaged resources.
+        /// See documentation <see href="https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose"/>.
+        /// </summary>
+        abstract void IDisposable.Dispose();
     }
 }
