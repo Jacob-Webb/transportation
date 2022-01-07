@@ -1,20 +1,19 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
 using Quartz;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Identity;
-using TransportationAPI.Models;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+using TransportationAPI.Models;
 
 namespace TransportationAPI.Tasks
 {
     [DisallowConcurrentExecution]
-    public class PurgeUnverifiedUsersJob : IJob
+    public class PurgeUnverifiedUsers : IJob
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<PurgeUnverifiedUsersJob> _logger;
+        private readonly ILogger<PurgeUnverifiedUsers> _logger;
 
-        public PurgeUnverifiedUsersJob(ApplicationDbContext context, ILogger<PurgeUnverifiedUsersJob> logger)
+        public PurgeUnverifiedUsers(ApplicationDbContext context, ILogger<PurgeUnverifiedUsers> logger)
         {
             _context = context;
             _logger = logger;
@@ -25,12 +24,13 @@ namespace TransportationAPI.Tasks
             try
             {
                 _logger.LogInformation("Removing unverified accounts");
-                _context.Users.Where(u => u.PhoneNumberConfirmed == false).DeleteFromQuery();
+                _context.Users.Where(u => !u.PhoneNumberConfirmed).DeleteFromQuery();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting user");
             }
+
             return Task.CompletedTask;
         }
     }

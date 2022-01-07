@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using TransportationAPI.Models;
-using TransportationAPI.IRepository;
 using TransportationAPI.DTOs;
+using TransportationAPI.IRepository;
+using TransportationAPI.Models;
 
 namespace TransportationAPI.Controllers
 {
@@ -21,7 +18,8 @@ namespace TransportationAPI.Controllers
         private readonly ILogger<EventTemplatesController> _logger;
         private readonly IMapper _mapper;
 
-        public EventTemplatesController(IUnitOfWork unitOfWork,
+        public EventTemplatesController(
+            IUnitOfWork unitOfWork,
             ILogger<EventTemplatesController> logger,
             IMapper mapper)
         {
@@ -75,7 +73,6 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-
             var template = await _unitOfWork.EventTemplates.Get(q => q.Id == id);
             if (template == null)
             {
@@ -111,8 +108,6 @@ namespace TransportationAPI.Controllers
             await _unitOfWork.Save();
 
             return NoContent();
-
         }
-
     }
 }

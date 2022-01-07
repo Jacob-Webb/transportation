@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Quartz;
 using Serilog;
+using System;
 using TransportationAPI.Extensions;
 using TransportationAPI.Tasks;
 
 namespace TransportationAPI
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -22,8 +17,8 @@ namespace TransportationAPI
                     path: "Logs/log-.txt",
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day,
-                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug
-                ).CreateLogger();
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug)
+                .CreateLogger();
             try
             {
                 Log.Information("Application is starting");
@@ -53,11 +48,10 @@ namespace TransportationAPI
                         q.UseMicrosoftDependencyInjectionJobFactory();
 
                         // Register the job, loading the schedule from configuration
-                        q.AddJobAndTrigger<PurgeUnverifiedUsersJob>(hostContext.Configuration);
+                        q.AddJobAndTrigger<PurgeUnverifiedUsers>(hostContext.Configuration);
                     });
 
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
                 });
-            
     }
 }

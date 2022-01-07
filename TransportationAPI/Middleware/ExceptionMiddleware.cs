@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using TransportationAPI.Errors;
 
 namespace TransportationAPI.Middleware
@@ -15,7 +15,8 @@ namespace TransportationAPI.Middleware
         private readonly ILogger<ExceptionMiddleware> _logger;
         private readonly IHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next,
+        public ExceptionMiddleware(
+            RequestDelegate next,
             ILogger<ExceptionMiddleware> logger,
             IHostEnvironment env)
         {

@@ -1,0 +1,134 @@
+{
+    "$schema": "../../../schemas/configuration/schema.json",
+    "changelog": {
+
+        "entryTypes": {
+            "feat": {
+                "displayName": "New Features",
+                "priority": 100
+            },
+            "fix": {
+                "displayName": "Bug Fixes",
+                "priority": 90
+            },
+            "perf": {
+                "displayName": "Performance Improvements",
+                "priority": 80
+            },
+            "docs": {
+                "displayName": "Documentation Changes",
+                "priority": 70
+            },
+            "refactor": {
+                "displayName": "Code Refactorings",
+                "priority": 60
+            },
+            "test": {
+                "displayName": "Test Changes",
+                "priority": 50
+            },
+            "build": {
+                "displayName": "Build System and Dependency Changes",
+                "priority": 40
+            },
+            "ci": {
+                "displayName": "Continuous Integration System Changes",
+                "priority": 30
+            },
+            "style": {
+                "displayName": "Style Changes",
+                "priority": 20
+            },
+            "chore": {
+                "displayName": "Chores",
+                "priority": 10
+            }
+        },
+
+        "scopes": {},
+
+        "footers": {
+            "see-also": { "displayName": "See Also" },
+            "closes": { "displayName": "Closes" },
+            "fixes": { "displayName": "Fixes" },
+            "co-authored-by": { "displayName": "Co-authored by" },
+            "reviewed-by": { "displayName": "Reviewed by" },
+            "pull-request": { "displayName": "Pull Request" },
+            "merge-request": { "displayName": "Merge Request" }
+        },
+
+        "filter": {
+            "include": [
+                { "type": "feat" },
+                { "type": "fix" },
+                { "type": "perf" },
+                { "type": "docs" },
+                { "type": "refactor" },
+                { "type": "build" },
+                { "type": "ci" },
+                { "type": "style" }
+            ],
+            "exclude": []
+        },
+
+        "tagPatterns": [
+            "^(?<version>\\d+\\.\\d+(\\.\\d+)?.*)",
+            "^v(?<version>\\d+\\.\\d+(\\.\\d+)?.*)"
+        ],
+
+        "outputPath": "changelog.md",
+
+        "integrations": {
+
+            "provider": "None",
+
+            "github": {
+                "accessToken": null,
+                "remoteName": "origin",
+                "host": null,
+                "owner": null,
+                "repository": null
+            },
+
+            "gitlab": {
+                "accessToken": null,
+                "remoteName": "origin",
+                "host": null,
+                "namespace": null,
+                "project": null
+            }
+        },
+
+        "versionRange": null,
+
+        "currentVersion": null,
+
+        "template": {
+            "name": "Default",
+
+            "default": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "gitHubRelease": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "gitLabRelease": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "html": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            }
+        },
+
+        "parser": {
+            "mode": "Loose"
+        }
+    }
+}

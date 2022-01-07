@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TransportationAPI.Models
@@ -8,13 +7,16 @@ namespace TransportationAPI.Models
     {
         public Driver()
         {
-            this.RouteDrivers = new HashSet<RouteDriver>();
+            RouteDrivers = new HashSet<RouteDriver>();
         }
+
         public int Id { get; set; }
+
         public virtual ICollection<RouteDriver> RouteDrivers { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
+
         public ApplicationUser User { get; set; }
     }
 }

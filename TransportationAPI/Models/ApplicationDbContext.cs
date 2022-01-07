@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TransportationAPI.Configurations.Entities;
 
@@ -15,49 +14,64 @@ namespace TransportationAPI.Models
             : base(options)
         {
         }
+
         public virtual DbSet<CancelledRide> CancelledRides { get; set; }
+
         public virtual DbSet<Coordinate> Coordinates { get; set; }
+
         public virtual DbSet<Driver> Drivers { get; set; }
+
         public virtual DbSet<Event> Events { get; set; }
+
         public virtual DbSet<EventTemplate> EventTemplates { get; set; }
+
         public virtual DbSet<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
+
         public virtual DbSet<Note> Notes { get; set; }
+
         public virtual DbSet<Route> Routes { get; set; }
+
         public virtual DbSet<RouteDriver> RouteDrivers { get; set; }
+
         public virtual DbSet<ScheduledRide> ScheduledRides { get; set; }
+
         public virtual DbSet<Source> Sources { get; set; }
+
         public virtual DbSet<TextHistory> TextHistory { get; set; }
+
         public virtual DbSet<UserCoordinate> UserCoordinates { get; set; }
+
         public virtual DbSet<UserNote> UserNotes { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
 
-            base.OnModelCreating(modelBuilder);
+            builder.ApplyConfiguration(new RoleConfiguration());
 
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
-
-            modelBuilder.Entity<Coordinate>()
+            builder.Entity<Coordinate>()
             .HasKey(c => new { c.Latitude, c.Longitude });
 
-            modelBuilder.Entity<CancelledRide>()
+            builder.Entity<CancelledRide>()
             .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });
 
-            modelBuilder.Entity<EventTemplateBoundary>()
+            builder.Entity<EventTemplateBoundary>()
             .HasKey(etb => new { etb.EventTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
 
-            modelBuilder.Entity<RouteDriver>()
+            builder.Entity<RouteDriver>()
             .HasKey(rd => new { rd.RouteId, rd.DriverId });
 
-            modelBuilder.Entity<UserCoordinate>()
+            builder.Entity<UserCoordinate>()
             .HasKey(uc => new { uc.ApplicationUserId, uc.CoordinateLatitude, uc.CoordinateLongitude });
 
-            modelBuilder.Entity<UserNote>()
+            builder.Entity<UserNote>()
             .HasKey(un => new { un.ApplicationUserId, un.NoteId });
 
-            OnModelCreatingPartial(modelBuilder);
+#pragma warning disable S3251 // Implementations should be provided for "partial" methods
+            OnModelCreatingPartial(builder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+#pragma warning restore S3251 // Implementations should be provided for "partial" methods
     }
 }

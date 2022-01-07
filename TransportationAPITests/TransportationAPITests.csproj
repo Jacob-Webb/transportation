@@ -15,6 +15,7 @@
   <ItemGroup>
     <None Remove="Configurations\" />
     <None Remove="DTOs\" />
+    <None Remove="docfx.console" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />

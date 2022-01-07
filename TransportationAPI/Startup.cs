@@ -5,13 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using TransportationAPI.Configurations;
-using TransportationAPI.Models;
 using TransportationAPI.Extensions;
 using TransportationAPI.IRepository;
 using TransportationAPI.Middleware;
+using TransportationAPI.Models;
 using TransportationAPI.Repository;
 using TransportationAPI.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TransportationAPI
 {

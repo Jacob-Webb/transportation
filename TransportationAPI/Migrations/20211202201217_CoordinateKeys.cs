@@ -96,13 +96,15 @@ namespace TransportationAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+#pragma warning disable SA1118 // Parameter should not span multiple lines
                 values: new object[,]
                 {
                     { "bc7dcd25-9c08-4be7-a08e-087e3cf4ec8b", "8d9c655a-35af-46cb-b4e1-10351759fd0d", "SuperAdmin", "SUPERADMIN" },
                     { "b9cfc8bc-887f-4ccf-8460-633eb2c4592e", "20cc4a0c-2328-4c35-aad8-c04aadc7fa1b", "Administrator", "ADMINISTRATOR" },
                     { "00cdcc3e-95d6-43d6-b85d-60d4bb9a5f26", "b351aed5-1e5a-4f54-bd29-1d2b560c6d42", "Driver", "DRIVER" },
-                    { "e808c521-96c9-4e1e-a21b-2afb166b13b1", "957164d8-795d-44d4-8e65-841010f97738", "Rider", "RIDER" }
+                    { "e808c521-96c9-4e1e-a21b-2afb166b13b1", "957164d8-795d-44d4-8e65-841010f97738", "Rider", "RIDER" },
                 });
+#pragma warning restore SA1118 // Parameter should not span multiple lines
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventTemplateBoundaries_CoordinateLatitude_CoordinateLongitude",
@@ -224,13 +226,15 @@ namespace TransportationAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+#pragma warning disable SA1118 // Parameter should not span multiple lines
                 values: new object[,]
                 {
                     { "9b092cea-c60a-4844-9a9e-462425591ca1", "c7c0f916-c67f-4478-a681-e5b3e94345b5", "SuperAdmin", "SUPERADMIN" },
                     { "59b8fb08-a70b-4919-b8c2-4f6e4016afea", "2b651955-da0e-408a-9540-a0567f7c97b5", "Administrator", "ADMINISTRATOR" },
                     { "7e4ff701-62e4-4f6c-8f6f-62f44e1f582a", "877cd9cc-ee62-430c-af48-82d64a9f0a9c", "Driver", "DRIVER" },
-                    { "bfae3d6f-f75e-4d9b-a0ee-1380a2324a87", "19198d1c-876a-40f6-8d57-dac186fc440a", "Rider", "RIDER" }
+                    { "bfae3d6f-f75e-4d9b-a0ee-1380a2324a87", "19198d1c-876a-40f6-8d57-dac186fc440a", "Rider", "RIDER" },
                 });
+#pragma warning restore SA1118 // Parameter should not span multiple lines
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventTemplateBoundaries_CoordinatesLatitude_CoordinatesLongitude",

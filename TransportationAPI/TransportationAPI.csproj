@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+    <Version>0.0.0</Version>
     <TargetFramework>net5.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <CodeAnalysisRuleSet>../RuleSet/StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
     <UserSecretsId>91a36312-1949-48be-8053-46cac234d891</UserSecretsId>
   </PropertyGroup>
 
@@ -24,6 +26,20 @@
     <PackageReference Include="Twilio.AspNet.Core" Version="5.37.2" />
     <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.2.17" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="../RuleSet/stylecop.json">
+        <Link>stylecop.json</Link>
+    </AdditionalFiles>
   </ItemGroup>
 
   <ItemGroup>
@@ -48,5 +64,11 @@
     <None Remove="Configurations\Mapper\" />
     <None Remove="Helpers\" />
     <None Remove="Logs\" />
+    <None Remove="StyleCop.Analyzers" />
+    <None Remove="StyleCop.MSBuild" />
+    <None Remove="SonarAnalyzer.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
   </ItemGroup>
 </Project>

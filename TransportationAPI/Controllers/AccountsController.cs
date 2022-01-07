@@ -1,29 +1,25 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Net;
 using System.Threading.Tasks;
-using TransportationAPI.Models;
-using TransportationAPI.Extensions;
-using TransportationAPI.Middleware;
 using TransportationAPI.DTOs;
+using TransportationAPI.Extensions;
+using TransportationAPI.Helpers;
+using TransportationAPI.Middleware;
+using TransportationAPI.Models;
 using TransportationAPI.Services;
 using Twilio.Exceptions;
-using Twilio.Rest.Lookups.V1;
-using System.Collections.Generic;
 using Twilio.Rest.Verify.V2.Service;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using TransportationAPI.IRepository;
-using TransportationAPI.Helpers;
-using System.Net;
 
 namespace TransportationAPI.Controllers
 {
     /// <summary>
-    /// Class <c>AccountsController</c> allows API calls relating to an ApplicationUsers account information
+    /// Class <c>AccountsController</c> allows API calls relating to an ApplicationUsers account information.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -35,15 +31,14 @@ namespace TransportationAPI.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
-        private readonly IUnitOfWork _unitOfWork; 
 
-        public AccountsController(IOptions<TwilioSettings> twilioVerifySettings,
+        public AccountsController(
+            IOptions<TwilioSettings> twilioVerifySettings,
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
             ILogger<AccountsController> logger,
             IMapper mapper,
-            IAuthManager authManager,
-            IUnitOfWork unitOfWork)
+            IAuthManager authManager)
         {
             _twilioVerifySettings = twilioVerifySettings.Value;
             _userManager = userManager;
@@ -51,7 +46,6 @@ namespace TransportationAPI.Controllers
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
-            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -59,7 +53,7 @@ namespace TransportationAPI.Controllers
         /// </summary>
         /// <param name="userDto">
         /// The <see cref="RegisterUserDto"/> instance that represents the information passed to and from the frontend
-        /// for user registration
+        /// for user registration.
         /// </param>
         /// <returns>
         /// An instance of <see cref="IActionResult"/> class representing the status code and content.
@@ -73,7 +67,10 @@ namespace TransportationAPI.Controllers
         {
             _logger.LogInformation($"Registration attempt for {userDto.PhoneNumber} ");
 
-            if (userDto == null || !ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var user = _mapper.Map<ApplicationUser>(userDto);
 
@@ -87,16 +84,17 @@ namespace TransportationAPI.Controllers
 
             string validatedPhoneNumber = formatStatus.Response;
 
-            // Check if phone number is already used and confirmed
+            // Check if phone number is already used and confirmed.
             var existingPhoneUser = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (existingPhoneUser != null && existingPhoneUser.PhoneNumberConfirmed)
             {
                 return Conflict("This phone number is already in use. Please contact The Rock's Transportation Department.");
             }
+
             if (existingPhoneUser != null && !existingPhoneUser.PhoneNumberConfirmed)
             {
-                // resend confirmation phone number and code to frontend to activate phone number then return
-                SendPhoneVerification(validatedPhoneNumber);
+                // Resend confirmation phone number and code to frontend to activate phone number then return.
+                await SendPhoneVerification(validatedPhoneNumber);
                 return StatusCode(403, "This number needs to be confirmed. Please enter your verification code to complete registration.");
             }
 
@@ -111,18 +109,19 @@ namespace TransportationAPI.Controllers
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
+
                 return BadRequest(ModelState);
             }
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            SendPhoneVerification(user.PhoneNumber);
+            await SendPhoneVerification(user.PhoneNumber);
             return Ok(new PhoneNumberDto { PhoneNumber = userDto.PhoneNumber });
         }
 
         /// <summary>
         /// Retrieves user based on validated phone number, creates an access token and refresh token,
-        /// assigns tokens, and updates the user
+        /// assigns tokens, and updates the user.
         /// </summary>
         /// <param name="userDto">
         /// The <see cref="AuthenticationDto"/> instance that represents the information passed to and from the frontend
@@ -163,6 +162,7 @@ namespace TransportationAPI.Controllers
             // Create AccessToken
             var accessToken = await _authManager.GenerateAccessToken();
             var refreshToken = _authManager.GenerateRefreshToken();
+
             // Create RefreshToken
             // Set Refresh Token to user
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
@@ -170,16 +170,16 @@ namespace TransportationAPI.Controllers
             user.RefreshToken = refreshToken;
             var refreshLifetime = Convert.ToDouble(_configuration.GetSection("Jwt").GetSection("RefreshLifetime").Value);
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshLifetime);
+
             // Save User
             await _userManager.UpdateAsync(user);
 
-
-            return Accepted(new AuthResponseDto {
+            return Accepted(new AuthResponseDto
+            {
                 IsAuthSuccessful = true,
                 AccessToken = accessToken,
-                RefreshToken = user.RefreshToken
+                RefreshToken = user.RefreshToken,
             });
-
         }
 
         /// <summary>
@@ -208,11 +208,10 @@ namespace TransportationAPI.Controllers
 
             phoneVerificationDto.PhoneNumber = formatResult.Response;
 
-
             var verificationStatus = await VerifyPhone(phoneVerificationDto);
             statusCode = (int)verificationStatus.Code;
 
-            if (statusCode < 200 || statusCode >=300)
+            if (statusCode < 200 || statusCode >= 300)
             {
                 return StatusCode(statusCode, verificationStatus.Response);
             }
@@ -223,7 +222,7 @@ namespace TransportationAPI.Controllers
         }
 
         /// <summary>
-        /// Generates a password reset token for the user, if any, found by the valid phone number
+        /// Generates a password reset token for the user, if any, found by the valid phone number.
         /// </summary>
         /// <param name="phoneNumberDto">
         /// The <see cref="PhoneNumberDto"/> instance that represents the information passed to and from the frontend
@@ -254,13 +253,13 @@ namespace TransportationAPI.Controllers
             var validatedPhoneNumber = formatResult.Response;
 
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
-            if (user == null || user.PhoneNumberConfirmed == false)
+            if (user == null || !user.PhoneNumberConfirmed)
             {
                 return BadRequest("Invalid client request");
             }
 
             // send out phone verification
-            SendPhoneVerification(validatedPhoneNumber);
+            await SendPhoneVerification(validatedPhoneNumber);
 
             return Ok();
         }
@@ -270,7 +269,7 @@ namespace TransportationAPI.Controllers
         /// </summary>
         /// <param name="resetPasswordDto">
         /// The <see cref="ResetPasswordDto"/> instance that represents the information passed to and from the frontend
-        /// to reset a password
+        /// to reset a password.
         /// </param>
         /// <returns>
         /// An instance of <see cref="IActionResult"/> class representing the status code and content.
@@ -296,7 +295,6 @@ namespace TransportationAPI.Controllers
 
             var validatedPhoneNumber = formatResult.Response;
 
-
             var user = await _userManager.FindByPhoneAsync(validatedPhoneNumber);
             if (user == null)
             {
@@ -306,8 +304,7 @@ namespace TransportationAPI.Controllers
             var updateResult = await _userManager.ResetPasswordAsync(
                 user,
                 await _userManager.GeneratePasswordResetTokenAsync(user),
-                resetPasswordDto.Password
-                );
+                resetPasswordDto.Password);
 
             if (!updateResult.Succeeded)
             {
@@ -315,6 +312,7 @@ namespace TransportationAPI.Controllers
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
+
                 return BadRequest(ModelState);
             }
 
@@ -322,7 +320,7 @@ namespace TransportationAPI.Controllers
         }
 
         /// <summary>
-        /// Verify a code-phone number pair then generate a password reset token for the user identified by the phone number
+        /// Verify a code-phone number pair then generate a password reset token for the user identified by the phone number.
         /// </summary>
         /// <param name="phoneVerificationDto">
         /// The <see cref="PhoneVerificationDto"/> instance that represents the information passed to and from the frontend
@@ -330,7 +328,7 @@ namespace TransportationAPI.Controllers
         /// </param>
         /// <returns>
         /// An instance of <see cref="IActionResult"/> class representing the status code and content.
-        /// A successful operation should return an Accepted code and an instance of <see cref="ResetPasswordDto"/> .
+        /// A successful operation should return an Accepted code and an instance of <see cref="ResetPasswordDto"/>.
         /// Errors return appropriate status codes and informative error messagses.
         /// </returns>
         [HttpPost]
@@ -367,7 +365,7 @@ namespace TransportationAPI.Controllers
             {
                 Password = null,
                 PhoneNumber = phoneVerificationDto.PhoneNumber,
-                Token = token
+                Token = token,
             };
 
             return Accepted(response);
@@ -385,7 +383,7 @@ namespace TransportationAPI.Controllers
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.BadRequest,
-                    Response = "Bad client request"
+                    Response = "Bad client request",
                 };
             }
 
@@ -397,14 +395,14 @@ namespace TransportationAPI.Controllers
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.BadRequest,
-                    Response = "There was an error confirming the verification code, please try again."
+                    Response = "There was an error confirming the verification code, please try again.",
                 };
             }
 
             return new HttpStatus
             {
                 Code = HttpStatusCode.OK,
-                Response = null
+                Response = null,
             };
         }
 
@@ -415,7 +413,7 @@ namespace TransportationAPI.Controllers
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.BadRequest,
-                    Response = $"Value of Phone number is {phoneVerificationDto.PhoneNumber}"
+                    Response = $"Value of Phone number is {phoneVerificationDto.PhoneNumber}",
                 };
             }
 
@@ -424,20 +422,20 @@ namespace TransportationAPI.Controllers
                 var verificationCheck = await VerificationCheckResource.CreateAsync(
                  to: phoneVerificationDto.PhoneNumber,
                  code: phoneVerificationDto.Code,
-                 pathServiceSid: _twilioVerifySettings.VerificationServiceSID
-                );
-                if (!(verificationCheck.Status == "approved"))
+                 pathServiceSid: _twilioVerifySettings.VerificationServiceSID);
+                if (verificationCheck.Status != "approved")
                 {
                     return new HttpStatus
                     {
                         Code = HttpStatusCode.BadRequest,
-                        Response = $"There was an error confirming the verification code. Please check your code and try again."
+                        Response = $"There was an error confirming the verification code. Please check your code and try again.",
                     };
                 }
+
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.Accepted,
-                    Response = "" 
+                    Response = string.Empty,
                 };
             }
             catch (TwilioException ex)
@@ -445,22 +443,21 @@ namespace TransportationAPI.Controllers
                 return new HttpStatus
                 {
                     Code = HttpStatusCode.InternalServerError,
-                    Response = ex.Message
+                    Response = ex.Message,
                 };
             }
         }
 
-        private async void SendPhoneVerification(string phone)
+        private async Task SendPhoneVerification(string phone)
         {
             var verification = await VerificationResource.CreateAsync(
                 to: phone,
                 channel: "sms",
-                pathServiceSid: _twilioVerifySettings.VerificationServiceSID
-            );
+                pathServiceSid: _twilioVerifySettings.VerificationServiceSID);
 
             if (verification.Status != "pending")
             {
-                ModelState.AddModelError("", $"There was an error sending the verification code: {verification.Status}");
+                ModelState.AddModelError(string.Empty, $"There was an error sending the verification code: {verification.Status}");
             }
         }
     }

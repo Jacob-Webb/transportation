@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Quartz;
+using System;
 
 namespace TransportationAPI.Extensions
 {
@@ -22,7 +22,7 @@ namespace TransportationAPI.Extensions
             // Some minor validation
             if (string.IsNullOrEmpty(cronSchedule))
             {
-                throw new Exception($"No Quartz.NET Cron schedule found for job in configuration at {configKey}");
+                throw new InvalidOperationException($"No Quartz.NET Cron schedule found for job in configuration at {configKey}");
             }
 
             // register the job as before
