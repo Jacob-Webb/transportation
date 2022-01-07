@@ -6,7 +6,7 @@ namespace TransportationAPI.DTOs
 {
     #pragma warning disable SA1402 // File may only contain a single type
     #pragma warning disable SA1649 // File name should match first type name
-    public class CreateEventTemplateDto
+    public class CreateGatheringTemplateDto
     #pragma warning restore SA1649 // File name should match first type name
     {
         [Required]
@@ -24,12 +24,12 @@ namespace TransportationAPI.DTOs
         public HashSet<CoordinateDto> BoundaryCoordinates { get; set; }
     }
 
-    public class EventTemplateDto : CreateEventTemplateDto
+    public class GatheringTemplateDto : CreateGatheringTemplateDto
     {
         public int Id { get; set; }
     }
 
-    public class UpdateEventTemplateDto : CreateEventTemplateDto
+    public class UpdateGatheringTemplateDto : CreateGatheringTemplateDto
     {
     }
     #pragma warning restore SA1402 // File may only contain a single type

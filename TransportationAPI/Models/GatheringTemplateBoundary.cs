@@ -1,10 +1,10 @@
 ﻿namespace TransportationAPI.Models
 {
-    public class EventTemplateBoundary
+    public class GatheringTemplateBoundary
     {
-        public int EventTemplateId { get; set; }
+        public int GatheringTemplateId { get; set; }
 
-        public EventTemplate EventTemplates { get; set; }
+        public GatheringTemplate GatheringTemplates { get; set; }
 
         public double CoordinateLatitude { get; set; }
 

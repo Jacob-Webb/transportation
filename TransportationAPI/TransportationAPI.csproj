@@ -56,14 +56,12 @@
     <Folder Include="Tasks\" />
     <Folder Include="Configurations\Mapper\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Quartz.Extensions.Hosting" />
     <None Remove="Tasks\" />
     <None Remove="Configurations\Mapper\" />
     <None Remove="Helpers\" />
-    <None Remove="Logs\" />
     <None Remove="StyleCop.Analyzers" />
     <None Remove="StyleCop.MSBuild" />
     <None Remove="SonarAnalyzer.CSharp" />

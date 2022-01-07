@@ -5,9 +5,9 @@ using TransportationAPI.DTOs;
 namespace TransportationAPITests
 {
     [TestFixture]
-    public class EventTemplateDtoTests
+    public class GatheringTemplateDtoTests
     {
-        private EventTemplateDto _eventTemplateDto;
+        private GatheringTemplateDto _GatheringTemplateDto;
         [SetUp]
         public void Setup()
         {

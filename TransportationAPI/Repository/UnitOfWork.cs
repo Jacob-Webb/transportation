@@ -12,9 +12,9 @@ namespace TransportationAPI.Repository
         private IGenericRepository<CancelledRide> _cancelledRide;
         private IGenericRepository<Coordinate> _coordinate;
         private IGenericRepository<Driver> _driver;
-        private IGenericRepository<Event> _event;
-        private IGenericRepository<EventTemplate> _eventTemplate;
-        private IGenericRepository<EventTemplateBoundary> _eventTemplateBoundary;
+        private IGenericRepository<Gathering> _gathering;
+        private IGenericRepository<GatheringTemplate> _gatheringTemplate;
+        private IGenericRepository<GatheringTemplateBoundary> _gatheringTemplateBoundary;
         private IGenericRepository<Note> _note;
         private IGenericRepository<Route> _route;
         private IGenericRepository<RouteDriver> _routeDriver;
@@ -37,11 +37,11 @@ namespace TransportationAPI.Repository
 
         public IGenericRepository<Driver> Drivers => _driver ??= new GenericRepository<Driver>(_context);
 
-        public IGenericRepository<Event> Events => _event ??= new GenericRepository<Event>(_context);
+        public IGenericRepository<Gathering> Gatherings => _gathering ??= new GenericRepository<Gathering>(_context);
 
-        public IGenericRepository<EventTemplate> EventTemplates => _eventTemplate ??= new GenericRepository<EventTemplate>(_context);
+        public IGenericRepository<GatheringTemplate> GatheringTemplates => _gatheringTemplate ??= new GenericRepository<GatheringTemplate>(_context);
 
-        public IGenericRepository<EventTemplateBoundary> EventTemplateBoundaries => _eventTemplateBoundary ??= new GenericRepository<EventTemplateBoundary>(_context);
+        public IGenericRepository<GatheringTemplateBoundary> GatheringTemplateBoundaries => _gatheringTemplateBoundary ??= new GenericRepository<GatheringTemplateBoundary>(_context);
 
         public IGenericRepository<Note> Notes => _note ??= new GenericRepository<Note>(_context);
 

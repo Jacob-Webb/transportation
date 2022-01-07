@@ -7,7 +7,7 @@
 
 ### In Progress
 
-- [ ] Implement EventTemplateManager Controller
+- [ ] Create GatheringTemplate Controller
 
 ### Completed
 

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace TransportationAPI.Models
 {
-    public class EventTemplate
+    public class GatheringTemplate
     {
-        public EventTemplate()
+        public GatheringTemplate()
         {
-            EventTemplateBoundaries = new HashSet<EventTemplateBoundary>();
+            GatheringTemplateBoundaries = new HashSet<GatheringTemplateBoundary>();
         }
 
         public int Id { get; set; }
@@ -22,6 +22,6 @@ namespace TransportationAPI.Models
 
         public bool Active { get; set; }
 
-        public virtual ICollection<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
+        public virtual ICollection<GatheringTemplateBoundary> GatheringTemplateBoundaries { get; set; }
     }
 }

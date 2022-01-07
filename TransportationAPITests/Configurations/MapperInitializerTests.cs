@@ -18,9 +18,9 @@ namespace TransportationAPITests
             cfg.CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new MapTimeSpanDtoToTimeSpan());
             cfg.CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 
-        // For this, I need to map from Coordinate to EventTemplateBoundary or ignore them and assign in code
+        // For this, I need to map from Coordinate to GatheringTemplateBoundary or ignore them and assign in code
         // Let's try ignoring for now.
-        cfg.CreateMap<EventTemplate, CreateEventTemplateDto>()
+        cfg.CreateMap<GatheringTemplate, CreateGatheringTemplateDto>()
             .ForMember(dest => dest.BoundaryCoordinates, opt => opt.Ignore());
         });
 

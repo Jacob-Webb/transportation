@@ -21,11 +21,11 @@ namespace TransportationAPI.Models
 
         public virtual DbSet<Driver> Drivers { get; set; }
 
-        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Gathering> Gatherings { get; set; }
 
-        public virtual DbSet<EventTemplate> EventTemplates { get; set; }
+        public virtual DbSet<GatheringTemplate> GatheringTemplates { get; set; }
 
-        public virtual DbSet<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
+        public virtual DbSet<GatheringTemplateBoundary> GatheringTemplateBoundaries { get; set; }
 
         public virtual DbSet<Note> Notes { get; set; }
 
@@ -53,10 +53,10 @@ namespace TransportationAPI.Models
             .HasKey(c => new { c.Latitude, c.Longitude });
 
             builder.Entity<CancelledRide>()
-            .HasKey(cr => new { cr.ApplicationUserId, cr.EventId });
+            .HasKey(cr => new { cr.ApplicationUserId, cr.GatheringId });
 
-            builder.Entity<EventTemplateBoundary>()
-            .HasKey(etb => new { etb.EventTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
+            builder.Entity<GatheringTemplateBoundary>()
+            .HasKey(etb => new { etb.GatheringTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
 
             builder.Entity<RouteDriver>()
             .HasKey(rd => new { rd.RouteId, rd.DriverId });

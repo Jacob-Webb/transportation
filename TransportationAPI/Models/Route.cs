@@ -17,9 +17,9 @@ namespace TransportationAPI.Models
 
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
 
-        [ForeignKey("Event")]
-        public int EventId { get; set; }
+        [ForeignKey("Gathering")]
+        public int GatheringId { get; set; }
 
-        public Event Event { get; set; }
+        public Gathering Gathering { get; set; }
     }
 }

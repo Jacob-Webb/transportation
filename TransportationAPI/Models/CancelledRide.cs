@@ -9,10 +9,10 @@ namespace TransportationAPI.Models
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        [ForeignKey("Event")]
-        public int EventId { get; set; }
+        [ForeignKey("Gathering")]
+        public int GatheringId { get; set; }
 
-        public Event Event { get; set; }
+        public Gathering Gathering { get; set; }
 
         public Note Note { get; set; }
 

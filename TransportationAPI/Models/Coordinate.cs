@@ -7,7 +7,7 @@ namespace TransportationAPI.Models
         public Coordinate()
         {
             UserCoordinates = new HashSet<UserCoordinate>();
-            EventTemplateBoundaries = new HashSet<EventTemplateBoundary>();
+            GatheringTemplateBoundaries = new HashSet<GatheringTemplateBoundary>();
         }
 
         public double Latitude { get; set; }
@@ -16,6 +16,6 @@ namespace TransportationAPI.Models
 
         public virtual ICollection<UserCoordinate> UserCoordinates { get; set; }
 
-        public virtual ICollection<EventTemplateBoundary> EventTemplateBoundaries { get; set; }
+        public virtual ICollection<GatheringTemplateBoundary> GatheringTemplateBoundaries { get; set; }
     }
 }

@@ -20,8 +20,8 @@ namespace TransportationAPI.Configurations
             CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new MapTimeSpanDtoToTimeSpan());
             CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 
-            CreateMap<EventTemplate, CreateEventTemplateDto>();
-            CreateMap<CreateEventTemplateDto, EventTemplate>();
+            CreateMap<GatheringTemplate, CreateGatheringTemplateDto>();
+            CreateMap<CreateGatheringTemplateDto, GatheringTemplate>();
         }
     }
 }

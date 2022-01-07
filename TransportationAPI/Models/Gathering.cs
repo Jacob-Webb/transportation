@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace TransportationAPI.Models
 {
-    public class Event
+    public class Gathering
     {
-        public Event()
+        public Gathering()
         {
             ScheduledRides = new HashSet<ScheduledRide>();
             CancelledRides = new HashSet<CancelledRide>();
@@ -14,7 +14,7 @@ namespace TransportationAPI.Models
 
         public int Id { get; set; }
 
-        public DateTime EventDateTime { get; set; }
+        public DateTime GatheringDateTime { get; set; }
 
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
 
@@ -22,6 +22,6 @@ namespace TransportationAPI.Models
 
         public virtual ICollection<Route> Routes { get; set; }
 
-        public EventTemplate Template { get; set; }
+        public GatheringTemplate Template { get; set; }
     }
 }

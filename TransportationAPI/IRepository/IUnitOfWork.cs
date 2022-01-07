@@ -30,19 +30,19 @@ namespace TransportationAPI.IRepository
         IGenericRepository<Driver> Drivers { get; }
 
         /// <summary>
-        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="Event"/>.
+        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="Gathering"/>.
         /// </summary>
-        IGenericRepository<Event> Events { get; }
+        IGenericRepository<Gathering> Gatherings { get; }
 
         /// <summary>
-        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="EventTemplate"/>.
+        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="GatheringTemplate"/>.
         /// </summary>
-        IGenericRepository<EventTemplate> EventTemplates { get; }
+        IGenericRepository<GatheringTemplate> GatheringTemplates { get; }
 
         /// <summary>
-        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="EventTemplateBoundary"/>.
+        /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="GatheringTemplateBoundary"/>.
         /// </summary>
-        IGenericRepository<EventTemplateBoundary> EventTemplateBoundaries { get; }
+        IGenericRepository<GatheringTemplateBoundary> GatheringTemplateBoundaries { get; }
 
         /// <summary>
         /// Gets the <see cref="IGenericRepository{T}"/> of entity type <see cref="Note"/>.
