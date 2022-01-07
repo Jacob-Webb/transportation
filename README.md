@@ -33,4 +33,4 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 
 ## Versioning and CHANGELOG.md generation
 
-* See [Versionize](https://www.nuget.org/packages/Versionize/) docs for automatic changelog generation and versioning.
+* Using [ChangeLog Nuget Package](https://github.com/ap0llo/changelog) for ChangeLog generation.

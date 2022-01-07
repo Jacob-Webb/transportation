@@ -1,10 +1,14 @@
 ﻿### Todo
 
-- [ ] Set up changelog generator
-- [ ] Begin versioning
-- [ ] Enforce commit rules for solution
+- [ ] Documentation
+  - [ ] Classes
+  - [ ] Methods
+  - [ ] Properties
 
 ### In Progress
 
+- [ ] Implement ChangeLog generator
+  - [ ] Using [ChangeLog generator](https://github.com/ap0llo/changelog)
+  - [ ] Add changelog.settings.json to solution root
 
 ### Completed
