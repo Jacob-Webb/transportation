@@ -652,6 +652,18 @@
                             {
                                 "type": "fix",
                                 "scope": "*"
+                            },
+                            {
+                                "type": "docs",
+                                "scope": "*"
+                            },
+                            {
+                                "type": "build",
+                                "scope": "*"
+                            },
+                            {
+                                "type": "refactor",
+                                "scope": "*"
                             }
                         ],
                         "exclude": []
