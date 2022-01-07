@@ -7,8 +7,9 @@
 
 ### In Progress
 
-- [ ] Implement ChangeLog generator
-  - [ ] Using [ChangeLog generator](https://github.com/ap0llo/changelog)
-  - [ ] Add changelog.settings.json to solution root
+- [ ] Implement EventTemplateManager Controller
 
 ### Completed
+
+- [x] Implement ChangeLog generator
+  - [x] Add changelog.settings.json to solution root

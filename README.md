@@ -34,3 +34,7 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 ## Versioning and CHANGELOG.md generation
 
 * Using [ChangeLog Nuget Package](https://github.com/ap0llo/changelog) for ChangeLog generation.
+
+* See [here](https://github.com/ap0llo/changelog/blob/master/src/ChangeLog/Configuration/defaultSettings.json) for default configuration for changelog.settings.json
+
+* Update `changelog` command to unique command of your choosing by changing file name at **/.dotnet/tools

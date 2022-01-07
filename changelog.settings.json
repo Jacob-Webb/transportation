@@ -1,676 +1,134 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "type": "object",
-    "properties": {
-        "changelog-csharp": {
-            "type": "object",
-            "properties": {
-                "scopes": {
-                    "type": "object",
-                    "patternProperties": {
-                        ".*": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Scope Display Name"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tagPatterns": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "^(?<version>\\d+\\.\\d+(\\.\\d+)?.*)",
-                        "^v(?<version>\\d+\\.\\d+(\\.\\d+)?.*)"
-                    ],
-                    "uniqueItems": true,
-                    "title": "Tag Patterns"
-                },
-                "outputPath": {
-                    "type": "string",
-                    "default": "changelog.md",
-                    "title": "Output Path"
-                },
-                "footers": {
-                    "type": "object",
-                    "patternProperties": {
-                        ".*": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            }
-                        }
-                    },
-                    "properties": {
-                        "closes": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Closes"
-                            }
-                        },
-                        "co-authored-by": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Co-authored by"
-                            }
-                        },
-                        "fixes": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Fixes"
-                            }
-                        },
-                        "merge-request": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Merge Request"
-                            }
-                        },
-                        "pull-request": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Pull Request"
-                            }
-                        },
-                        "reviewed-by": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Reviewed by"
-                            }
-                        },
-                        "see-also": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Footer Display Name"
-                                }
-                            },
-                            "default": {
-                                "displayName": "See Also"
-                            }
-                        }
-                    }
-                },
-                "integrations": {
-                    "type": "object",
-                    "properties": {
-                        "provider": {
-                            "type": "string",
-                            "enum": [
-                                "None",
-                                "GitHub",
-                                "GitLab"
-                            ],
-                            "default": "None",
-                            "title": "Integration Provider"
-                        },
-                        "github": {
-                            "type": "object",
-                            "properties": {
-                                "accessToken": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitHub Access Token"
-                                },
-                                "remoteName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": "origin",
-                                    "title": "GitHub Remote Name"
-                                },
-                                "host": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitHub Host"
-                                },
-                                "owner": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitHub Repository Owner"
-                                },
-                                "repository": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitHub Repository Name"
-                                }
-                            }
-                        },
-                        "gitlab": {
-                            "type": "object",
-                            "properties": {
-                                "accessToken": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitLab Access Token"
-                                },
-                                "remoteName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": "origin",
-                                    "title": "GitLab Remote Name"
-                                },
-                                "host": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitLab Host"
-                                },
-                                "namespace": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitLab Namespace"
-                                },
-                                "project": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "GitLab Project Name"
-                                }
-                            }
-                        }
-                    }
-                },
-                "versionRange": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "title": "Version Range"
-                },
-                "currentVersion": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "title": "Current Version"
-                },
-                "template": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "enum": [
-                                "Default",
-                                "GitLabRelease",
-                                "GitHubRelease",
-                                "Html"
-                            ],
-                            "default": "Default",
-                            "title": "Template Name"
-                        },
-                        "default": {
-                            "type": "object",
-                            "properties": {
-                                "normalizeReferences": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "customDirectory": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "Template Custom Directory"
-                                }
-                            }
-                        },
-                        "gitHubRelease": {
-                            "type": "object",
-                            "properties": {
-                                "normalizeReferences": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "customDirectory": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "Template Custom Directory"
-                                }
-                            }
-                        },
-                        "gitLabRelease": {
-                            "type": "object",
-                            "properties": {
-                                "normalizeReferences": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "customDirectory": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "Template Custom Directory"
-                                }
-                            }
-                        },
-                        "html": {
-                            "type": "object",
-                            "properties": {
-                                "normalizeReferences": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "customDirectory": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null,
-                                    "title": "Template Custom Directory"
-                                }
-                            }
-                        }
-                    }
-                },
-                "entryTypes": {
-                    "type": "object",
-                    "patternProperties": {
-                        ".*": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            }
-                        }
-                    },
-                    "properties": {
-                        "build": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Build System and Dependency Changes",
-                                "priority": 40
-                            }
-                        },
-                        "chore": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Chores",
-                                "priority": 10
-                            }
-                        },
-                        "ci": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Continuous Integration System Changes",
-                                "priority": 30
-                            }
-                        },
-                        "docs": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Documentation Changes",
-                                "priority": 70
-                            }
-                        },
-                        "feat": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "New Features",
-                                "priority": 100
-                            }
-                        },
-                        "fix": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Bug Fixes",
-                                "priority": 90
-                            }
-                        },
-                        "perf": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Performance Improvements",
-                                "priority": 80
-                            }
-                        },
-                        "refactor": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Code Refactorings",
-                                "priority": 60
-                            }
-                        },
-                        "style": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Style Changes",
-                                "priority": 20
-                            }
-                        },
-                        "test": {
-                            "type": "object",
-                            "properties": {
-                                "displayName": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "title": "Entry Type Display Name"
-                                },
-                                "priority": {
-                                    "type": "integer",
-                                    "title": "Entry Type Priority"
-                                }
-                            },
-                            "default": {
-                                "displayName": "Test Changes",
-                                "priority": 50
-                            }
-                        }
-                    }
-                },
-                "parser": {
-                    "type": "object",
-                    "properties": {
-                        "mode": {
-                            "type": "string",
-                            "enum": [
-                                "Strict",
-                                "Loose"
-                            ],
-                            "default": "Loose",
-                            "title": "Parser Mode"
-                        }
-                    }
-                },
-                "filter": {
-                    "type": "object",
-                    "properties": {
-                        "include": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "type": "string",
-                                        "title": "Filter Type Expression"
-                                    },
-                                    "scope": {
-                                        "type": "string",
-                                        "title": "Filter Scope Expression"
-                                    }
-                                }
-                            },
-                            "title": "Filter Include Expressions"
-                        },
-                        "exclude": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "type": {
-                                        "type": "string",
-                                        "title": "Filter Type Expression"
-                                    },
-                                    "scope": {
-                                        "type": "string",
-                                        "title": "Filter Scope Expression"
-                                    }
-                                }
-                            },
-                            "title": "Filter Exclude Expressions"
-                        }
-                    },
-                    "default": {
-                        "include": [
-                            {
-                                "type": "feat",
-                                "scope": "*"
-                            },
-                            {
-                                "type": "fix",
-                                "scope": "*"
-                            },
-                            {
-                                "type": "docs",
-                                "scope": "*"
-                            },
-                            {
-                                "type": "build",
-                                "scope": "*"
-                            },
-                            {
-                                "type": "refactor",
-                                "scope": "*"
-                            }
-                        ],
-                        "exclude": []
-                    },
-                    "title": "Filter"
-                }
+    "$schema": "../../../schemas/configuration/schema.json",
+    "changelog": {
+
+        "entryTypes": {
+            "feat": {
+                "displayName": "New Features",
+                "priority": 100
+            },
+            "fix": {
+                "displayName": "Bug Fixes",
+                "priority": 90
+            },
+            "perf": {
+                "displayName": "Performance Improvements",
+                "priority": 80
+            },
+            "docs": {
+                "displayName": "Documentation Changes",
+                "priority": 70
+            },
+            "refactor": {
+                "displayName": "Code Refactorings",
+                "priority": 60
+            },
+            "test": {
+                "displayName": "Test Changes",
+                "priority": 50
+            },
+            "build": {
+                "displayName": "Build System and Dependency Changes",
+                "priority": 40
+            },
+            "ci": {
+                "displayName": "Continuous Integration System Changes",
+                "priority": 30
+            },
+            "style": {
+                "displayName": "Style Changes",
+                "priority": 20
+            },
+            "chore": {
+                "displayName": "Chores",
+                "priority": 10
             }
+        },
+
+        "scopes": {},
+
+        "footers": {
+            "see-also": { "displayName": "See Also" },
+            "closes": { "displayName": "Closes" },
+            "fixes": { "displayName": "Fixes" },
+            "co-authored-by": { "displayName": "Co-authored by" },
+            "reviewed-by": { "displayName": "Reviewed by" },
+            "pull-request": { "displayName": "Pull Request" },
+            "merge-request": { "displayName": "Merge Request" }
+        },
+
+        "filter": {
+            "include": [
+                { "type": "feat" },
+                { "type": "fix" },
+                { "type": "perf" },
+                { "type": "docs" },
+                { "type": "refactor" },
+                { "type": "build" },
+                { "type": "ci" },
+                { "type": "style" }
+            ],
+            "exclude": []
+        },
+
+        "tagPatterns": [
+            "^(?<version>\\d+\\.\\d+(\\.\\d+)?.*)",
+            "^v(?<version>\\d+\\.\\d+(\\.\\d+)?.*)"
+        ],
+
+        "outputPath": "changelog.md",
+
+        "integrations": {
+
+            "provider": "None",
+
+            "github": {
+                "accessToken": null,
+                "remoteName": "origin",
+                "host": null,
+                "owner": null,
+                "repository": null
+            },
+
+            "gitlab": {
+                "accessToken": null,
+                "remoteName": "origin",
+                "host": null,
+                "namespace": null,
+                "project": null
+            }
+        },
+
+        "versionRange": null,
+
+        "currentVersion": null,
+
+        "template": {
+            "name": "Default",
+
+            "default": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "gitHubRelease": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "gitLabRelease": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            },
+
+            "html": {
+                "normalizeReferences": true,
+                "customDirectory": null
+            }
+        },
+
+        "parser": {
+            "mode": "Loose"
         }
     }
 }
