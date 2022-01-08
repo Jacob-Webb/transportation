@@ -19,7 +19,7 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 * Clone this respository (https://github.com/Jacob-Webb/transportation.git)
 
 * Environment variables
-  * Contact development team for access to environment variables listed in appsettings.json 
+  * Contact development team for access to environment variables listed in appsettings.json
   * Utilize user secrets for Visual Studio on Mac (learn more from [this link](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=linux))
     * Enable secret storage
       - To use user secrets, run the following command in the project directory: `dotnet user-secrets init`

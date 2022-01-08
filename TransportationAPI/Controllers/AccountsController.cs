@@ -371,9 +371,6 @@ namespace TransportationAPI.Controllers
             return Accepted(response);
         }
 
-        /*
-         * Utility Methods
-         */
         private async Task<HttpStatus> ConfirmPhone(string phoneNumber)
         {
             var identityUser = await _userManager.FindByPhoneAsync(phoneNumber);
