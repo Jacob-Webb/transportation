@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using TransportationAPI.DTOs;
 
 namespace TransportationAPITests
@@ -8,6 +8,7 @@ namespace TransportationAPITests
     public class TimeSpanDtoTests
     {
         private TimeSpanDto _timeSpanDto;
+
         [SetUp]
         public void Setup()
         {
@@ -51,6 +52,5 @@ namespace TransportationAPITests
             _timeSpanDto.Minutes = 1;
             Assert.AreEqual(1, _timeSpanDto.Minutes);
         }
-
     }
 }

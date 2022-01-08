@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <Version>0.0.0</Version>
+    <Version>0.1.1</Version>
     <TargetFramework>net5.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <CodeAnalysisRuleSet>../RuleSet/StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
     <UserSecretsId>91a36312-1949-48be-8053-46cac234d891</UserSecretsId>
   </PropertyGroup>
 
