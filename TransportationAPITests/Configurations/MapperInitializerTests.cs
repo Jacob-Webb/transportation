@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using TransportationAPI.Configurations.Mapper;
 using TransportationAPI.DTOs;
+using TransportationAPI.Extensions;
 using TransportationAPI.Models;
 
 namespace TransportationAPITests
@@ -12,8 +13,8 @@ namespace TransportationAPITests
     {
         private readonly MapperConfiguration _config = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<ApplicationUser, AuthenticationDto>().ReverseMap();
-            cfg.CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
+            cfg.CreateMap<ApplicationUser, AuthenticationDto>().ForMember(dest => dest.Password, act => act.Ignore()).ReverseMap();
+            cfg.CreateMap<ApplicationUser, RegisterUserDto>().ForMember(dest => dest.Password, act => act.Ignore()).ReverseMap();
             cfg.CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new MapTimeSpanToTimeSpanDto());
             cfg.CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new MapTimeSpanDtoToTimeSpan());
             cfg.CreateMap<Coordinate, CoordinateDto>().ReverseMap();
@@ -23,12 +24,6 @@ namespace TransportationAPITests
             cfg.CreateMap<GatheringTemplate, CreateGatheringTemplateDto>()
             .ForMember(dest => dest.BoundaryCoordinates, opt => opt.Ignore());
         });
-
-        [SetUp]
-        public void Setup()
-        {
-            // Method intentionally left empty.
-        }
 
         [Test]
         public void Configuration_IsValid()
