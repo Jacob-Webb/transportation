@@ -37,4 +37,14 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 
 * See [here](https://github.com/ap0llo/changelog/blob/master/src/ChangeLog/Configuration/defaultSettings.json) for default configuration for changelog.settings.json
 
-* Update `changelog` command to unique command of your choosing by changing file name at **/.dotnet/tools
+* Update `changelog` command to unique command of your choosing by changing file name at **/.dotnet/tools.
+
+## Testing
+
+* Tests should be written for all public methods. 
+
+* When unit testing something that uses DbContext, use EF in-memory database. Doing so is appropriate because the test is not dependent on database behavior.
+
+  - See [here for an explanation](https://docs.microsoft.com/en-us/ef/core/testing/).
+
+  - For an example of how to do this, see [here](https://docs.microsoft.com/en-us/ef/core/testing/testing-sample).

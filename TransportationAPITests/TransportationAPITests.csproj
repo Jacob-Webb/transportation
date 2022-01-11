@@ -19,6 +19,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.13" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,11 +37,14 @@
     <None Remove="Moq" />
     <None Remove="SonarAnalyzer.CSharp" />
     <None Remove="StyleCop.Analyzers" />
+    <None Remove="Microsoft.EntityFrameworkCore.InMemory" />
+    <None Remove="NUnit.Analyzers" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="DTOs\" />
     <Folder Include="Controllers\" />
+    <Folder Include="bin\Debug\net5.0\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransportationAPI\TransportationAPI.csproj" />

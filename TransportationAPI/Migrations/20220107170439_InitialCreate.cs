@@ -1,10 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace TransportationAPI.Migrations
 {
     public partial class InitialCreate : Migration
     {
+#pragma warning disable SA1413 // Use trailing comma in multi-line initializers
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -470,6 +471,7 @@ namespace TransportationAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+#pragma warning disable SA1118 // Parameter should not span multiple lines
                 values: new object[,]
                 {
                     { "7ac1a3ce-49c3-4c6c-bdf0-c6e66f4c81f0", "4a0eb050-ea40-4f3d-8306-cdd4604fc3a3", "SuperAdmin", "SUPERADMIN" },
@@ -477,6 +479,7 @@ namespace TransportationAPI.Migrations
                     { "f4bb86e6-fe9b-4cf7-b67d-b6cf06d443a5", "483b4bb5-3d82-40d3-a045-9a93aa76661b", "Driver", "DRIVER" },
                     { "6367fd6d-951a-4f4e-a143-25c95d5440d7", "d0729f8d-81f7-4108-a09d-7f467f28ef6c", "User", "USER" }
                 });
+#pragma warning restore SA1118 // Parameter should not span multiple lines
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -653,5 +656,6 @@ namespace TransportationAPI.Migrations
             migrationBuilder.DropTable(
                 name: "GatheringTemplates");
         }
+#pragma warning restore SA1413 // Use trailing comma in multi-line initializers
     }
 }
