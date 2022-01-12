@@ -14,14 +14,14 @@ namespace TransportationAPI.Configurations
         /// </summary>
         public MapperInitializer()
         {
-            CreateMap<ApplicationUser, AuthenticationDto>().ReverseMap();
-            CreateMap<ApplicationUser, RegisterUserDto>().ReverseMap();
+            CreateMap<ApplicationUser, AuthenticationDto>().ForMember(dest => dest.Password, act => act.Ignore()).ReverseMap();
+            CreateMap<ApplicationUser, RegisterUserDto>().ForMember(dest => dest.Password, act => act.Ignore()).ReverseMap();
             CreateMap<TimeSpan, TimeSpanDto>().ConvertUsing(new MapTimeSpanToTimeSpanDto());
             CreateMap<TimeSpanDto, TimeSpan>().ConvertUsing(new MapTimeSpanDtoToTimeSpan());
             CreateMap<Coordinate, CoordinateDto>().ReverseMap();
 
-            CreateMap<GatheringTemplate, CreateGatheringTemplateDto>();
-            CreateMap<CreateGatheringTemplateDto, GatheringTemplate>();
+            CreateMap<GatheringTemplate, GatheringTemplateDto>().ForMember(dest => dest.BoundaryCoordinates, opt => opt.Ignore());
+            CreateMap<CreateGatheringTemplateDto, GatheringTemplate>().ForMember(dest => dest.GatheringTemplateBoundaries, opt => opt.Ignore());
         }
     }
 }

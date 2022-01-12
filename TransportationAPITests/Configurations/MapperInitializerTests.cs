@@ -3,7 +3,6 @@ using NUnit.Framework;
 using System;
 using TransportationAPI.Configurations.Mapper;
 using TransportationAPI.DTOs;
-using TransportationAPI.Extensions;
 using TransportationAPI.Models;
 
 namespace TransportationAPITests
@@ -21,8 +20,12 @@ namespace TransportationAPITests
 
             // For this, I need to map from Coordinate to GatheringTemplateBoundary or ignore them and assign in code
             // Let's try ignoring for now.
-            cfg.CreateMap<GatheringTemplate, CreateGatheringTemplateDto>()
+            cfg.CreateMap<GatheringTemplate, GatheringTemplateDto>()
             .ForMember(dest => dest.BoundaryCoordinates, opt => opt.Ignore());
+
+            cfg.CreateMap<CreateGatheringTemplateDto, GatheringTemplate>()
+            .ForMember(dest => dest.GatheringTemplateBoundaries, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         });
 
         [Test]

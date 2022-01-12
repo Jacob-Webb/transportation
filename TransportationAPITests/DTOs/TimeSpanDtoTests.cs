@@ -31,7 +31,7 @@ namespace TransportationAPITests
         public void Hour_AssignedValueIsValid_ReturnsHourValue()
         {
             _timeSpanDto.Hours = 1;
-            Assert.AreEqual(1, _timeSpanDto.Hours);
+            Assert.That(_timeSpanDto.Hours, Is.EqualTo(1));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace TransportationAPITests
         public void Minutes_AssignedValueIsValid_ReturnsMinutesValue()
         {
             _timeSpanDto.Minutes = 1;
-            Assert.AreEqual(1, _timeSpanDto.Minutes);
+            Assert.That(_timeSpanDto.Minutes, Is.EqualTo(1));
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TransportationAPI.Attributes;
 
 namespace TransportationAPI.DTOs
 {
@@ -9,7 +8,6 @@ namespace TransportationAPI.DTOs
     {
         [Required(ErrorMessage = "A password is required")]
         [StringLength(255)]
-        [NoMap]
         public string Password { get; set; }
     }
 

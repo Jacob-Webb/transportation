@@ -56,7 +56,6 @@
     <Folder Include="Tasks\" />
     <Folder Include="Configurations\Mapper\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Quartz.Extensions.Hosting" />
@@ -66,7 +65,6 @@
     <None Remove="StyleCop.Analyzers" />
     <None Remove="StyleCop.MSBuild" />
     <None Remove="SonarAnalyzer.CSharp" />
-    <None Remove="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />

@@ -28,13 +28,6 @@ namespace TransportationAPI.Controllers
             _mapper = mapper;
         }
 
-        public GatheringTemplatesController()
-        {
-            _unitOfWork = null;
-            _logger = null;
-            _mapper = null;
-        }
-
         [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPost]
         public async Task<IActionResult> CreateTemplate([FromBody] CreateGatheringTemplateDto templateDto)
@@ -52,22 +45,22 @@ namespace TransportationAPI.Controllers
             return CreatedAtRoute("GetTemplate", new { id = template.Id }, template);
         }
 
-        [HttpGet]
+        [HttpGet("{id:int}", Name = "Template")]
         [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> GetAll()
-        {
-            var templates = await _unitOfWork.GatheringTemplates.GetAll();
-            var results = _mapper.Map<IList<GatheringTemplateDto>>(templates);
-            return Ok(results);
-        }
-
-        [HttpGet("{id:int}", Name = "GetTemplate")]
-        [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> GetTemplate(int id)
+        public async Task<IActionResult> GetTemplateById(int id)
         {
             var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
             var result = _mapper.Map<GatheringTemplateDto>(template);
             return Ok(result);
+        }
+
+        [HttpGet(Name = "Templates")]
+        [Authorize(Policy = "RequireAdministratorRole")]
+        public async Task<IActionResult> GetAllTemplates()
+        {
+            var templates = await _unitOfWork.GatheringTemplates.GetAll();
+            var results = _mapper.Map<IList<GatheringTemplateDto>>(templates);
+            return Ok(results);
         }
 
         [HttpPut("{id:int}")]

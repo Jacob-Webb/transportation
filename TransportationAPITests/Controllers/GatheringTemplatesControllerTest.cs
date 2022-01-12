@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Net;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using TransportationAPI.Configurations;
 using TransportationAPI.Controllers;
@@ -27,7 +27,6 @@ namespace TransportationAPITests.Controllers
 
         private DbContextOptions<ApplicationDbContext> _options;
         private IUnitOfWork _unitOfWork;
-        private GatheringTemplatesController _templatesController;
 
         public GatheringTemplatesControllerTest()
         {
@@ -56,16 +55,29 @@ namespace TransportationAPITests.Controllers
 
             var context = new ApplicationDbContext(_options);
             _unitOfWork = new UnitOfWork(context);
-            _templatesController = new GatheringTemplatesController(
-                _unitOfWork,
-                _mockLogger.Object,
-                _mapper);
         }
 
         [Test]
-        public async Task CreateTemplate_ModelIsValid_ReturnsId()
+        public void TestModelValidation_ModelStateIsNotValid_ReturnsFalse()
+        {
+            var dataModel = new GatheringTemplateDto();
+
+            var context = new System.ComponentModel.DataAnnotations.ValidationContext(dataModel);
+            var results = new List<ValidationResult>();
+            var isModelStateValid = Validator.TryValidateObject(dataModel, context, results, true);
+
+            Assert.That(isModelStateValid, Is.EqualTo(false));
+        }
+
+        [Test]
+        public async Task CreateTemplate_ModelIsValid_ReturnsAcceptedCreatedAtRouteResult()
         {
             // Assign
+            var controller = new GatheringTemplatesController(
+                 _unitOfWork,
+                 _mockLogger.Object,
+                 _mapper);
+
             var createTemplateDto = new CreateGatheringTemplateDto
             {
                 DayOfWeek = System.DayOfWeek.Wednesday,
@@ -76,7 +88,7 @@ namespace TransportationAPITests.Controllers
             };
 
             // Act
-            var template = await _templatesController.CreateTemplate(createTemplateDto);
+            var template = await controller.CreateTemplate(createTemplateDto);
             CreatedAtRouteResult creationResult = template as CreatedAtRouteResult;
 
             // Assert
@@ -84,6 +96,22 @@ namespace TransportationAPITests.Controllers
             Assert.That(creationResult.Value, Is.TypeOf<TransportationAPI.Models.GatheringTemplate>());
             Assert.That(creationResult.StatusCode, Is.EqualTo(201));
             Assert.That(creationResult.RouteName, Is.EqualTo("GetTemplate"));
+        }
+
+        [Test]
+        public async Task CreateTemplate_ModelIsInvalid_ReturnsBadRequest()
+        {
+            // Assign
+            var controller = new GatheringTemplatesController(
+                 _unitOfWork,
+                 _mockLogger.Object,
+                 _mapper);
+
+            controller.ModelState.AddModelError("test", "test");
+
+            var result = await controller.CreateTemplate(new CreateGatheringTemplateDto());
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
     }
 }
