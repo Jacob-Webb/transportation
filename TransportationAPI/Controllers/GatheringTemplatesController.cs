@@ -50,6 +50,11 @@ namespace TransportationAPI.Controllers
         public async Task<IActionResult> GetTemplateById(int id)
         {
             var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
+
+            if (template == null)
+            {
+                return BadRequest("Invalid template identifier");
+            }
             var result = _mapper.Map<GatheringTemplateDto>(template);
             return Ok(result);
         }

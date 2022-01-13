@@ -54,6 +54,7 @@ namespace TransportationAPITests.Controllers
                 .Options;
 
             var context = new ApplicationDbContext(_options);
+            Seed(context);
             _unitOfWork = new UnitOfWork(context);
         }
 
@@ -109,9 +110,92 @@ namespace TransportationAPITests.Controllers
 
             controller.ModelState.AddModelError("test", "test");
 
+            // Act
             var result = await controller.CreateTemplate(new CreateGatheringTemplateDto());
 
+            // Assert
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task GetTemplateById_IdIsValid_ReturnsTemplateById()
+        {
+            // Assign
+            var controller = new GatheringTemplatesController(
+                _unitOfWork,
+                _mockLogger.Object,
+                _mapper);
+
+            // Act
+            var template = await controller.GetTemplateById(1);
+            var result = template as OkObjectResult;
+            GatheringTemplateDto templateDto = result.Value as GatheringTemplateDto;
+
+            // Assert
+            Assert.That(template, Is.TypeOf<OkObjectResult>());
+            Assert.That(result.Value, Is.TypeOf<GatheringTemplateDto>());
+            Assert.That(templateDto.Id, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task GetTemplateById_IdIsOutOfRange_ReturnsBadRequest()
+        {
+            // Assign
+            var controller = new GatheringTemplatesController(
+                _unitOfWork,
+                _mockLogger.Object,
+                _mapper);
+
+            // Act
+            var template = await controller.GetTemplateById(-1);
+            var result = template as BadRequestObjectResult;
+
+            // Assert
+            Assert.That(result.StatusCode, Is.EqualTo(400));
+        }
+
+        /// <summary>
+        /// Initialize the context with a few GatheringTemplates.
+        /// </summary>
+        /// <param name="context">Instance of <see cref="DbContext"/>.</param>
+        private void Seed(ApplicationDbContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            var templateOne = new GatheringTemplate
+            {
+                Id = 1,
+                DayOfWeek = System.DayOfWeek.Sunday,
+                TimeOfDay = new System.TimeSpan(9, 0, 0),
+                Language = "English",
+                DriversNeeded = 3,
+                Active = true,
+            };
+
+            var templateTwo = new GatheringTemplate
+            {
+                Id = 2,
+                DayOfWeek = System.DayOfWeek.Wednesday,
+                TimeOfDay = new System.TimeSpan(19, 0, 0),
+                Language = "English",
+                DriversNeeded = 3,
+                Active = true,
+            };
+
+            var templateThree = new GatheringTemplate
+            {
+                Id = 3,
+                DayOfWeek = System.DayOfWeek.Saturday,
+                TimeOfDay = new System.TimeSpan(10, 0, 0),
+                Language = "English",
+                DriversNeeded = 3,
+                Active = true,
+            };
+
+            context.AddRange(templateOne, templateTwo, templateThree);
+
+            context.SaveChanges();
         }
     }
 }
