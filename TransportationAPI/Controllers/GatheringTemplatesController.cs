@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -30,6 +31,9 @@ namespace TransportationAPI.Controllers
 
         [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateTemplate([FromBody] CreateGatheringTemplateDto templateDto)
         {
             if (!ModelState.IsValid)
@@ -47,6 +51,9 @@ namespace TransportationAPI.Controllers
 
         [HttpGet("{id:int}", Name = "Template")]
         [Authorize(Policy = "RequireAdministratorRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTemplateById(int id)
         {
             var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
@@ -55,12 +62,15 @@ namespace TransportationAPI.Controllers
             {
                 return BadRequest("Invalid template identifier");
             }
+
             var result = _mapper.Map<GatheringTemplateDto>(template);
             return Ok(result);
         }
 
         [HttpGet(Name = "Templates")]
         [Authorize(Policy = "RequireAdministratorRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTemplates()
         {
             var templates = await _unitOfWork.GatheringTemplates.GetAll();
@@ -70,6 +80,9 @@ namespace TransportationAPI.Controllers
 
         [HttpPut("{id:int}")]
         [Authorize(Policy = "RequireAdministratorRole")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateGatheringTemplate(int id, [FromBody] UpdateGatheringTemplateDto templateDto)
         {
             if (!ModelState.IsValid || id < 1)
@@ -94,6 +107,9 @@ namespace TransportationAPI.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Policy = "RequireAdministratorRole")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteGatheringTemplate(int id)
         {
             if (id < 1)

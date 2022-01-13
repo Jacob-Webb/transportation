@@ -45,8 +45,10 @@ namespace TransportationAPITests.Controllers
 
         protected DbContextOptions<ApplicationDbContext> ContextOptions { get; }
 
-        // Initialize in memory db context, unitOfWork, and GatheringTemplatesController.
-        [OneTimeSetUp]
+        /// <summary>
+        /// Initialize the database with values at the start of every test.
+        /// </summary>
+        [SetUp]
         public void Setup()
         {
             _options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -152,6 +154,23 @@ namespace TransportationAPITests.Controllers
 
             // Assert
             Assert.That(result.StatusCode, Is.EqualTo(400));
+        }
+
+        [Test]
+        public async Task GetAllTemplates_CollectionIsNotEmpty_ReturnsCollectionOfTemplate()
+        {
+            var controller = new GatheringTemplatesController(
+                _unitOfWork,
+                _mockLogger.Object,
+                _mapper);
+
+            var templates = await controller.GetAllTemplates();
+            var result = templates as OkObjectResult;
+            var values = (List<GatheringTemplateDto>)result.Value;
+
+            Assert.That(values, Is.TypeOf<List<GatheringTemplateDto>>());
+            Assert.That(values, Has.Count.EqualTo(3));
+            Assert.That(values[0].Id, Is.EqualTo(1));
         }
 
         /// <summary>

@@ -5,6 +5,12 @@
   - [ ] Methods
   - [ ] Properties
 
+- [ ] Testing
+  - [ ] Create multiple options for database types (see here)[https://docs.microsoft.com/en-us/ef/core/testing/testing-sample]
+    - [ ] In-Memory
+    - [ ] SQLite
+    - [ ] SQL Server
+
 ### In Progress
 
 - [ ] Create GatheringTemplate Controller

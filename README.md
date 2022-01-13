@@ -43,7 +43,7 @@ To see the client side code, please visit https://github.com/Jacob-Webb/transpor
 
 * Tests should be written for all public methods. 
 
-* When unit testing something that uses DbContext, use EF in-memory database. Doing so is appropriate because the test is not dependent on database behavior.
+* When unit testing something that uses EF Core, use multiple database types such as SQL Server, SQLite, and in-memory. Doing so is appropriate because the test is not dependent on database behavior.
 
   - See [here for an explanation](https://docs.microsoft.com/en-us/ef/core/testing/).
 
