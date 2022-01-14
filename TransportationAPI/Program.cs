@@ -49,6 +49,7 @@ namespace TransportationAPI
 
                         // Register the job, loading the schedule from configuration
                         q.AddJobAndTrigger<PurgeUnverifiedUsers>(hostContext.Configuration);
+                        q.AddJobAndTrigger<CreateWeeklyGatheringsFromTemplates>(hostContext.Configuration);
                     });
 
                     services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

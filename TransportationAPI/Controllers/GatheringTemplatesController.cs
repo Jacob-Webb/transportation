@@ -30,7 +30,7 @@ namespace TransportationAPI.Controllers
         }
 
         [Authorize(Policy = "RequireAdministratorRole")]
-        [HttpPost]
+        [HttpPost (Name = "CreateTemplate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -46,7 +46,7 @@ namespace TransportationAPI.Controllers
             await _unitOfWork.GatheringTemplates.Insert(template);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetTemplate", new { id = template.Id }, template);
+            return CreatedAtRoute("CreateTemplate", new { id = template.Id }, template);
         }
 
         [HttpGet("{id:int}", Name = "Template")]

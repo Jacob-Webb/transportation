@@ -1,5 +1,9 @@
 ﻿### Todo
 
+- [ ] Refactor
+  - [ ] Update User Registration to return CreatedAtRouteResult
+  - [ ] Rename all asynchrounous methods to MyMethodAsync
+
 - [ ] Documentation
   - [ ] Classes
   - [ ] Methods

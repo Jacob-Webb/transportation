@@ -39,12 +39,14 @@
     <None Remove="StyleCop.Analyzers" />
     <None Remove="Microsoft.EntityFrameworkCore.InMemory" />
     <None Remove="NUnit.Analyzers" />
+    <None Remove="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="DTOs\" />
     <Folder Include="Controllers\" />
     <Folder Include="bin\Debug\net5.0\" />
+    <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransportationAPI\TransportationAPI.csproj" />

@@ -15,7 +15,6 @@ namespace TransportationAPI.Extensions
             string jobName = typeof(T).Name;
 
             // Try and load the schedule from configuration
-            // Currently runs at 1am everyday
             var configKey = $"Quartz:{jobName}";
             var cronSchedule = config[configKey];
 
