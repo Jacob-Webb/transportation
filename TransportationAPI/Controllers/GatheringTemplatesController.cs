@@ -46,15 +46,15 @@ namespace TransportationAPI.Controllers
             await _unitOfWork.GatheringTemplates.InsertAsync(template);
             await _unitOfWork.SaveAsync();
 
-            return CreatedAtRoute("CreateTemplate", new { id = template.Id }, template);
+            return CreatedAtRoute("GetTemplate", new { id = template.Id }, template);
         }
 
-        [HttpGet("{id:int}", Name = "Template")]
+        [HttpGet("{id:int}", Name = "GetTemplate")]
         [Authorize(Policy = "RequireAdministratorRole")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTemplateById(int id)
+        public async Task<IActionResult> GetTemplate(int id)
         {
             var template = await _unitOfWork.GatheringTemplates.GetAsync(q => q.Id == id);
 

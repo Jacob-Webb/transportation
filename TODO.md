@@ -1,7 +1,6 @@
 ﻿### Todo
 
 - [ ] Refactor
-  - [ ] Update User Registration to return CreatedAtRouteResult
   - [ ] Set CreateWeeklyGatheringsFromGatheringTemplates to use UnitOfWork instead of DbContext
 
 - [ ] Documentation

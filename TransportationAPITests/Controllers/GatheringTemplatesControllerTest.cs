@@ -129,7 +129,7 @@ namespace TransportationAPITests.Controllers
                 _mapper);
 
             // Act
-            var template = await controller.GetTemplateById(1);
+            var template = await controller.GetTemplate(1);
             var result = template as OkObjectResult;
             GatheringTemplateDto templateDto = result.Value as GatheringTemplateDto;
 
@@ -149,7 +149,7 @@ namespace TransportationAPITests.Controllers
                 _mapper);
 
             // Act
-            var template = await controller.GetTemplateById(-1);
+            var template = await controller.GetTemplate(-1);
             var result = template as BadRequestObjectResult;
 
             // Assert
