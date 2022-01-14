@@ -32,12 +32,12 @@ namespace TransportationAPI.Services
             _logger = logger;
         }
 
-        public async Task<string> GenerateAccessToken(ApplicationUser user = null)
+        public async Task<string> GenerateAccessTokenAsync(ApplicationUser user = null)
         {
             _logger.LogInformation($"Generating access token attempted for {user}");
 
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims(user);
+            var claims = await GetClaimsAsync(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
@@ -79,7 +79,7 @@ namespace TransportationAPI.Services
             return principal;
         }
 
-        public async Task<bool> ValidateUser(AuthenticationDto userDto)
+        public async Task<bool> ValidateUserAsync(AuthenticationDto userDto)
         {
             // userDto Phone number must be in E.164 format.
             // userDto.Phone should be formatted by the calling method before being passed to ValidateUser.
@@ -102,7 +102,7 @@ namespace TransportationAPI.Services
             return token;
         }
 
-        private async Task<List<Claim>> GetClaims(ApplicationUser user = null)
+        private async Task<List<Claim>> GetClaimsAsync(ApplicationUser user = null)
         {
             if (user != null)
             {

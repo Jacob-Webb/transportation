@@ -72,7 +72,7 @@ namespace TransportationAPI.Controllers
                 return StatusCode(403, "Session timed out. Please login again");
             }
 
-            var newAccessToken = await _authManager.GenerateAccessToken(user);
+            var newAccessToken = await _authManager.GenerateAccessTokenAsync(user);
             var newRefreshToken = _authManager.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;

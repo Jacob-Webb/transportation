@@ -18,7 +18,7 @@ namespace TransportationAPI.Services
         /// </summary>
         /// <param name="user">An instance of type <see cref="ApplicationUser"/>.</param>
         /// <returns>An instance of type <see cref="Task{TResult}"/>.</returns>
-        Task<string> GenerateAccessToken(ApplicationUser user = null);
+        Task<string> GenerateAccessTokenAsync(ApplicationUser user = null);
 
         /// <summary>
         /// Generate a long-term token to allow a user's access token to be refreshed as long as it is viable.
@@ -38,6 +38,6 @@ namespace TransportationAPI.Services
         /// </summary>
         /// <param name="userDto">An instance of <see cref="AuthenticationDto"/>.</param>
         /// <returns>An instance of type <see cref="Task{TResult}"/>.</returns>
-        Task<bool> ValidateUser(AuthenticationDto userDto);
+        Task<bool> ValidateUserAsync(AuthenticationDto userDto);
     }
 }

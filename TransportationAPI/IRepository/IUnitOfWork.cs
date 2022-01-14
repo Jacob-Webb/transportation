@@ -88,7 +88,7 @@ namespace TransportationAPI.IRepository
         /// Persists updates to the database.
         /// </summary>
         /// <returns>An instance of type <see cref="Task"/>.</returns>
-        Task Save();
+        Task SaveAsync();
 
         /// <summary>
         /// Implements the Dispose method, primarily for releasing unmanaged resources.

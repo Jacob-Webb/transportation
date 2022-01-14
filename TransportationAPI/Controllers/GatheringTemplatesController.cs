@@ -43,8 +43,8 @@ namespace TransportationAPI.Controllers
             }
 
             var template = _mapper.Map<GatheringTemplate>(templateDto);
-            await _unitOfWork.GatheringTemplates.Insert(template);
-            await _unitOfWork.Save();
+            await _unitOfWork.GatheringTemplates.InsertAsync(template);
+            await _unitOfWork.SaveAsync();
 
             return CreatedAtRoute("CreateTemplate", new { id = template.Id }, template);
         }
@@ -56,7 +56,7 @@ namespace TransportationAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTemplateById(int id)
         {
-            var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
+            var template = await _unitOfWork.GatheringTemplates.GetAsync(q => q.Id == id);
 
             if (template == null)
             {
@@ -73,7 +73,7 @@ namespace TransportationAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTemplates()
         {
-            var templates = await _unitOfWork.GatheringTemplates.GetAll();
+            var templates = await _unitOfWork.GatheringTemplates.GetAllAsync();
             var results = _mapper.Map<IList<GatheringTemplateDto>>(templates);
             return Ok(results);
         }
@@ -91,7 +91,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
+            var template = await _unitOfWork.GatheringTemplates.GetAsync(q => q.Id == id);
             if (template == null)
             {
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateGatheringTemplate)}");
@@ -100,7 +100,7 @@ namespace TransportationAPI.Controllers
 
             _mapper.Map(templateDto, template);
             _unitOfWork.GatheringTemplates.Update(template);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -118,15 +118,15 @@ namespace TransportationAPI.Controllers
                 return BadRequest();
             }
 
-            var template = await _unitOfWork.GatheringTemplates.Get(q => q.Id == id);
+            var template = await _unitOfWork.GatheringTemplates.GetAsync(q => q.Id == id);
             if (template == null)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGatheringTemplate)}");
                 return BadRequest("Submitted data is invalid");
             }
 
-            await _unitOfWork.GatheringTemplates.Delete(id);
-            await _unitOfWork.Save();
+            await _unitOfWork.GatheringTemplates.DeleteAsync(id);
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }

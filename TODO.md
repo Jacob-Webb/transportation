@@ -2,7 +2,7 @@
 
 - [ ] Refactor
   - [ ] Update User Registration to return CreatedAtRouteResult
-  - [ ] Rename all asynchrounous methods to MyMethodAsync
+  - [ ] Set CreateWeeklyGatheringsFromGatheringTemplates to use UnitOfWork instead of DbContext
 
 - [ ] Documentation
   - [ ] Classes
@@ -17,9 +17,8 @@
 
 ### In Progress
 
-- [ ] Create GatheringTemplate Controller
-  - [ ] Build tests for template CRUD methods
-  - [ ] Build template CRUD methods
+- [ ] Refactor
+  - [ ] Create non-asynchronous methods where appropriate
 
 ### Completed
 
@@ -27,3 +26,8 @@
   - [x] Add changelog.settings.json to solution root
 - [x] Implement StyleCop
 - [x] Implement SonarAnalyzer
+- [x] Create GatheringTemplate Controller
+  - [x] Build tests for template CRUD methods
+  - [x] Build template CRUD methods
+- [x] Refactor
+  - [x] Rename all asynchronous methods to MyMethodAsync

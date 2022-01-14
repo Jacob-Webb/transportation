@@ -11,7 +11,7 @@ namespace TransportationAPI.Middleware
     {
         public string VerificationServiceSID { get; set; }
 
-        public static async Task<HttpStatus> FormatPhoneNumber(string numberToFormat)
+        public static async Task<HttpStatus> FormatPhoneNumberAsync(string numberToFormat)
         {
             try
             {

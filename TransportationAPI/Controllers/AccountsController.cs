@@ -74,7 +74,7 @@ namespace TransportationAPI.Controllers
 
             var user = _mapper.Map<ApplicationUser>(userDto);
 
-            var formatStatus = await TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
+            var formatStatus = await TwilioSettings.FormatPhoneNumberAsync(userDto.PhoneNumber);
 
             var statusCode = (int)formatStatus.Code;
             if (statusCode < 200 || statusCode >= 300)
@@ -142,7 +142,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var formatResult = await TwilioSettings.FormatPhoneNumber(userDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumberAsync(userDto.PhoneNumber);
             var statusCode = (int)formatResult.Code;
 
             if (statusCode < 200 || statusCode >= 300)
@@ -154,13 +154,13 @@ namespace TransportationAPI.Controllers
 
             userDto.PhoneNumber = validatedPhoneNumber;
 
-            if (!await _authManager.ValidateUser(userDto))
+            if (!await _authManager.ValidateUserAsync(userDto))
             {
                 return Unauthorized("The phone number - password combination is invalid. Please try again.");
             }
 
             // Create AccessToken
-            var accessToken = await _authManager.GenerateAccessToken();
+            var accessToken = await _authManager.GenerateAccessTokenAsync();
             var refreshToken = _authManager.GenerateRefreshToken();
 
             // Create RefreshToken
@@ -198,7 +198,7 @@ namespace TransportationAPI.Controllers
         [Route("PhoneConfirmation")]
         public async Task<IActionResult> PhoneConfirmation([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
-            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumberAsync(phoneVerificationDto.PhoneNumber);
             var statusCode = (int)formatResult.Code;
 
             if (statusCode < 200 || statusCode >= 300)
@@ -242,7 +242,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneNumberDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumberAsync(phoneNumberDto.PhoneNumber);
             var statusCode = (int)formatResult.Code;
 
             if (statusCode < 200 || statusCode >= 300)
@@ -285,7 +285,7 @@ namespace TransportationAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var formatResult = await TwilioSettings.FormatPhoneNumber(resetPasswordDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumberAsync(resetPasswordDto.PhoneNumber);
             var statusCode = (int)formatResult.Code;
 
             if (statusCode < 200 || statusCode >= 300)
@@ -335,7 +335,7 @@ namespace TransportationAPI.Controllers
         [Route("ResetPasswordToken")]
         public async Task<IActionResult> ResetPasswordToken([FromBody] PhoneVerificationDto phoneVerificationDto)
         {
-            var formatResult = await TwilioSettings.FormatPhoneNumber(phoneVerificationDto.PhoneNumber);
+            var formatResult = await TwilioSettings.FormatPhoneNumberAsync(phoneVerificationDto.PhoneNumber);
             var statusCode = (int)formatResult.Code;
 
             if (statusCode < 200 || statusCode >= 300)

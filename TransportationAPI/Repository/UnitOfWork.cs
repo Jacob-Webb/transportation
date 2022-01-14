@@ -59,7 +59,7 @@ namespace TransportationAPI.Repository
 
         public IGenericRepository<UserNote> UserNotes => _userNote ??= new GenericRepository<UserNote>(_context);
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }
