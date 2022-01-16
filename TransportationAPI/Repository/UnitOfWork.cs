@@ -64,6 +64,11 @@ namespace TransportationAPI.Repository
             await _context.SaveChangesAsync();
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Dispose()
         {
             // Dispose of unmanaged resources.

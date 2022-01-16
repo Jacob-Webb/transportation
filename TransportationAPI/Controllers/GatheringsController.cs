@@ -19,9 +19,9 @@ namespace TransportationAPI.Controllers
     [ApiController]
     public class GatheringsController : ControllerBase
     {
-        private ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<GatheringsController> _logger;
+        private readonly ILogger<CreateWeeklyGatheringsFromTemplates> _creationLogger;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -31,14 +31,14 @@ namespace TransportationAPI.Controllers
         /// <param name="logger">An instance of <see cref="ILogger{TCategoryName}"/>.</param>
         /// <param name="mapper">An instance of <see cref="IMapper"/>.</param>
         public GatheringsController(
-            ApplicationDbContext context,
             IUnitOfWork unitOfWork,
             ILogger<GatheringsController> logger,
+            ILogger<CreateWeeklyGatheringsFromTemplates> creationLogger,
             IMapper mapper)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _creationLogger = creationLogger;
             _mapper = mapper;
         }
 
@@ -48,7 +48,7 @@ namespace TransportationAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateGatherings()
         {
-            var createWeeklyGatheringsTask = new CreateWeeklyGatheringsFromTemplates(_context, _logger);
+            var createWeeklyGatheringsTask = new CreateWeeklyGatheringsFromTemplates(_unitOfWork, _creationLogger);
             createWeeklyGatheringsTask.Execute();
 
             return Ok();

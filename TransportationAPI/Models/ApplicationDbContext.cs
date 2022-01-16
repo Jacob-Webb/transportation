@@ -55,6 +55,10 @@ namespace TransportationAPI.Models
             builder.Entity<CancelledRide>()
             .HasKey(cr => new { cr.ApplicationUserId, cr.GatheringId });
 
+            builder.Entity<Gathering>()
+                .HasIndex(g => g.DateAndTime)
+                .IsUnique();
+
             builder.Entity<GatheringTemplateBoundary>()
             .HasKey(etb => new { etb.GatheringTemplateId, etb.CoordinateLatitude, etb.CoordinateLongitude });
 

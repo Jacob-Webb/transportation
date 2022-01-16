@@ -14,7 +14,7 @@ namespace TransportationAPI.Models
 
         public int Id { get; set; }
 
-        public DateTime GatheringDateTime { get; set; }
+        public DateTime DateAndTime { get; set; }
 
         public virtual ICollection<ScheduledRide> ScheduledRides { get; set; }
 

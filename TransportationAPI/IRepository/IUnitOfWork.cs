@@ -91,6 +91,11 @@ namespace TransportationAPI.IRepository
         Task SaveAsync();
 
         /// <summary>
+        /// Persists updates to the database.
+        /// </summary>
+        void Save();
+
+        /// <summary>
         /// Implements the Dispose method, primarily for releasing unmanaged resources.
         /// See documentation <see href="https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose"/>.
         /// </summary>

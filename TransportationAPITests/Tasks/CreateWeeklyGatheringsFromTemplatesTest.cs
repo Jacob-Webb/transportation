@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Quartz;
+using System.Collections.Generic;
+using System.Linq;
+using TransportationAPI.IRepository;
 using TransportationAPI.Models;
+using TransportationAPI.Repository;
 using TransportationAPI.Tasks;
 
 namespace TransportationAPITests.Tasks
@@ -14,8 +16,8 @@ namespace TransportationAPITests.Tasks
     public class CreateWeeklyGatheringsFromTemplatesTest
     {
         private DbContextOptions<ApplicationDbContext> _options;
-        private ApplicationDbContext _context;
-        private  Mock<ILogger<CreateWeeklyGatheringsFromTemplates>> _mockLogger;
+        private IUnitOfWork _unitOfWork;
+        private Mock<ILogger<CreateWeeklyGatheringsFromTemplates>> _mockLogger;
 
         [SetUp]
         public void Setup()
@@ -24,9 +26,9 @@ namespace TransportationAPITests.Tasks
                 .UseInMemoryDatabase(databaseName: "TemplatesDatabase")
                 .Options;
 
-            _context = new ApplicationDbContext(_options);
-            Seed(_context);
-
+            var context = new ApplicationDbContext(_options);
+            Seed(context);
+            _unitOfWork = new UnitOfWork(context);
             _mockLogger = new Mock<ILogger<CreateWeeklyGatheringsFromTemplates>>();
         }
 
@@ -34,19 +36,19 @@ namespace TransportationAPITests.Tasks
         public void Execute_UpcomingActiveTemplates_CreateOrUpdateWeeklyGatherings()
         {
             // Assign
-            var job = new CreateWeeklyGatheringsFromTemplates(_context, _mockLogger.Object);
+            var job = new CreateWeeklyGatheringsFromTemplates(_unitOfWork, _mockLogger.Object);
             var mockIJobExecutionContext = new Mock<IJobExecutionContext>();
 
             // Act
             job.Execute(mockIJobExecutionContext.Object);
 
-            List<Gathering> result = _context.Gatherings.ToList();
+            List<Gathering> result = _unitOfWork.Gatherings.GetAll().ToList();
 
             // Assert
             mockIJobExecutionContext.VerifyAll();
             Assert.That(result, Is.TypeOf<List<Gathering>>());
             Assert.That(result, Has.Count.EqualTo(3));
-            Assert.That(result[0].GatheringDateTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Sunday));
+            Assert.That(result[0].DateAndTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Sunday));
         }
 
         /// <summary>
