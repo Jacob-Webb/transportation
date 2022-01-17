@@ -21,7 +21,5 @@ namespace TransportationAPI.Models
         public virtual ICollection<CancelledRide> CancelledRides { get; set; }
 
         public virtual ICollection<Route> Routes { get; set; }
-
-        public GatheringTemplate Template { get; set; }
     }
 }

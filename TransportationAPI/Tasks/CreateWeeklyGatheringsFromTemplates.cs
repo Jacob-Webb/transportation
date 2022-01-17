@@ -67,62 +67,87 @@ namespace TransportationAPI.Tasks
         {
             _logger.LogInformation("Creating weekly gatherings.");
 
-            /*
-             * Get all of the gatherings for the next week. 
-             * For each active template, check if a gathering already exists with the DayOfWeek and TimeOfDay. 
-             * If none exists, create the gathering with that information. 
+            /* 
+             * Create a Gathering from each template for the next week.
+             * For each created gathering, 
+             *  If no other gathering has the same DateTime, insert the gathering. 
              */
+            var daysInAWeek = 7;
 
-            var now = DateTime.Now;
+            var gatheringsFromTemplates = GetGatheringsFromTemplates(_unitOfWork.GatheringTemplates.GetAll(template => template.Active), daysInAWeek)
+                .OrderBy(gathering => gathering.DateAndTime)
+                .ToList();
 
-            // Get all gatherings between now and nextweek
-            var thisWeeksGatherings = ThisWeeksGatherings(now);
+            var savedGatherings = GetGatheringsFromStorage(DateTime.Now, DateTime.Now.AddDays(daysInAWeek))
+                .OrderBy(gathering => gathering.DateAndTime)
+                .ToList();
 
-            //if (thisWeeksGatherings != null)
-            //{
-            //    var activeTemplates = from templates in _unitOfWork.GatheringTemplates.GetAll()
-            //                          from gatherings in thisWeeksGatherings
-            //                          where templates.Active
-            //                            && (templates.DayOfWeek != gatherings.GatheringDateTime.DayOfWeek)
-            //                            && (templates.TimeOfDay != gatherings.GatheringDateTime.TimeOfDay)
-            //                          select templates;
-            //}
+            // Sort lists, then walk through them to find matching pairs, if none is found, add newGathering to a list of new gatherings.
+            var templateIndex = 0;
+            var storageIndex = 0;
+            var templateCount = gatheringsFromTemplates.Count;
 
-            var activeTemplates = _unitOfWork.GatheringTemplates.GetAll(template => template.Active);
-            foreach (var activeTemplate in activeTemplates)
+            while (templateIndex < templateCount && storageIndex < savedGatherings.Count)
             {
-                foreach (var gathering in thisWeeksGatherings)
+                if (gatheringsFromTemplates[templateIndex].DateAndTime < savedGatherings[storageIndex].DateAndTime)
                 {
-                    if ((activeTemplate.DayOfWeek == gathering.DateAndTime.DayOfWeek) && (activeTemplate.TimeOfDay == gathering.DateAndTime.TimeOfDay))
-                    {
-                        activeTemplates.Remove(activeTemplate);
-                    }
+                    ++templateIndex;
+                }
+                else if (gatheringsFromTemplates[templateIndex].DateAndTime > savedGatherings[storageIndex].DateAndTime)
+                {
+                    ++storageIndex;
+                }
+                else if (gatheringsFromTemplates[templateIndex].DateAndTime == savedGatherings[storageIndex].DateAndTime)
+                {
+                    gatheringsFromTemplates.RemoveAt(templateIndex);
+                    --templateCount;
                 }
             }
 
-            foreach (var templateWithoutGathering in activeTemplates)
+            foreach (var newGathering in gatheringsFromTemplates)
             {
-                var gathering = now;
-                var dayDifference = (int)templateWithoutGathering.DayOfWeek - (int)now.DayOfWeek;
-                if (dayDifference <= 0)
-                {
-                    dayDifference += 7;
-                }
-
-                var gatheringDay = gathering.AddDays(dayDifference);
-                _unitOfWork.Gatherings.Insert(new Gathering
-                {
-                    DateAndTime = new DateTime(now.Year, now.Month, gatheringDay.Day, templateWithoutGathering.TimeOfDay.Hours, templateWithoutGathering.TimeOfDay.Minutes, 0),
-                });
+                _unitOfWork.Gatherings.Insert(newGathering);
+                _unitOfWork.Save();
             }
         }
 
-        private IList<Gathering> ThisWeeksGatherings(DateTime now)
+        private IList<Gathering> GetGatheringsFromStorage(DateTime now, DateTime endDate)
         {
-            var nextWeek = now.AddDays(7);
-
             return _unitOfWork.Gatherings.GetAll(gathering =>
-                gathering.DateAndTime.CompareTo(now) >= 0 && gathering.DateAndTime.CompareTo(nextWeek) <= 0);
+                gathering.DateAndTime.CompareTo(now) >= 0 && gathering.DateAndTime.CompareTo(endDate) <= 0);
+        }
+
+        private IList<Gathering> GetGatheringsFromTemplates(IList<GatheringTemplate> activeTemplates, int daysInAWeek)
+        {
+            var gatheringList = new List<Gathering>();
+            foreach (var template in activeTemplates)
+            {
+                var templatesDayOfTheWeek = (int)template.DayOfWeek;
+                var currentDayOfTheWeek = (int)DateTime.Now.DayOfWeek;
+                int occursFollowingWeek = 0;
+
+                if (currentDayOfTheWeek >= templatesDayOfTheWeek)
+                {
+                    occursFollowingWeek = 1;
+                }
+
+                var fromNowUntilTemplatsDayOfTheWeek = templatesDayOfTheWeek - currentDayOfTheWeek + (occursFollowingWeek * daysInAWeek);
+                var newGatheringDateTime = DateTime.Now.AddDays(fromNowUntilTemplatsDayOfTheWeek);
+                var newGathering = new Gathering
+                {
+                    DateAndTime = new DateTime(
+                        newGatheringDateTime.Year,
+                        newGatheringDateTime.Month,
+                        newGatheringDateTime.Day,
+                        template.TimeOfDay.Hours,
+                        template.TimeOfDay.Minutes,
+                        0),
+                };
+
+                gatheringList.Add(newGathering);
+            }
+
+            return gatheringList;
         }
     }
 }
