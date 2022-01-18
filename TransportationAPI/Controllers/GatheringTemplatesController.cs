@@ -30,7 +30,7 @@ namespace TransportationAPI.Controllers
         }
 
         [Authorize(Policy = "RequireAdministratorRole")]
-        [HttpPost (Name = "CreateTemplate")]
+        [HttpPost(Name = "CreateTemplate")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -11,7 +11,7 @@ namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220116062252_gatheringdatetimeunique")]
-    partial class gatheringdatetimeunique
+    partial class Gatheringdatetimeunique
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

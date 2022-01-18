@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransportationAPI.Controllers;
 using TransportationAPI.IRepository;
 using TransportationAPI.Models;
 
@@ -16,14 +15,13 @@ namespace TransportationAPI.Tasks
     [DisallowConcurrentExecution]
     public class CreateWeeklyGatheringsFromTemplates : IJob
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CreateWeeklyGatheringsFromTemplates> _logger;
 
-        /// <summary>
+       /// <summary>
         /// Initializes a new instance of the <see cref="CreateWeeklyGatheringsFromTemplates"/> class.
         /// </summary>
-        /// <param name="context">An instance of <see cref="ApplicationDbContext"/>.</param>
+        /// <param name="unitOfWork">An instance of <see cref="ApplicationDbContext"/>.</param>
         /// <param name="logger">An instance of <see cref="ILogger{TCategoryName}"/>.</param>
         public CreateWeeklyGatheringsFromTemplates(
             IUnitOfWork unitOfWork,
@@ -67,11 +65,6 @@ namespace TransportationAPI.Tasks
         {
             _logger.LogInformation("Creating weekly gatherings.");
 
-            /* 
-             * Create a Gathering from each template for the next week.
-             * For each created gathering, 
-             *  If no other gathering has the same DateTime, insert the gathering. 
-             */
             var daysInAWeek = 7;
 
             var gatheringsFromTemplates = GetGatheringsFromTemplates(_unitOfWork.GatheringTemplates.GetAll(template => template.Active), daysInAWeek)
@@ -82,27 +75,8 @@ namespace TransportationAPI.Tasks
                 .OrderBy(gathering => gathering.DateAndTime)
                 .ToList();
 
-            // Sort lists, then walk through them to find matching pairs, if none is found, add newGathering to a list of new gatherings.
-            var templateIndex = 0;
-            var storageIndex = 0;
-            var templateCount = gatheringsFromTemplates.Count;
-
-            while (templateIndex < templateCount && storageIndex < savedGatherings.Count)
-            {
-                if (gatheringsFromTemplates[templateIndex].DateAndTime < savedGatherings[storageIndex].DateAndTime)
-                {
-                    ++templateIndex;
-                }
-                else if (gatheringsFromTemplates[templateIndex].DateAndTime > savedGatherings[storageIndex].DateAndTime)
-                {
-                    ++storageIndex;
-                }
-                else if (gatheringsFromTemplates[templateIndex].DateAndTime == savedGatherings[storageIndex].DateAndTime)
-                {
-                    gatheringsFromTemplates.RemoveAt(templateIndex);
-                    --templateCount;
-                }
-            }
+            // Walk through the sorted lists, removing a template from the list if it matches an existing Gathering
+            RemoveExistingGatherings(savedGatherings, gatheringsFromTemplates);
 
             foreach (var newGathering in gatheringsFromTemplates)
             {
@@ -148,6 +122,30 @@ namespace TransportationAPI.Tasks
             }
 
             return gatheringList;
+        }
+
+        private void RemoveExistingGatherings(List<Gathering> savedGatherings, List<Gathering> gatheringsFromTemplates)
+        {
+            var templateIndex = 0;
+            var storageIndex = 0;
+            var templateCount = gatheringsFromTemplates.Count;
+
+            while (templateIndex < templateCount && storageIndex < savedGatherings.Count)
+            {
+                if (gatheringsFromTemplates[templateIndex].DateAndTime < savedGatherings[storageIndex].DateAndTime)
+                {
+                    ++templateIndex;
+                }
+                else if (gatheringsFromTemplates[templateIndex].DateAndTime > savedGatherings[storageIndex].DateAndTime)
+                {
+                    ++storageIndex;
+                }
+                else if (gatheringsFromTemplates[templateIndex].DateAndTime == savedGatherings[storageIndex].DateAndTime)
+                {
+                    gatheringsFromTemplates.RemoveAt(templateIndex);
+                    --templateCount;
+                }
+            }
         }
     }
 }

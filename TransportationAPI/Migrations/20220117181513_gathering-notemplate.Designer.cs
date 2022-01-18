@@ -11,7 +11,7 @@ namespace TransportationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220117181513_gathering-notemplate")]
-    partial class gatheringnotemplate
+    partial class Gatheringnotemplate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
