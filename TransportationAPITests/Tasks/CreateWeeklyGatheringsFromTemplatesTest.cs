@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Quartz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TransportationAPI.IRepository;
@@ -33,7 +34,7 @@ namespace TransportationAPITests.Tasks
         }
 
         [Test]
-        public void Execute_UpcomingActiveTemplates_CreateOrUpdateWeeklyGatherings()
+        public void Execute_NoUpcomingGatherings_AllGatheringsCreated()
         {
             // Assign
             var job = new CreateWeeklyGatheringsFromTemplates(_unitOfWork, _mockLogger.Object);
@@ -48,7 +49,49 @@ namespace TransportationAPITests.Tasks
             mockIJobExecutionContext.VerifyAll();
             Assert.That(result, Is.TypeOf<List<Gathering>>());
             Assert.That(result, Has.Count.EqualTo(3));
-            Assert.That(result[0].DateAndTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Sunday));
+            Assert.That(result[0].DateAndTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Wednesday));
+            Assert.That(result[1].DateAndTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Saturday));
+            Assert.That(result[2].DateAndTime.DayOfWeek, Is.EqualTo(System.DayOfWeek.Sunday));
+        }
+
+        [Test]
+        public void Execute_GatheringsAlreadyExist_ReturnsNoNewGatherings()
+        {
+            // Assign
+            var gatheringOne =
+                new Gathering
+                {
+                    DateAndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 23, 9, 0, 0),
+                };
+            var gatheringTwo =
+                new Gathering
+                {
+                    DateAndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 19, 19, 0, 0),
+                };
+            var gatheringThree =
+                new Gathering
+                {
+                    DateAndTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 22, 10, 0, 0),
+                };
+
+            _unitOfWork.Gatherings.Insert(gatheringOne);
+            _unitOfWork.Gatherings.Insert(gatheringTwo);
+            _unitOfWork.Gatherings.Insert(gatheringThree);
+            _unitOfWork.Save();
+
+            var job = new CreateWeeklyGatheringsFromTemplates(_unitOfWork, _mockLogger.Object);
+            var mockIJobExecutionContext = new Mock<IJobExecutionContext>();
+
+            // Act
+            job.Execute(mockIJobExecutionContext.Object);
+
+            List<Gathering> result = _unitOfWork.Gatherings.GetAll().ToList();
+
+            // Assert
+            mockIJobExecutionContext.VerifyAll();
+            Assert.That(result, Is.TypeOf<List<Gathering>>());
+            Assert.That(result, Has.Count.EqualTo(3));
+            Assert.That(result[0].Id, Is.EqualTo(3));
         }
 
         /// <summary>
