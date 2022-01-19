@@ -1,7 +1,6 @@
 ﻿### Todo
-
-- [ ] Refactor
-  - [ ] Set CreateWeeklyGatheringsFromGatheringTemplates to use UnitOfWork instead of DbContext
+- [ ] Feature
+  - [ ] Create Gathering CRUD and controllers
 
 - [ ] Documentation
   - [ ] Classes
@@ -16,8 +15,7 @@
 
 ### In Progress
 
-- [ ] Refactor
-  - [ ] Create non-asynchronous methods where appropriate
+
 
 ### Completed
 
@@ -30,3 +28,5 @@
   - [x] Build template CRUD methods
 - [x] Refactor
   - [x] Rename all asynchronous methods to MyMethodAsync
+  - [x] Create non-asynchronous methods where appropriate
+  - [x] Set CreateWeeklyGatheringsFromGatheringTemplates to use UnitOfWork instead of DbContext

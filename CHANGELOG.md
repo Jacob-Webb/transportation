@@ -1,5 +1,64 @@
 # Change Log
 
+## 0.2.0
+
+### New Features
+
+- [create gatherings automatically from gathering templates](#changelog-heading-4371c61ecdba27fe0a91fb3b3dd12c521e177e73)
+
+### Code Refactorings
+
+- [add quartz cron job to create gatherings from gathering templates](#changelog-heading-51820a75f72946674d89cd765a975f522bd843c7)
+- [rename asynchronous methods to mymethodasync](#changelog-heading-b88b3fd96ecf57d636d0177cc24023ea18aba205)
+- [createdatroute location points to gettemplate](#changelog-heading-28be1d62ecfb32381cc8583a04d6929f0756e902)
+- [add synchronous equivalent of async methods](#changelog-heading-b310e8a4e9f58754935c75111185b04bc7159fdc)
+- [gathering dateandtime made to be unique](#changelog-heading-7be736d31352e7407b7946ce030b409be2ac5912)
+- [remove Template from Gathering](#changelog-heading-0cb9329b667729b0535ea2c173891b97390a5612)
+
+### Details
+
+#### <a id="changelog-heading-4371c61ecdba27fe0a91fb3b3dd12c521e177e73"></a> create gatherings automatically from gathering templates
+
+gathering templates are used to generate weekly gatherings. cron job running to execute task once a day
+
+- Commit: `4371c61`
+
+#### <a id="changelog-heading-51820a75f72946674d89cd765a975f522bd843c7"></a> add quartz cron job to create gatherings from gathering templates
+
+- Commit: `51820a7`
+
+#### <a id="changelog-heading-b88b3fd96ecf57d636d0177cc24023ea18aba205"></a> rename asynchronous methods to mymethodasync
+
+naming convention recommends -async- as a suffic to asynchronous methods
+
+- Commit: `b88b3fd`
+
+#### <a id="changelog-heading-28be1d62ecfb32381cc8583a04d6929f0756e902"></a> createdatroute location points to gettemplate
+
+createdatroute location erroneously pointed to createtemplate instead of get template
+
+- Commit: `28be1d6`
+
+#### <a id="changelog-heading-b310e8a4e9f58754935c75111185b04bc7159fdc"></a> add synchronous equivalent of async methods
+
+some sync methods are required to be used by the program
+
+- Commit: `b310e8a`
+
+#### <a id="changelog-heading-7be736d31352e7407b7946ce030b409be2ac5912"></a> gathering dateandtime made to be unique
+
+only one gathering should exist for a given datetime
+
+- Commit: `7be736d`
+
+#### <a id="changelog-heading-0cb9329b667729b0535ea2c173891b97390a5612"></a> remove Template from Gathering
+
+no need to track Template Id for gatherings
+
+- Commit: `0cb9329`
+
+___
+
 ## 0.1.3
 
 ### Documentation Changes
